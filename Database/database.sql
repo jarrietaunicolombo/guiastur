@@ -177,13 +177,3 @@ ADD CONSTRAINT Fk_Guias_Turnos
 FOREIGN KEY (guia_id)
 REFERENCES Guias(cedula);
 
-ALTER TABLE Gestion_turnos
-ADD CONSTRAINT Fk_Gestion_turnos_Guias
-FOREIGN KEY (guia_id)
-REFERENCES Guias(cedula);
-
-ALTER TABLE Gestion_turnos
-ADD CONSTRAINT Fk_Gestion_turnos_Turnos
-FOREIGN KEY (turno_id)
-REFERENCES Turnos(id);
-
