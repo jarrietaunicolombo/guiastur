@@ -1,12 +1,10 @@
 <?php
 
-interface RecaladaRepository
+interface IRecaladaRepository
 {
-    public function find($id);
-    public function findAll();
-    public function create(Recalada $recalada);
-    public function update(Recalada $recalada);
-    public function delete($id);
+    public function find($id): Recalada;
+    public function findAll(): array;
+    public function create(Recalada $recalada): Recalada;
+    public function update(Recalada $recalada): void;
+    public function delete($id): void;
 }
-
-

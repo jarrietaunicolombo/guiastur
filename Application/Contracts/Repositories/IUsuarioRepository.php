@@ -1,9 +1,11 @@
 <?php
-interface UsuarioRepository
+
+interface IUsuarioRepository
 {
-    public function find($id);
-    public function findAll();
-    public function create(Usuario $usuario);
-    public function update(Usuario $usuario);
-    public function delete($id);
+    public function find($id): Usuario;
+    public function findAll(): array;
+    public function create(Usuario $usuario): Usuario;
+    public function update(Usuario $usuario): void;
+    public function delete($id): void;
 }
+

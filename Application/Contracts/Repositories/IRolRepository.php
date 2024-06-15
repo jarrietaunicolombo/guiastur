@@ -1,11 +1,10 @@
 <?php
 
-interface RolRepository
+interface IRolRepository
 {
-    public function find($id);
-    public function findAll();
-    public function create(Rol $rol);
-    public function update(Rol $rol);
-    public function delete($id);
+    public function find($id): Rol;
+    public function findAll(): array;
+    public function create(Rol $rol): Rol;
+    public function update(Rol $rol): void;
+    public function delete($id): void;
 }
-
