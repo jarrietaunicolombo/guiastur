@@ -1,4 +1,12 @@
 CREATE DATABASE Gestion_turnos_guias_bd;
+
+ALTER DATABASE Gestion_turnos_guias_bd
+ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE nombre_base_de_datos;
+SELECT CONCAT('ALTER TABLE ', TABLE_NAME, ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;') 
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_SCHEMA = 'Gestion_turnos_guias_bd';
+
 use Gestion_turnos_guias_bd; 
 
 CREATE TABLE Usuarios (
@@ -123,12 +131,6 @@ CREATE TABLE Gestion_turnos (
     PRIMARY KEY(turno_id, guia_id)
 ) engine = innodb;
 
-ALTER TABLE Gestion_turnos
-DROP COLUMN guia_id;
-
-ALTER TABLE Gestion_turnos
-ADD COLUMN guia_id VARCHAR(20) NOT NULL
-AFTER turno_id;
 
 ALTER TABLE Usuarios
 ADD CONSTRAINT Fk_Roles_usuarios
@@ -184,3 +186,4 @@ ALTER TABLE Gestion_turnos
 ADD CONSTRAINT Fk_Gestion_turnos_Turnos
 FOREIGN KEY (turno_id)
 REFERENCES Turnos(id);
+
