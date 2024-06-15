@@ -107,29 +107,21 @@ CREATE TABLE Atenciones (
 
 
 
-CREATE TABLE Turnos (
+
+CREATE TABLE turnos (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-	numero INTEGER(4) NOT NULL,
-    observaciones VARCHAR(100) ,
-    estado VARCHAR(30),
-	guia_id INT NOT NULL,
-    atencion_id INT NOT NULL,
-    fecha_registro DATETIME NOT NULL,
-    usuario_registro INT 
-) engine = innodb;
+    numero int(4) NOT NULL,
+    estado varchar(30) DEFAULT NULL,
+    fecha_uso datetime DEFAULT NULL,
+    fecha_salida datetime DEFAULT NULL,
+    fecha_regreso datetime DEFAULT NULL,
+    observaciones text,
+    guia_id varchar(20) NOT NULL,
+    atencion_id int NOT NULL,
+    fecha_registro datetime NOT NULL,
+    usuario_registro int DEFAULT NULL
+) ENGINE=InnoDB;
 
-
-CREATE TABLE Gestion_turnos (
-    turno_id INT NOT NULL,
-    guia_id INT NOT NULL,
-    fecha_uso DATETIME NOT NULL,
-    fecha_salida DATETIME,
-    fecha_regreso DATETIME,
-    observaciones TEXT,
-    fecha_registro DATETIME NOT NULL,
-    usuario_registro INT,
-    PRIMARY KEY(turno_id, guia_id)
-) engine = innodb;
 
 
 ALTER TABLE Usuarios
