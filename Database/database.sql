@@ -1,86 +1,186 @@
+CREATE DATABASE Gestion_turnos_guias_bd;
+use Gestion_turnos_guias_bd; 
+
 CREATE TABLE Usuarios (
-	usuario_id INT PRIMARY KEY,
-    nomnbre VARCHAR(100) NOT NULL,
-    u_password VARCHAR(100) NOT NULL,
-    rol VARCHAR(100) NOT NULL,
-	estado VARCHAR(100) NOT NULL,
-    fecha_reg DATE NOT NULL
-)
+	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    email VARCHAR(70) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+	estado VARCHAR(100) DEFAULT 'ACTIVO',
+    rol_id INT NOT NULL,
+    guia_o_supervisor_id VARCHAR(20),
+    fecha_registro DATETIME NOT NULL,
+    usuario_registro INT 
+) engine = innodb;
+
+
+CREATE TABLE Roles (
+	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    nombre VARCHAR(20) NOT NULL,
+    descripcion TEXT,
+    icono VARCHAR(25),
+    fecha_registro DATETIME NOT NULL,
+    usuario_registro INT   
+) engine = innodb;
 
 CREATE TABLE Guias (
-	cedula VARCHAR(100) PRIMARY KEY,
-    rnt VARCHAR(100) NOT NULL,
+	cedula VARCHAR(20) PRIMARY KEY NOT NULL,
+    rnt VARCHAR(40) NOT NULL UNIQUE,
     nombres VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
-    fecha_nac DATE NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    genero VARCHAR(100) NOT NULL,
-	estado VARCHAR(100) NOT NULL,
-    foto VARCHAR(200) NOT NULL,
-    observaciones VARCHAR(200) NOT NULL
-)
+    fecha_nacimiento DATE,
+    genero VARCHAR(100),
+    foto VARCHAR(200) UNIQUE,
+    observaciones TEXT,
+    usuario_id INT NOT NULL,
+    fecha_registro DATETIME NOT NULL,
+    usuario_registro INT 
+) engine = innodb;
+
+CREATE TABLE Supervisores (
+	cedula VARCHAR(20) PRIMARY KEY NOT NULL,
+    rnt VARCHAR(40) NOT NULL UNIQUE,
+    nombres VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE,
+    genero VARCHAR(100),
+    foto VARCHAR(200) UNIQUE,
+    observaciones TEXT,
+    usuario_id INT NOT NULL,
+    fecha_registro DATETIME NOT NULL,
+    usuario_registro INT 
+) engine = innodb;
+
+
 
 CREATE TABLE Buques (
-	nombre VARCHAR(100) PRIMARY KEY,
-    foto VARCHAR(100) NOT NULL,
-    fecha_reg DATE NOT NULL,
-    usuario_id INT,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id)
-)
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    codigo VARCHAR(30) UNIQUE,
+	nombre VARCHAR(100) NOT NULL,
+    foto VARCHAR(15) UNIQUE,
+    fecha_registro DATETIME NOT NULL,
+    usuario_registro INT 
+) engine = innodb;
 
 
 CREATE TABLE Recaladas (
-	codigo VARCHAR(100) PRIMARY KEY,
-    id INT NOT NULL,
-    fecha_ini DATE NOT NULL,
-    fecha_fin DATE NOT NULL,
-    fecha_reg DATE NOT NULL,
-    num_turistas INT(11) NOT NULL,
-    observaciones VARCHAR(100) NOT NULL,
-    origen VARCHAR(100) NOT NULL,
-	usuario_id INT,
-    nombre VARCHAR(100),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id),
-    FOREIGN KEY (nombre) REFERENCES buques(nombre)
-)
+	id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    fecha_arribo DATETIME NOT NULL,
+    fecha_zarpe DATE,
+    total_turistas INTEGER(5) NOT NULL,
+    observaciones TEXT,
+    buque_id INT NOT NULL,
+    pais_origen INT NOT NULL,
+    fecha_registro DATETIME NOT NULL,
+    usuario_registro INT
+) engine = innodb;
+
+
+CREATE TABLE Paises (
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+	nombre VARCHAR(100) UNIQUE NOT NULL,
+    bandera VARCHAR(15) UNIQUE,
+    fecha_registro DATETIME NOT NULL,
+    usuario_registro INT 
+) engine = innodb;
+
 
 CREATE TABLE Atenciones (
-	aten_id INT PRIMARY KEY,
-    fecha_ate DATE NOT NULL,
-    fecha_cie DATE NOT NULL,
-    fecha_reg DATE NOT NULL,
-    admin_turno VARCHAR(100) NOT NULL,
-    num_turnos INT(11) NOT NULL,
-    observaciones VARCHAR(100) NOT NULL,
-	usuario_id INT,
-    codigo VARCHAR(100),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id),
-    FOREIGN KEY (codigo) REFERENCES recaladas(codigo)
-)
+	id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    fecha_inicio DATETIME NOT NULL,
+    fecha_cierre  DATETIME,
+    total_turnos INTEGER(3) NOT NULL,
+    observaciones TEXT,
+    supervisor_id INT,
+    recalada_id INT NOT NULL,
+    fecha_registro DATETIME NOT NULL,
+    usuario_registro INT 
+) engine = innodb;
 
-CREATE TABLE Turno (
-	turno_id INT PRIMARY KEY,
-    fecha_reg DATE NOT NULL,
-    estado VARCHAR(100) NOT NULL,
-    pos_turnos INT(11) NOT NULL,
-    observaciones VARCHAR(100) NOT NULL,
-	usuario_id INT,
-    aten_id INT,
-    cedula VARCHAR(100),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id),
-    FOREIGN KEY (aten_id) REFERENCES atenciones(aten_id),
-    FOREIGN KEY (cedula) REFERENCES guias(cedula)
-)
 
-CREATE TABLE Gestion_Turno (
-	ges_tur_id INT PRIMARY KEY,
-    fecha_hor_sal DATE NOT NULL,
-    fecha_hor_regreso DATE NOT NULL,
-    fecha_hor_aten DATE NOT NULL,
-    observaciones VARCHAR(100) NOT NULL,
-	aten_id INT,
-    turno_id INT,
-    FOREIGN KEY (aten_id) REFERENCES atenciones(aten_id),
-    FOREIGN KEY (turno_id) REFERENCES turno(turno_id)
-)
 
+CREATE TABLE Turnos (
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+	numero INTEGER(4) NOT NULL,
+    observaciones VARCHAR(100) ,
+    estado VARCHAR(30),
+	guia_id INT NOT NULL,
+    atencion_id INT NOT NULL,
+    fecha_registro DATETIME NOT NULL,
+    usuario_registro INT 
+) engine = innodb;
+
+
+CREATE TABLE Gestion_turnos (
+    turno_id INT NOT NULL,
+    guia_id INT NOT NULL,
+    fecha_uso DATETIME NOT NULL,
+    fecha_salida DATETIME,
+    fecha_regreso DATETIME,
+    observaciones TEXT,
+    fecha_registro DATETIME NOT NULL,
+    usuario_registro INT,
+    PRIMARY KEY(turno_id, guia_id)
+) engine = innodb;
+
+ALTER TABLE Gestion_turnos
+DROP COLUMN guia_id;
+
+ALTER TABLE Gestion_turnos
+ADD COLUMN guia_id VARCHAR(20) NOT NULL
+AFTER turno_id;
+
+ALTER TABLE Usuarios
+ADD CONSTRAINT Fk_Roles_usuarios
+FOREIGN KEY (rol_id)
+REFERENCES Roles(id);
+
+ALTER TABLE Supervisores
+ADD CONSTRAINT Fk_Usuarios_Supervisores
+FOREIGN KEY (usuario_id)
+REFERENCES Usuarios(id);
+
+ALTER TABLE Guias
+ADD CONSTRAINT Fk_Usuarios_Guias
+FOREIGN KEY (usuario_id)
+REFERENCES Usuarios(id);
+
+ALTER TABLE Recaladas
+ADD CONSTRAINT Fk_Recaladas_Buques
+FOREIGN KEY (buque_id)
+REFERENCES Buques(id);
+
+ALTER TABLE Recaladas
+ADD CONSTRAINT Fk_Paises_Recalada
+FOREIGN KEY (pais_origen)
+REFERENCES Paises(id);
+
+ALTER TABLE Atenciones
+ADD CONSTRAINT Fk_Atenciones_Recaladas
+FOREIGN KEY (recalada_id)
+REFERENCES Recaladas(id);
+
+ALTER TABLE Atenciones
+ADD CONSTRAINT Fk_Supervisores_Atenciones
+FOREIGN KEY (supervisor_id)
+REFERENCES Supervisores(cedula);
+
+ALTER TABLE Turnos
+ADD CONSTRAINT Fk_Turnos_Atenciones
+FOREIGN KEY (atencion_id)
+REFERENCES Atenciones(id);
+
+ALTER TABLE Turnos
+ADD CONSTRAINT Fk_Guias_Turnos
+FOREIGN KEY (guia_id)
+REFERENCES Guias(cedula);
+
+ALTER TABLE Gestion_turnos
+ADD CONSTRAINT Fk_Gestion_turnos_Guias
+FOREIGN KEY (guia_id)
+REFERENCES Guias(cedula);
+
+ALTER TABLE Gestion_turnos
+ADD CONSTRAINT Fk_Gestion_turnos_Turnos
+FOREIGN KEY (turno_id)
+REFERENCES Turnos(id);
