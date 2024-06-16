@@ -22,7 +22,7 @@ CREATE TABLE Usuarios (
 ) engine = innodb;
 
 
-CREATE TABLE Roles (
+CREATE TABLE Rols (
 	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     nombre VARCHAR(20) NOT NULL,
     descripcion TEXT,
@@ -45,7 +45,7 @@ CREATE TABLE Guias (
     usuario_registro INT 
 ) engine = innodb;
 
-CREATE TABLE Supervisores (
+CREATE TABLE Supervisors (
 	cedula VARCHAR(20) PRIMARY KEY NOT NULL,
     rnt VARCHAR(40) NOT NULL UNIQUE,
     nombres VARCHAR(100) NOT NULL,
@@ -125,12 +125,12 @@ CREATE TABLE turnos (
 
 
 ALTER TABLE Usuarios
-ADD CONSTRAINT Fk_Roles_usuarios
+ADD CONSTRAINT Fk_Rols_usuarios
 FOREIGN KEY (rol_id)
-REFERENCES Roles(id);
+REFERENCES Rols(id);
 
-ALTER TABLE Supervisores
-ADD CONSTRAINT Fk_Usuarios_Supervisores
+ALTER TABLE Supervisors
+ADD CONSTRAINT Fk_Usuarios_Supervisors
 FOREIGN KEY (usuario_id)
 REFERENCES Usuarios(id);
 
@@ -155,9 +155,9 @@ FOREIGN KEY (recalada_id)
 REFERENCES Recaladas(id);
 
 ALTER TABLE Atenciones
-ADD CONSTRAINT Fk_Supervisores_Atenciones
+ADD CONSTRAINT Fk_Supervisors_Atenciones
 FOREIGN KEY (supervisor_id)
-REFERENCES Supervisores(cedula);
+REFERENCES Supervisors(cedula);
 
 ALTER TABLE Turnos
 ADD CONSTRAINT Fk_Turnos_Atenciones
@@ -168,4 +168,3 @@ ALTER TABLE Turnos
 ADD CONSTRAINT Fk_Guias_Turnos
 FOREIGN KEY (guia_id)
 REFERENCES Guias(cedula);
-
