@@ -8,21 +8,26 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Lo
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
 
-class TestLoginUseCase{
+class TestLoginUseCase
+{
 
-    public static function TestLoginShouldShowUserData(){
+    public static function TestLoginShouldShowUserData()
+    {
         //arrenge
-        $respository = new UsuarioRepository();
-        $loginQuery = new LoginQueryHandler($respository);
-        $email = "fulanito4@gmail.comx";
-        $password = "Abc123$$$";
-        $request = new LoginRequest($email, $password);
-        $loginUseCase = new LoginUseCase($loginQuery);
-        // Act
-        $response = $loginUseCase->RequestAccess($request);
-        echo "Nombre: ".$response->getNombre()."<br>";
-
-        // Assert
+        try {
+            $respository = new UsuarioRepository();
+            $loginQuery = new LoginQueryHandler($respository);
+            $email = "fulanito4@gmail.com";
+            $password = "Abc123$$$";
+            $request = new LoginRequest($email, $password);
+            $loginUseCase = new LoginUseCase($loginQuery);
+            // Act
+            $response = $loginUseCase->RequestAccess($request);
+            // Assert
+            echo "Nombre: " . $response->getNombre() . "<br>";
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }
 
