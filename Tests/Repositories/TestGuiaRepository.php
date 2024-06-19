@@ -2,6 +2,7 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Guia.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/GuiaRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 class TestGuiaRepository
 {
@@ -9,24 +10,27 @@ class TestGuiaRepository
     {
         try {
             // Arrange
+            $usuario = 35;
             $guia = new Guia();
             $guid = Utility::generateGUID(1);
-            $guia->cedula = "234567004";
-            // $guia->rnt =  $guid;
-            $guia->rnt =  "66711822-95af";
+            $guia->cedula = "55443322";
+            $guia->rnt =  $guid;
+            // $guia->rnt =  "66711822-95af";
             $guia->nombres = "FULANITO-". explode("-", $guia->rnt)[1];
             $guia->apellidos = "DE TAL";
-            $guia->fecha_nacimiento = (new DateTime("1978-09-26"))->format('Y-m-d H:i:s');
-
-            $guia->genero = "Masculino";
-            $guia->usuario_id = 2;
+            $guia->fecha_nacimiento = (new DateTime("1991-11-08"))->format('Y-m-d H:i:s');
+            $guia->genero = "Femenino";
+            $guia->usuario_id = $usuario;
             $guia->fecha_registro = new DateTime();
             $guia->usuario_registro = 1;
             $repository = new GuiaRepository();
             // Act
             $guia = $repository->create($guia);
             echo "Guía creado.<br>";
-        } catch (Exception $e) {
+        } catch (EntityReferenceNotFoundException $e) {
+            echo "ERROR: ".$e->getMessage() ;
+        }
+        catch (Exception $e) {
             echo "ERROR: ".$e->getMessage(). "<br>";
         }
     }
@@ -91,9 +95,9 @@ class TestGuiaRepository
     }
 }
 
-// TestGuiaRepository::testSaveGuiaAndRetrieveWithID();
-TestGuiaRepository::testFindGuiaAndShowData();
-TestGuiaRepository::testUpdateGuiaAndShowNewData();
-TestGuiaRepository::testFindGuiaAndShowData();
+TestGuiaRepository::testSaveGuiaAndRetrieveWithID();
+// TestGuiaRepository::testFindGuiaAndShowData();
+// TestGuiaRepository::testUpdateGuiaAndShowNewData();
+// TestGuiaRepository::testFindGuiaAndShowData();
 // TestGuiaRepository::testDeleteGuiaVerifyNonExistence();
 TestGuiaRepository::testShowAllGuiasAndShowMessageIfEmpty();

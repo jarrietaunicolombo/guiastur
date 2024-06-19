@@ -1,18 +1,16 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Usuario.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IUsuarioRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Atencion.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IAtencionRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/DuplicateEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NotFoundEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
 
-use ActiveRecord\DatabaseException;
-
-class UsuarioRepository implements IUsuarioRepository
+class AtencionRepository implements IAtencionRepository
 {
-    public function find($id): Usuario
+    public function find($id): Atencion
     {
         try {
-            return Usuario::find($id);
+            return Atencion::find($id);
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -26,46 +24,46 @@ class UsuarioRepository implements IUsuarioRepository
     public function findAll(): array
     {
         try {
-            return Usuario::all();
+            return Atencion::all();
         } catch (Exception $e) {
             throw Utility::errorHandler($e);
         }
     }
 
-    public function create(Usuario $usuario): Usuario
+    public function create(Atencion $Atencion): Atencion
     {
         try {
-            $usuario->save();
-            return $usuario;
+            $Atencion->save();
+            return $Atencion;
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Usuario ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Atencion ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
     }
 
-    public function update(Usuario $usuario): Usuario
+    public function update(Atencion $Atencion): Atencion
     {
-        $this->find($usuario->id);
+        $this->find($Atencion->id);
         try {
-             $usuario->save();
-             return $usuario;
+            $Atencion->save();
+            return $Atencion;
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Usuario ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Atencion ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
-            throw  Utility::errorHandler($e);
+            throw Utility::errorHandler($e);
         }
     }
 
     public function delete($id): bool
     {
-        $usuario = $this->find($id);
-        return  $usuario->delete();
+        $Atencion = $this->find($id);
+        return $Atencion->delete();
     }
 }

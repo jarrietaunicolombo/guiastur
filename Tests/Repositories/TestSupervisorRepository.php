@@ -2,6 +2,7 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Supervisor.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/SupervisorRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 class TestSupervisorRepository
 {
@@ -9,24 +10,29 @@ class TestSupervisorRepository
     {
         try {
             // Arrange
+            $usuario = 32;
             $supervisor = new Supervisor();
             $guid = Utility::generateGUID(1);
-            $supervisor->cedula = "11223344";
+            $supervisor->cedula = "44332211";
             $supervisor->rnt =  $guid;
             // $supervisor->rnt =  "66711822-95af";
             $supervisor->nombres = "FULANITO-". explode("-", $supervisor->rnt)[1];
             $supervisor->apellidos = "DE TAL";
-            $supervisor->fecha_nacimiento = (new DateTime("1985-05-11"))->format('Y-m-d H:i:s');
+            $supervisor->fecha_nacimiento = (new DateTime("1990-07-11"))->format('Y-m-d H:i:s');
 
-            $supervisor->genero = "Femenino";
-            $supervisor->usuario_id = 5;
+            $supervisor->genero = "Famenino";
+            $supervisor->usuario_id = $usuario;
             $supervisor->fecha_registro = new DateTime();
             $supervisor->usuario_registro = 1;
             $repository = new SupervisorRepository();
+            
             // Act
             $repository->create($supervisor);
             echo "Supervisor creado.<br>";
-        } catch (Exception $e) {
+        } catch (EntityReferenceNotFoundException $e) {
+            echo "ERROR: ".$e->getMessage() ;
+        }
+        catch (Exception $e) {
             echo "ERROR: ".$e->getMessage(). "<br>";
         }
     }
@@ -34,7 +40,7 @@ class TestSupervisorRepository
     public static function testFindSupervisorAndShowData()
     {
         try {
-            $id = "11223344";
+            $id = "44332211";
             $repository = new SupervisorRepository();
             $guia = $repository->find($id);
 
@@ -48,7 +54,7 @@ class TestSupervisorRepository
     {
         try {
             $repository = new SupervisorRepository();
-            $supervisor = $repository->find("11223344");
+            $supervisor = $repository->find("44332211");
             $supervisor->observaciones = "Supervisor Actualizado";
             $repository->update($supervisor);
 
@@ -61,7 +67,7 @@ class TestSupervisorRepository
     public static function testDeleteSupervisorVerifyNonExistence()
     {
         try {
-            $id = "11223344";
+            $id = "44332211";
             $repository = new SupervisorRepository();
             $repository->delete($id);
             echo "Supervisor elimimado";
@@ -91,6 +97,6 @@ class TestSupervisorRepository
 }
 
 // TestSupervisorRepository::testSaveSupervisorAndRetrieveWithID();
-TestSupervisorRepository::testFindSupervisorAndShowData();
+// TestSupervisorRepository::testFindSupervisorAndShowData();
 // TestSupervisorRepository::testUpdateGuiaAndShowNewData();
 TestSupervisorRepository::testShowAllSupervisorsAndShowMessageIfEmpty();

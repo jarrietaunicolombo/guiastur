@@ -2,21 +2,23 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Usuario.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/UsuarioRespository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 use ActiveRecord\DatabaseException;
+use ActiveRecord\Utils;
 
 class TestUsuarioRepository
 {
     public static function testSaveUserAndRetrieveWithID()
     {
         // Arrange
-        $rol = 1;
-        $usuarioAdmin = 2;
+        $rol = 3;
+        $usuarioAdmin = 1;
         try {
             $usuario = new Usuario();
-            $usuario->nombre = "FULANITO DE TAL 2";
-            $usuario->email = "fulanito2@gmail.com";
-            $usuario->password = "UnaPrueba$$$***";
+            $usuario->nombre = "FULANITO DE TAL 5";
+            $usuario->email = "fulanito5@gmail.com";
+            $usuario->password = "Abc123$$$";
             $usuario->rol_id = $rol;
             $usuario->fecha_registro = date('Y-m-d H:i:s', strtotime('now'));
             $usuario->usuario_registro = $usuarioAdmin;
@@ -29,7 +31,10 @@ class TestUsuarioRepository
             } else {
                 echo "Usuario No creado";
             }
-        } catch (Exception $e) {
+        } catch (EntityReferenceNotFoundException $e) {
+            echo "ERROR: ".$e->getMessage() ;
+        }
+        catch (Exception $e) {
             echo "ERROR: ".$e->getMessage() ;
         }
     }

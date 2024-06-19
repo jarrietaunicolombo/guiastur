@@ -2,6 +2,7 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Buque.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/BuqueRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 class TestBuqueRepository
 {
@@ -22,7 +23,10 @@ class TestBuqueRepository
             } else {
                 echo "Buque No creado";
             }
-        } catch (Exception $e) {
+        } catch (EntityReferenceNotFoundException $e) {
+            echo "ERROR: ".$e->getMessage() ;
+        }
+        catch (Exception $e) {
             echo "ERROR: ".$e->getMessage(). "<br>";
         }
     }

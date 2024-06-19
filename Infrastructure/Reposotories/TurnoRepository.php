@@ -1,18 +1,16 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Usuario.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IUsuarioRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Turno.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/ITurnoRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/DuplicateEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NotFoundEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
 
-use ActiveRecord\DatabaseException;
-
-class UsuarioRepository implements IUsuarioRepository
+class TurnoRepository implements ITurnoRepository
 {
-    public function find($id): Usuario
+    public function find($id): Turno
     {
         try {
-            return Usuario::find($id);
+            return Turno::find($id);
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -26,46 +24,46 @@ class UsuarioRepository implements IUsuarioRepository
     public function findAll(): array
     {
         try {
-            return Usuario::all();
+            return Turno::all();
         } catch (Exception $e) {
             throw Utility::errorHandler($e);
         }
     }
 
-    public function create(Usuario $usuario): Usuario
+    public function create(Turno $Turno): Turno
     {
         try {
-            $usuario->save();
-            return $usuario;
+            $Turno->save();
+            return $Turno;
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Usuario ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Turno ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
     }
 
-    public function update(Usuario $usuario): Usuario
+    public function update(Turno $Turno): Turno
     {
-        $this->find($usuario->id);
+        $this->find($Turno->id);
         try {
-             $usuario->save();
-             return $usuario;
+            $Turno->save();
+            return $Turno;
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Usuario ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Turno ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
-            throw  Utility::errorHandler($e);
+            throw Utility::errorHandler($e);
         }
     }
 
     public function delete($id): bool
     {
-        $usuario = $this->find($id);
-        return  $usuario->delete();
+        $Turno = $this->find($id);
+        return $Turno->delete();
     }
 }

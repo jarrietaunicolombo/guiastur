@@ -21,15 +21,18 @@ class TestRolRepository
             } else {
                 echo "Rol No creado";
             }
-        } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+        } catch (EntityReferenceNotFoundException $e) {
+            echo "ERROR: ".$e->getMessage() ;
+        }
+        catch (Exception $e) {
+            echo "ERROR: ".$e->getMessage() ;
         }
     }
 
     public static function testFindRolAndShowData()
     {
         try {
-            $id = 1;
+            $id = 2;
             $repository = new RolRepository();
             $rol = $repository->find($id);
 
@@ -45,8 +48,9 @@ class TestRolRepository
     {
         try {
             $repository = new RolRepository();
-            $rol = $repository->find(1);
-            $rol->nombre = "Super Admin";
+            $rol = $repository->find(2);
+            $rol->nombre = "Supervisor";
+            // $rol->descripcion = "Persona encargada de registar Usuarios, Roles, Guias, Supervisores, Paises, ";
             $rol = $repository->update($rol);
 
             echo "NOMBRE: " . $rol->nombre . "<BR>";
@@ -92,6 +96,7 @@ class TestRolRepository
 // TestRolRepository::testSaveRolAndRetrieveWithID();
 // TestRolRepository::testFindRolAndShowData();
 // TestRolRepository::testUpdateRolAndShowNewData();
+// TestRolRepository::testFindRolAndShowData();
 // TestRolRepository::testDeleteRolVerifyNonExistence();
 TestRolRepository::testShowAllRolesAndShowMessageIfEmpty();
 

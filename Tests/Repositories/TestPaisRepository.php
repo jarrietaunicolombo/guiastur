@@ -2,6 +2,7 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Pais.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/PaisRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 class TestPaisRepository
 {
@@ -22,7 +23,10 @@ class TestPaisRepository
             } else {
                 echo "Pais No creado";
             }
-        } catch (Exception $e) {
+        } catch (EntityReferenceNotFoundException $e) {
+            echo "ERROR: ".$e->getMessage() ;
+        }
+        catch (Exception $e) {
             echo "ERROR: ".$e->getMessage(). "<br>";
         }
     }
@@ -90,7 +94,7 @@ class TestPaisRepository
 }
 
 // TestPaisRepository::testSavePaisAndRetrieveWithID();
-TestPaisRepository::testFindPaisAndShowData();
+// TestPaisRepository::testFindPaisAndShowData();
 // TestPaisRepository::testUpdatePaisAndShowNewData();
 // TestPaisRepository::testDeletePaisVerifyNonExistence();
 TestPaisRepository::testShowAllPaisesAndShowMessageIfEmpty();
