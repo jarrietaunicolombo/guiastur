@@ -57,6 +57,24 @@ class TestUsuarioRepository
         }
     }
 
+    public static function testFindUserByEmailAndShowData()
+    {
+        try {
+              // Arrange
+            $email = "fulanito5@gmail.com";
+            $repository = new UsuarioRepository();
+            // Act
+            $usuario = $repository->findByEmail($email);
+            // Assert: 
+            echo $usuario->nombre."<BR>";
+            echo $usuario->email."<BR>";
+           
+        } catch (Exception $e) {
+            echo "ERROR: ".$e->getMessage();
+        }
+    }
+
+
     public static function testUpdaeUserAndShowNewData()
     {
         try {
@@ -120,4 +138,5 @@ class TestUsuarioRepository
 // TestUsuarioRepository::testFindUserAndShowData();s
 // TestUsuarioRepository::testUpdaeUserAndShowNewData();
 // TestUsuarioRepository::testDeleteUserVerifyNonExistence();
-TestUsuarioRepository::testShowAllUsersAndShowMessageIfEmpty();
+// TestUsuarioRepository::testShowAllUsersAndShowMessageIfEmpty();
+TestUsuarioRepository::testFindUserByEmailAndShowData();

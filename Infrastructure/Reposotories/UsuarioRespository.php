@@ -23,6 +23,24 @@ class UsuarioRepository implements IUsuarioRepository
         }
     }
 
+    public function findByEmail($email): Usuario
+    {
+        try {
+            $user = Usuario::find_by_email($email);
+            if(!$user){
+                throw new NotFoundEntryException("Usuario con email $email no existe");
+            }
+            return $user;
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
+    }
+
     public function findAll(): array
     {
         try {
