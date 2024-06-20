@@ -10,10 +10,10 @@ class TestTurnoRepository
     {
         try {
             // Arrange
-            $guia = '11223344';
-            $atencion = 2;
+            $guia = '7654321';
+            $atencion = 1;
             $Turno = new Turno();
-            $Turno->numero = 1;
+            $Turno->numero = 2;
             $Turno->fecha_uso = new DateTime();
             // $Turno->total_salisa = new DateTime();
             // $Turno->total_regreso = new DateTime();
@@ -125,5 +125,5 @@ class TestTurnoRepository
 // TestTurnoRepository::testFindTurnoAndShowData();
 // TestTurnoRepository::testUpdateTurnoAndShowNewData();
 // TestTurnoRepository::testFindTurnoAndShowData();
-TestTurnoRepository::testDeleteTurnoVerifyNonExistence();
+// TestTurnoRepository::testDeleteTurnoVerifyNonExistence();
 TestTurnoRepository::testShowAllTurnosAndShowMessageIfEmpty();

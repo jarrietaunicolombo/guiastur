@@ -10,22 +10,20 @@ class TestSupervisorRepository
     {
         try {
             // Arrange
-            $usuario = 32;
+            $usuario = 2;
             $supervisor = new Supervisor();
             $guid = Utility::generateGUID(1);
-            $supervisor->cedula = "44332211";
+            $supervisor->cedula = "11223344";
             $supervisor->rnt =  $guid;
             // $supervisor->rnt =  "66711822-95af";
-            $supervisor->nombres = "FULANITO-". explode("-", $supervisor->rnt)[1];
+            $supervisor->nombres = "FULANITO 3 - ". explode("-", $supervisor->rnt)[1];
             $supervisor->apellidos = "DE TAL";
             $supervisor->fecha_nacimiento = (new DateTime("1990-07-11"))->format('Y-m-d H:i:s');
-
             $supervisor->genero = "Famenino";
             $supervisor->usuario_id = $usuario;
             $supervisor->fecha_registro = new DateTime();
             $supervisor->usuario_registro = 1;
             $repository = new SupervisorRepository();
-            
             // Act
             $repository->create($supervisor);
             echo "Supervisor creado.<br>";
@@ -89,6 +87,7 @@ class TestSupervisorRepository
             foreach ($supervisorList as $supervisor) {
                 echo "ID: " .  $supervisor->cedula. "<BR>";
                 echo "NOMBRE: ". $supervisor->nombres. " " . $supervisor->apellidos."<BR>";
+                echo "ROL: ". $supervisor->usuario->rol->nombre."<BR>";
             }
         } catch (Exception $e) {
             echo "ERROR: ".$e->getMessage();

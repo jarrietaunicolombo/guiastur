@@ -10,7 +10,7 @@ class TestAtencionRepository
     {
         try {
             // Arrange
-            $supervisor = '44332211';
+            $supervisor = '11223344';
             $recalada = 1;
             $Atencion = new Atencion();
             $Atencion->fecha_inicio = new DateTime();

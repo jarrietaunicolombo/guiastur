@@ -12,7 +12,8 @@ class TestRolRepository
             $rol->nombre = "Usuario";
             $rol->fecha_registro = new DateTime();
             $rol->usuario_registro = 1;
-            $rol->descripcion = "Una persona creada en el sistema pero habilitada solo para consultar cierto tipo de informacion";
+            // $rol->descripcion = "Una persona creada en el sistema pero habilitada solo para consultar cierto tipo de informacion";
+            $rol->descripcion = "Persona solo puede consultar buques y recaladas";
             $repository = new RolRepository();
             $rol = $repository->create($rol);
 
@@ -32,7 +33,7 @@ class TestRolRepository
     public static function testFindRolAndShowData()
     {
         try {
-            $id = 2;
+            $id = 1;
             $repository = new RolRepository();
             $rol = $repository->find($id);
 

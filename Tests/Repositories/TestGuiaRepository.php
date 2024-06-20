@@ -10,13 +10,13 @@ class TestGuiaRepository
     {
         try {
             // Arrange
-            $usuario = 35;
+            $usuario = 3;
             $guia = new Guia();
             $guid = Utility::generateGUID(1);
-            $guia->cedula = "55443322";
+            $guia->cedula = "7894561";
             $guia->rnt =  $guid;
             // $guia->rnt =  "66711822-95af";
-            $guia->nombres = "FULANITO-". explode("-", $guia->rnt)[1];
+            $guia->nombres = "FULANITO 5 - ". explode("-", $guia->rnt)[1];
             $guia->apellidos = "DE TAL";
             $guia->fecha_nacimiento = (new DateTime("1991-11-08"))->format('Y-m-d H:i:s');
             $guia->genero = "Femenino";
@@ -95,7 +95,7 @@ class TestGuiaRepository
     }
 }
 
-TestGuiaRepository::testSaveGuiaAndRetrieveWithID();
+// TestGuiaRepository::testSaveGuiaAndRetrieveWithID();
 // TestGuiaRepository::testFindGuiaAndShowData();
 // TestGuiaRepository::testUpdateGuiaAndShowNewData();
 // TestGuiaRepository::testFindGuiaAndShowData();

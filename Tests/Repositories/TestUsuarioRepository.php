@@ -16,8 +16,8 @@ class TestUsuarioRepository
         $usuarioAdmin = 1;
         try {
             $usuario = new Usuario();
-            $usuario->nombre = "FULANITO DE TAL 5";
-            $usuario->email = "fulanito5@gmail.com";
+            $usuario->nombre = "FULANITO DE TAL 3";
+            $usuario->email = "fulanito3@gmail.com";
             $usuario->password = "Abc123$$$";
             $usuario->rol_id = $rol;
             $usuario->fecha_registro = date('Y-m-d H:i:s', strtotime('now'));
@@ -138,5 +138,5 @@ class TestUsuarioRepository
 // TestUsuarioRepository::testFindUserAndShowData();s
 // TestUsuarioRepository::testUpdaeUserAndShowNewData();
 // TestUsuarioRepository::testDeleteUserVerifyNonExistence();
-// TestUsuarioRepository::testShowAllUsersAndShowMessageIfEmpty();
-TestUsuarioRepository::testFindUserByEmailAndShowData();
+TestUsuarioRepository::testShowAllUsersAndShowMessageIfEmpty();
+// TestUsuarioRepository::testFindUserByEmailAndShowData();

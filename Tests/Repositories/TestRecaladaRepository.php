@@ -93,7 +93,7 @@ class TestRecaladaRepository
                 echo "NUMERO DE TURISTAS: " . $Recalada->total_turistas . "<br>";
                 echo "OBSERVACIONES: " . $Recalada->observaciones . "<br>";
                 echo "PAIS ORIGEN: " . $Recalada->pais->nombre . "<br>";
-
+                echo "BUQUE: " . $Recalada->buque->nombre . "<br>";
             }
         } catch (Exception $e) {
             echo "ERROR: ".$e->getMessage(). "<br>";
