@@ -3,5 +3,5 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dt
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
 
 interface ILoginUseCase {
-    public function RequestAccess(LoginRequest $request) : LoginResponse;
+    public function login(LoginRequest $request) : LoginResponse;
 }

@@ -1,8 +1,8 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IUsuarioRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/UsuarioRespository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Features/ILoginQuery.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Features/Queries/LoginQuery/LoginQueryHandler.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/ILoginQuery.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/LoginQuery/LoginQueryHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/ILoginUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/LoginUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginRequest.php";
@@ -17,12 +17,12 @@ class TestLoginUseCase
         try {
             $respository = new UsuarioRepository();
             $loginQuery = new LoginQueryHandler($respository);
-            $email = "fulanito4@gmail.com";
+            $email = "fulanito3@gmail.com";
             $password = "Abc123$$$";
             $request = new LoginRequest($email, $password);
             $loginUseCase = new LoginUseCase($loginQuery);
             // Act
-            $response = $loginUseCase->RequestAccess($request);
+            $response = $loginUseCase->login($request);
             // Assert
             echo "Nombre: " . $response->getNombre() . "<br>";
         } catch (Exception $e) {

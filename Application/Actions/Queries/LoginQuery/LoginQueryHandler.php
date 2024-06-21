@@ -1,7 +1,7 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Features/ILoginQuery.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/ILoginQuery.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IUsuarioRepository.php";
 
 class LoginQueryHandler implements ILoginQuery{
@@ -13,7 +13,7 @@ class LoginQueryHandler implements ILoginQuery{
         $this->repository = $repository;
     }
 
-    public function loginAction(LoginRequest $request) : LoginResponse{
+    public function handler(LoginRequest $request) : LoginResponse{
     
         $usuario = $this->repository->findByEmail($request->getEmail());
         if($usuario->password != $request->getPassword()){
@@ -25,7 +25,6 @@ class LoginQueryHandler implements ILoginQuery{
                                     , $usuario->estado
                                     , $usuario->rol->nombre
                                     , $usuario->guia_o_supervisor_id+"");
-       
     }
 }
 
