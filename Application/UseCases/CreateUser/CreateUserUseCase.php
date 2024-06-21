@@ -12,8 +12,7 @@ class CreateUserUseCase implements ICreateUserUseCase {
     {
         $this->createUserCommand = $createUserCommand;
     }
-        
-    
+
     public function createUser(CreateUserRequest $request) : CreateUserResponse{
       return  $this->createUserCommand->handler($request);
     }

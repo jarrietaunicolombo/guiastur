@@ -90,7 +90,7 @@ class Utility
         ];
     }
 
-    public static function generateGUID($len)
+    public static function generateGUID($len = 4)
     {
         $data = str_replace('.', '', uniqid('', true));
         $parts = [

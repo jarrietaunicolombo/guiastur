@@ -53,6 +53,7 @@ class UsuarioRepository implements IUsuarioRepository
     public function create(Usuario $usuario): Usuario
     {
         try {
+            $usuario->validation_token = Utility::generateGUID();
             $usuario->save();
             return $usuario;
         } catch (Exception $e) {

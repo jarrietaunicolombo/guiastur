@@ -13,7 +13,7 @@ class CreateUserRequest{
             throw new \InvalidArgumentException("El Email es requerido");
         }
         if(!isset($password) || empty(trim($password))){
-            throw anew \InvalidArgumentException("El Password es requerido");
+            throw new \InvalidArgumentException("El Password es requerido");
         }
         if(!isset($nombre) || empty(trim($nombre))){
             throw new \InvalidArgumentException("El Nombre es requerido");

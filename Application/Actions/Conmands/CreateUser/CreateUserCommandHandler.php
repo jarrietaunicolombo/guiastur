@@ -22,15 +22,10 @@ class CreateUserCommandHandler implements ICreateUserCommand {
         $user->fecha_registro = $request->getFechaRegistro();
         $user->usuario_registro = $request->getUsuarioRegistro();
         $user = $this->usuarioRepository->create($user);
-        $createUserResponse = new CreateUserResponse(
+        return  new CreateUserResponse(
                                     $user->id
-                                    , $user->email
-                                    , $user->nombre
-                                    , $user->rol->id
+                                    , $user->validation_token
                                     , $user->rol->nombre
-                                    , $user->estado);
-        $createUserResponse->setFechaRegistro($user->fecha_registro);
-        $createUserResponse->setUsuarioRegistro($user->usuario_registro);
-        return $createUserResponse;   
+                                    , $request);
     }
 }

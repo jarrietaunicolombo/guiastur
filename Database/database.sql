@@ -17,10 +17,10 @@ CREATE TABLE Usuarios (
 	estado VARCHAR(100) DEFAULT 'ACTIVO',
     rol_id INT NOT NULL,
     guia_o_supervisor_id VARCHAR(20),
+    validation_token VARCHAR(250) UNIQUE,
     fecha_registro DATETIME NOT NULL,
     usuario_registro INT 
 ) engine = innodb;
-
 
 CREATE TABLE Rols (
 	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -167,3 +167,4 @@ ALTER TABLE Turnos
 ADD CONSTRAINT Fk_Guias_Turnos
 FOREIGN KEY (guia_id)
 REFERENCES Guias(cedula);
+

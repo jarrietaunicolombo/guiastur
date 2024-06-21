@@ -15,10 +15,10 @@ class TestCreateUserUseCase
 {
     public static function TestCreateUserUseShouldShowData(){
         // Arrange
-        $email = "fulanito9@gmail.com";
+        $email = "fulanito12@gmail.com";
         $password = "Abc123$$";
-        $nombre = "Fulanito 9 De Tal";
-        $rol_id = 3;
+        $nombre = "Fulanito 12 De Tal";
+        $rol_id = 2;
         $usuario_registro = 1;
         $createUserRequest = new CreateUserRequest($email, $password, $nombre, $rol_id, $usuario_registro);
         $repositorio = new UsuarioRepository();
@@ -28,7 +28,10 @@ class TestCreateUserUseCase
         // Act
         $createUserResponse = $createUserUseCase->createUser($createUserRequest);
         // Assert
-        echo "USUARIO ID: ".$createUserResponse->getId();
+        echo "USUARIO ID: ".$createUserResponse->getId()."<br/>";
+        echo "VALIDATION TOKEN: ".$createUserResponse->getValidationToken()."<br/>";
+        echo "NOBRE: ".$createUserResponse->getUsuario()->getNombre()."<br/>";
+        echo "ROL: ".$createUserResponse->getRolNombre()."<br/>";
     }
 
 }
