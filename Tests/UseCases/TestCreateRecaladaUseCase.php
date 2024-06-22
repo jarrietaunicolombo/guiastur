@@ -1,11 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Recalada.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IRecaladaRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/ICreateRecaladaCommand.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/ICreateRecaladaUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Commands/CreateRecalada/CreateRecaladaCommnadHandler.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Commands/CreateRecaladaCommandHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateRecalada/Dto/CreateRecaladaRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateRecalada/Dto/CreateRecaladaResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateRecalada/CreateRecaladaUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/RecaladaRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
@@ -19,11 +14,11 @@ class TestCreateRecaladaUseCase
         try {
             // Arrange
             $fecha_arribo = new DateTime();
-            $fecha_zarpe = (new DateTime())->modify("+5 days");
-            $total_turistas = 450;
-            $buque_id = 1;
+            $fecha_zarpe = (new DateTime())->modify("+3 days");
+            $total_turistas = 580;
+            $buque_id = 5;
             $pais_id = 1;
-            $observaciones = "Turistas en su mayoria con idioma Portuguez";
+            $observaciones = "Turistas en su mayoria con idioma Venezuela";
             $usuario_registro = 1;
             $createRecaladaRequest = new CreateRecaladaRequest(
                 $fecha_arribo
