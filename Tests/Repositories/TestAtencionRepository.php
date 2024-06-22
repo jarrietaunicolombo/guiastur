@@ -108,6 +108,29 @@ class TestAtencionRepository
             echo "ERROR: " . $e->getMessage() . "<br>";
         }
     }
+
+    public static function testValidateAtencionShouldShowYesOrNo(){
+        try {
+            // Arrange
+            $recaladaId = 1;
+            $fecha = new DateTime();
+            // $fecha = (new DateTime())->modify("+20 day");
+            $repository = new AtencionRepository();
+            // Act
+            $isValidate = $repository->validateAtencion($recaladaId, $fecha);
+            // Assert 
+            if($isValidate){
+                echo "La Atencion es valida para ".$fecha->format("Y-m-d H:i:s");
+            }
+            else{
+                echo "La Atencion no es validad para ".$fecha->format("Y-m-d H:i:s");
+            }
+        } catch (Exception $e) {
+            echo "ERROR: ".$e->getMessage(). "<br>";
+        }
+    }
+
+
 }
 
 // TestAtencionRepository::testSaveAtencionAndRetrieveWithID();
@@ -115,3 +138,4 @@ class TestAtencionRepository
 // TestAtencionRepository::testUpdateAtencionAndShowNewData();
 // TestAtencionRepository::testDeleteAtencionVerifyNonExistence();
 TestAtencionRepository::testShowAllAtencionsAndShowMessageIfEmpty();
+TestAtencionRepository::testValidateAtencionShouldShowYesOrNo();
