@@ -90,10 +90,32 @@ class TestRecaladaRepository
             }
             foreach ($RecaladaList as $Recalada) {
                 echo "ID: " . $Recalada->id . "<br>";
+                echo "FECHA ARRIBO: " . $Recalada->fecha_arribo->format("Y-m-d H:i:s") . "<br>";
+                echo "FECHA ZARPE: " . $Recalada->fecha_zarpe->format("Y-m-d H:i:s") . "<br>";
                 echo "NUMERO DE TURISTAS: " . $Recalada->total_turistas . "<br>";
                 echo "OBSERVACIONES: " . $Recalada->observaciones . "<br>";
                 echo "PAIS ORIGEN: " . $Recalada->pais->nombre . "<br>";
                 echo "BUQUE: " . $Recalada->buque->nombre . "<br>";
+            }
+        } catch (Exception $e) {
+            echo "ERROR: ".$e->getMessage(). "<br>";
+        }
+    }
+
+    public static function testValidateRecaladaShouldShowYesOrNo(){
+        try {
+            // Arrange
+            $buqueId = 1;
+            $fecha = (new DateTime())->modify("+5 day");
+            $repository = new RecaladaRepository();
+            // Act
+            $isValidate = $repository->validateRecalada($buqueId, $fecha);
+            // Assert 
+            if($isValidate){
+                echo "La Recalada es valida para ".$fecha->format("Y-m-d H:i:s");
+            }
+            else{
+                echo "La Recalada no es validad para ".$fecha->format("Y-m-d H:i:s");
             }
         } catch (Exception $e) {
             echo "ERROR: ".$e->getMessage(). "<br>";
@@ -106,4 +128,5 @@ class TestRecaladaRepository
 // TestRecaladaRepository::testUpdateRecaladaAndShowNewData();
 // TestRecaladaRepository::testDeleteRecaladaVerifyNonExistence();
 TestRecaladaRepository::testShowAllRecaladasAndShowMessageIfEmpty();
+TestRecaladaRepository::testValidateRecaladaShouldShowYesOrNo();
 
