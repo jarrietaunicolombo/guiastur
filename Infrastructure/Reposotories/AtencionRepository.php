@@ -66,4 +66,13 @@ class AtencionRepository implements IAtencionRepository
         $Atencion = $this->find($id);
         return $Atencion->delete();
     }
+
+    public function validateAtencion(int $RecaladaId, DateTime $fecha): bool{
+        $atenciones = Atencion::find("all", array("conditions" => 
+                                    array("recalada_id = ? AND fecha_cierre > ?", $RecaladaId, $fecha)));
+        if (count($atenciones) > 0) {
+            return false;
+        }
+        return true;
+    }
 }

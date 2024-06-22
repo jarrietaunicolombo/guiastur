@@ -1,7 +1,8 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Commands/CreateAtencionCommandHandler.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateAtecion/Dto/CreateAtencionRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateAtecion/CreateAtencionUseCase.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/ValidateAtencionQueryHandler.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateAtencion/Dto/CreateAtencionRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateAtencion/CreateAtencionUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/AtencionRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
@@ -13,8 +14,8 @@ class TestCreateAtencionUseCase
     {
         try {
             // Arrange
-            $fecha_inicio = (new DateTime())->modify("+4 days");
-            $fecha_cierre = (new DateTime())->modify("+5 days");
+            $fecha_inicio =(new DateTime())->modify("+10 days");
+            $fecha_cierre = (new DateTime())->modify("+15 days");
             $total_turnos = 45;
             $observacioes = "Es necesario que los Guias hablen Frances";
             $supervisor_id = "44332211";
@@ -30,8 +31,9 @@ class TestCreateAtencionUseCase
                 , $usurio_id
             );
             $repositorio = new AtencionRepository();
+            $validateAtencionQuery = new ValidateAtencionQueryHandler($repositorio);
             $createAtencionAction = new CreateAtencionCommandHandler($repositorio);
-            $createAtencionUseCase = new CreateAtencionUseCase($createAtencionAction);
+            $createAtencionUseCase = new CreateAtencionUseCase($validateAtencionQuery, $createAtencionAction);
 
             // Act
             $createAtencionResponse = $createAtencionUseCase->createAtencion($createAtencionRequest);

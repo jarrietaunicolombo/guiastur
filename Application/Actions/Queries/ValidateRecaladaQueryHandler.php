@@ -6,16 +6,16 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Reposit
 class ValidateRecaladaQueryHandler implements IValidateRecaladaQuery{
 
 
-    private $recaladaRepository;
+    private $atencionRepository;
     
     public function __construct(IRecaladaRepository $recaladaRepository)
     {
-        $this->recaladaRepository = $recaladaRepository;
+        $this->atencionRepository = $recaladaRepository;
     }
 
     public function handler(ValidateRecaldaRequest $request) : bool{
     
-        return $this->recaladaRepository->validateRecalada($request->getBuqueId(), $request->getFecha());
+        return $this->atencionRepository->validateRecalada($request->getBuqueId(), $request->getFecha());
          
     }
 }
