@@ -106,7 +106,7 @@ class TestRecaladaRepository
         try {
             // Arrange
             $buqueId = 1;
-            $fecha = new DateTime();
+            $fecha = (new DateTime())->modify("+5 day");
             $repository = new RecaladaRepository();
             // Act
             $isValidate = $repository->validateRecalada($buqueId, $fecha);
