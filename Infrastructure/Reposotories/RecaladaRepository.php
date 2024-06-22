@@ -66,4 +66,16 @@ class RecaladaRepository implements IRecaladaRepository
         $recalada = $this->find($id);
         return $recalada->delete();
     }
+
+    public function validateRecalada(int $buqueId, DateTime $fecha): bool{
+        $recaladas = Recalada::find("all", array("conditions" 
+                                                =>array("buque_id = ? AND fecha_zarpe > ?"
+                                                        , $buqueId
+                                                        , $fecha)
+                                            ));
+        if (count($recaladas) > 0) {
+            return false;
+        }
+        return true;
+    }
 }

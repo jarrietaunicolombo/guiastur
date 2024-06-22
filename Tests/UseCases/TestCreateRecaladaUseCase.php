@@ -4,6 +4,8 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateRe
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateRecalada/CreateRecaladaUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/RecaladaRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/LoginQuery/ValidateRecaladaQueryHandler.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/ValidateRecaladaException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
 
 
@@ -13,7 +15,7 @@ class TestCreateRecaladaUseCase
     {
         try {
             // Arrange
-            $fecha_arribo = new DateTime();
+            $fecha_arribo =(new DateTime())->modify("+2 days");
             $fecha_zarpe = (new DateTime())->modify("+3 days");
             $total_turistas = 580;
             $buque_id = 5;
@@ -30,8 +32,9 @@ class TestCreateRecaladaUseCase
                 , $usuario_registro
             );
             $repositorio = new RecaladaRepository();
-            $createRecaladaAction = new CreateRecaladaCommandHandler($repositorio);
-            $createRecaladaUseCase = new CreateRecaladaUseCase($createRecaladaAction);
+            $validateRecaladaQuery = new ValidateRecaladaQueryHandler($repositorio);
+            $createRecaladaCommand = new CreateRecaladaCommandHandler($repositorio);
+            $createRecaladaUseCase = new CreateRecaladaUseCase($validateRecaladaQuery, $createRecaladaCommand);
 
             // Act
             $createRecaladaResponse = $createRecaladaUseCase->createRecalada($createRecaladaRequest);

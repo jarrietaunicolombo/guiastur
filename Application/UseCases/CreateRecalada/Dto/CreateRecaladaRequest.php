@@ -37,9 +37,14 @@ class CreateRecaladaRequest
             throw new \InvalidArgumentException("El UsuarioRegistroID de la nueva Recalada es requerido");
         }
 
-        if (!isset($observaciones) || empty(trim($observaciones)) ) {
+        if (isset($observaciones) && empty(trim($observaciones)) ) {
             $observaciones = null;
         }
+
+        if (isset($fecha_zarpe) && $fecha_arribo > $fecha_zarpe)  {
+            throw new \InvalidArgumentException("La Fecha de Arribo no puede ser mayor que la Fecha de Zarpe para la nueva Recaladad");
+        }
+
 
         $this->fecha_arribo = $fecha_arribo;
         $this->fecha_zarpe = $fecha_zarpe;
