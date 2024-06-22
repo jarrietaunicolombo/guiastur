@@ -6,4 +6,5 @@ interface IAtencionRepository
     public function create(Atencion $atencion): Atencion;
     public function update(Atencion $atencion): Atencion;
     public function delete($id): bool;
+    public function validateAtencion(int $RecaladaId, DateTime $fecha): bool;
 }

@@ -15,7 +15,7 @@ class TestCreateRecaladaUseCase
     {
         try {
             // Arrange
-            $fecha_arribo =(new DateTime())->modify("+2 days");
+            $fecha_arribo =(new DateTime())->modify("-2 days");
             $fecha_zarpe = (new DateTime())->modify("+3 days");
             $total_turistas = 580;
             $buque_id = 5;
@@ -35,10 +35,8 @@ class TestCreateRecaladaUseCase
             $validateRecaladaQuery = new ValidateRecaladaQueryHandler($repositorio);
             $createRecaladaCommand = new CreateRecaladaCommandHandler($repositorio);
             $createRecaladaUseCase = new CreateRecaladaUseCase($validateRecaladaQuery, $createRecaladaCommand);
-
             // Act
             $createRecaladaResponse = $createRecaladaUseCase->createRecalada($createRecaladaRequest);
-
             // Assert
             echo "RECALADA ID: " . $createRecaladaResponse->getId() . "<br/>";
             echo "FECHA ARRIBO: " . $createRecaladaResponse->getRecalada()->getFechaArribo()->format("Y-m-d H:i:s") . "<br/>";
@@ -50,7 +48,6 @@ class TestCreateRecaladaUseCase
             echo "" . $e->getMessage();
         }
     }
-
 }
 
 TestCreateRecaladaUseCase::TestCreateRecaladaUseShouldShowData();
