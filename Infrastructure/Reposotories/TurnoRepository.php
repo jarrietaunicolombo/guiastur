@@ -66,4 +66,9 @@ class TurnoRepository implements ITurnoRepository
         $Turno = $this->find($id);
         return $Turno->delete();
     }
+
+    public function findByAtencion(int $atencionId): array{
+        $turnos = Turno::find("all", ["conditions"=> ["atencion_id = ?", $atencionId]]);
+        return $turnos;
+    }
 }

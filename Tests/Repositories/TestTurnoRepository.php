@@ -119,6 +119,29 @@ class TestTurnoRepository
             echo "ERROR: " . $e->getMessage() . "<br>";
         }
     }
+
+    public static function testGetTunosByAtencionShouldShowList(){
+        try {
+            $atencionId = 2;
+            $repository = new TurnoRepository();
+            $turnosList = $repository->findByAtencion($atencionId);
+            echo "<br>------------testGetTunosByAtencionShouldShowList------------<br>";
+            foreach ($turnosList as $Turno) {
+                 echo "ID: " . $Turno->id . "<br>";
+                echo "NUMERO: " . $Turno->numero . "<br>";
+                echo "USADO: " . ($Turno->fecha_uso!== NULL ? $Turno->fecha_uso->format("Y-m-d H:i:s") : "")."<br>";
+                echo "SALIDA: " . ($Turno->fecha_salida !== NULL ? $Turno->fecha_salida->format("Y-m-d H:i:s") : ""). "<br>";
+                echo "REGRESO: " . ($Turno->fecha_salida !== NULL ? $Turno->fecha_regreso->format("Y-m-d H:i:s") : "").  "<br>";
+                echo "OBSERVACIONES: " . $Turno->observaciones. "<br>";
+                echo "GUIA: " . $Turno->guia->nombres . "<br>";
+                echo "TOTAL TURNOS: " . $Turno->atencion->total_turnos . "<br>";
+                echo "_______________________________________<br/>";
+            }
+        }
+        catch (Exception $e) {
+            echo "ERROR: ". $e->getMessage() . "<br>";
+        }
+    }
 }
 
 // TestTurnoRepository::testSaveTurnoAndRetrieveWithID();
@@ -127,3 +150,5 @@ class TestTurnoRepository
 // TestTurnoRepository::testFindTurnoAndShowData();
 // TestTurnoRepository::testDeleteTurnoVerifyNonExistence();
 TestTurnoRepository::testShowAllTurnosAndShowMessageIfEmpty();
+
+TestTurnoRepository::testGetTunosByAtencionShouldShowList();
