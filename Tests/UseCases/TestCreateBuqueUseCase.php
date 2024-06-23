@@ -30,7 +30,7 @@ class TestCreateBuqueUseCase
         echo "BUQUE ID: ".$createBuqueResponse->getId()."<br/>";
         echo "CODIGO: ".$createBuqueResponse->getBuque()->getCodigo()."<br/>";
         echo "NOBRE: ".$createBuqueResponse->getBuque()->getNombre()."<br/>";
-        echo "ROL: ".$createBuqueResponse->getBuque()->getFechaRegistro()->format("Y-m-d H:i:s")."<br/>";
+        echo "FECHA REGISTRO: ".$createBuqueResponse->getBuque()->getFechaRegistro()->format("Y-m-d H:i:s")."<br/>";
         echo "USuARIO REGISTRO: ".$createBuqueResponse->getBuque()->getUsuarioRegistro()."<br/>";
     }
 
