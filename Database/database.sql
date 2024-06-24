@@ -112,8 +112,11 @@ CREATE TABLE turnos (
     numero int(4) NOT NULL,
     estado varchar(30) DEFAULT NULL,
     fecha_uso datetime DEFAULT NULL,
+    usuario_uso INT,
     fecha_salida datetime DEFAULT NULL,
+    usuario_salida INT,
     fecha_regreso datetime DEFAULT NULL,
+    usuario_regreso INT,
     observaciones text,
     guia_id varchar(20) NOT NULL,
     atencion_id int NOT NULL,
@@ -167,4 +170,3 @@ ALTER TABLE Turnos
 ADD CONSTRAINT Fk_Guias_Turnos
 FOREIGN KEY (guia_id)
 REFERENCES Guias(cedula);
-
