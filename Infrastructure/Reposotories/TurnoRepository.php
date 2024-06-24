@@ -67,8 +67,28 @@ class TurnoRepository implements ITurnoRepository
         return $Turno->delete();
     }
 
-    public function findByAtencion(int $atencionId): array{
-        $turnos = Turno::find("all", ["conditions"=> ["atencion_id = ?", $atencionId]]);
+    public function findByAtencion(int $atencionId): array
+    {
+        $turnos = Turno::find("all", ["conditions" => ["atencion_id = ?", $atencionId]]);
         return $turnos;
+    }
+
+    public function findByTurnosStateCreateByAtencion(int $atencionId): array
+    {
+        try{
+            $status = "Creado";
+            $turnos = Turno::find("all", array(
+                "conditions"
+                => array(
+                        "estado = ? AND atencion_id = ?",
+                        $status,
+                        $atencionId
+                    )
+            )
+            );
+            return $turnos;
+        } catch (Exception $e) {
+            throw Utility::errorHandler($e);
+        }
     }
 }

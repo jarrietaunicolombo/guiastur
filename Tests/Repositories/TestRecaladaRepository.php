@@ -30,7 +30,7 @@ class TestRecaladaRepository
                 echo "Recalada No creado";
             }
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo "ERROR: " . $e->getMessage() . "<br>";
         }
     }
 
@@ -41,11 +41,11 @@ class TestRecaladaRepository
             $repository = new RecaladaRepository();
             $Recalada = $repository->find($id);
 
-            echo "TOTAL TURISTAS: ".$Recalada->total_turistas."<BR>";
-            echo "BUQUE: ".$Recalada->buque->nombre."<BR>";
+            echo "TOTAL TURISTAS: " . $Recalada->total_turistas . "<BR>";
+            echo "BUQUE: " . $Recalada->buque->nombre . "<BR>";
 
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo "ERROR: " . $e->getMessage() . "<br>";
         }
     }
 
@@ -60,7 +60,7 @@ class TestRecaladaRepository
 
             echo "NOMBRE: " . $Recalada->nombre . "<BR>";
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo "ERROR: " . $e->getMessage() . "<br>";
         }
     }
 
@@ -73,7 +73,7 @@ class TestRecaladaRepository
             $resul = $repository->delete($id);
             echo $resul ? "Recalada eliminado" : "Recalada no eliminado";
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo "ERROR: " . $e->getMessage() . "<br>";
 
         }
     }
@@ -88,21 +88,15 @@ class TestRecaladaRepository
                 echo "No existen Recalada para mostrar";
                 return;
             }
-            foreach ($RecaladaList as $Recalada) {
-                echo "ID: " . $Recalada->id . "<br>";
-                echo "FECHA ARRIBO: " . $Recalada->fecha_arribo->format("Y-m-d H:i:s") . "<br>";
-                echo "FECHA ZARPE: " . $Recalada->fecha_zarpe->format("Y-m-d H:i:s") . "<br>";
-                echo "NUMERO DE TURISTAS: " . $Recalada->total_turistas . "<br>";
-                echo "OBSERVACIONES: " . $Recalada->observaciones . "<br>";
-                echo "PAIS ORIGEN: " . $Recalada->pais->nombre . "<br>";
-                echo "BUQUE: " . $Recalada->buque->nombre . "<br>";
-            }
+            self::showRecaladaData($RecaladaList, "TODAS LAS RECALADAS");
+            
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo "ERROR: " . $e->getMessage() . "<br>";
         }
     }
 
-    public static function testValidateRecaladaShouldShowYesOrNo(){
+    public static function testValidateRecaladaShouldShowYesOrNo()
+    {
         try {
             // Arrange
             $buqueId = 1;
@@ -111,16 +105,53 @@ class TestRecaladaRepository
             // Act
             $isValidate = $repository->validateRecalada($buqueId, $fecha);
             // Assert 
-            if($isValidate){
-                echo "La Recalada es valida para ".$fecha->format("Y-m-d H:i:s");
-            }
-            else{
-                echo "La Recalada no es validad para ".$fecha->format("Y-m-d H:i:s");
+            if ($isValidate) {
+                echo "La Recalada es valida para " . $fecha->format("Y-m-d H:i:s");
+            } else {
+                echo "La Recalada no es validad para " . $fecha->format("Y-m-d H:i:s");
             }
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo "ERROR: " . $e->getMessage() . "<br>";
         }
     }
+
+    public static function testFindRecaladaInThePortShouldShowList()
+    {
+        $repository = new RecaladaRepository();
+        $recaladasIndePort = $repository->findRecaladaInThePort();
+        // Mostrar: la lista [id, Buque, Arribo, Zarpe, Turistas, Pais Origen, número de Atenciones]
+        self::showRecaladaData($recaladasIndePort, "RECALADAS EN EL PUERTO");
+    }
+
+    private static function showRecaladaData($recaladas, string $title)
+    {
+
+        $output = "<hr/><h3>$title</h3>
+                        <table border=4> <tr> 
+                          <th>BUQUE ID</th> 
+                          <th>NOMBRE</th> 
+                          <th>RECALADA ID</th> 
+                          <th>ARRIBO</th> 
+                          <th>ZARPE</th> 
+                          <th>TURISTAS</th> 
+                          <th>ORIGEN</th> 
+                          <th>ATENCIONES</th> 
+                          </tr> ";
+        foreach ($recaladas as $Recalada) {
+            $output .= "<td>" . $Recalada->buque->id . "</td> 
+                        <td>" . $Recalada->buque->nombre . "</td> 
+                        <td>" . $Recalada->id . "</td> 
+                        <td>" . $Recalada->fecha_arribo . "</td> 
+                        <td>" . $Recalada->fecha_zarpe . "</td> 
+                        <td>" . $Recalada->total_turistas . "</td> 
+                        <td>" . $Recalada->pais->nombre . "</td> 
+                        <td>" . count($Recalada->atencions) . "</td> </tr>";
+
+        }
+        $output .= "</table>";
+        echo $output;
+    }
+
 }
 
 // TestRecaladaRepository::testSaveRecaladaAndRetrieveWithID();
@@ -128,5 +159,7 @@ class TestRecaladaRepository
 // TestRecaladaRepository::testUpdateRecaladaAndShowNewData();
 // TestRecaladaRepository::testDeleteRecaladaVerifyNonExistence();
 TestRecaladaRepository::testShowAllRecaladasAndShowMessageIfEmpty();
-TestRecaladaRepository::testValidateRecaladaShouldShowYesOrNo();
+// TestRecaladaRepository::testValidateRecaladaShouldShowYesOrNo();
+TestRecaladaRepository::testFindRecaladaInThePortShouldShowList();
+
 
