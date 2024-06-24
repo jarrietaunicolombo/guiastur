@@ -3,9 +3,7 @@ class CreateTurnoRequest
 {
     private $numero;
     private $estado;
-    private $fecha_uso;
-    private $fecha_salida;
-    private $fecha_regreso;
+  
     private $observaciones;
     private $guia_id;
     private $atencion_id;
@@ -15,9 +13,6 @@ class CreateTurnoRequest
     public function __construct(
         int $numero,
         string $estado = null,
-        DateTime $fecha_uso = null,
-        DateTime $fecha_salida = null,
-        DateTime $fecha_regreso = null,
         string $observaciones = null,
         string $guia_id,
         int $atencion_id,
@@ -43,17 +38,12 @@ class CreateTurnoRequest
         $this->numero = $numero;
         $this->guia_id = $guia_id;
         $this->estado = $estado;
-        $this->fecha_uso = $fecha_uso;
-        $this->fecha_salida = $fecha_salida;
-        $this->fecha_regreso = $fecha_regreso;
         $this->observaciones = $observaciones;
         $this->guia_id = $guia_id;
         $this->fecha_registro = new DateTime();
         $this->atencion_id = $atencion_id;
         $this->usuario_registro = $usuario_registro;
     }
-
-
 
     public function getNumero()
     {
@@ -72,24 +62,6 @@ class CreateTurnoRequest
     public function getEstado() 
     {
         return $this->estado;
-    }
-
-
-    public function getFechaUso() 
-    {
-        return $this->fecha_uso;
-    }
-
-
-    public function getFechaSalida() 
-    {
-        return $this->fecha_salida;
-    }
-
-
-    public function getFechaRegreso() 
-    {
-        return $this->fecha_regreso;
     }
 
 

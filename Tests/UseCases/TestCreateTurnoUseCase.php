@@ -16,21 +16,15 @@ class TestCreateTurnoUseCase
         try {
             // Arrange
              $numero = 0 ;
-             $estado = "Disponible";
-             $fecha_uso = NULL;
-             $fecha_salida = NULL ;
-             $fecha_regreso = NULL;
+             $estado = "Creado";
              $observaciones = NULL;
              $guia_id = '1234567';
-             $atencion_id = 4;
+             $atencion_id = 1;
              $usuario_registro = $guia_id;
         
             $createTurnoRequest = new CreateTurnoRequest(
                 $numero
                 , $estado
-                , $fecha_uso
-                , $fecha_salida
-                , $fecha_regreso
                 , $observaciones
                 , $guia_id
                 , $atencion_id
@@ -47,9 +41,6 @@ class TestCreateTurnoUseCase
             // Assert
             echo "TURNO ID: " . $createTurnoResponse->getId() . "<br/>";
             echo "NUMERO: " . $createTurnoResponse->getTurno()->getNumero(). "<br/>";
-            echo "FECHA USO: " . $createTurnoResponse->getTurno()->getFechaUso(). "<br/>";
-            echo "FECHA SALIDA: " . $createTurnoResponse->getTurno()->getFechaSalida() . "<br/>";
-            echo "FECHA REGRESO: " . $createTurnoResponse->getTurno()->getFechaRegreso() . "<br/>";
             echo "OBSERVACIONES: " . $createTurnoResponse->getTurno()->getObservaciones() . "<br/>";
             echo "GUIA ID: " . $createTurnoResponse->getTurno()->getGuiaId() . "<br/>";
             echo "ATENCION ID: " . $createTurnoResponse->getTurno()->getAtencionId() . "<br/>";
