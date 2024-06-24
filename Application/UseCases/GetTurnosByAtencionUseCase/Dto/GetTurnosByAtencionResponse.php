@@ -50,8 +50,11 @@ class GetTurnosByAtencionDto
     private $guia_id;
     private $estado;
     private $fecha_uso;
+    private $usuario_usa;
     private $fecha_salida;
+    private $usuario_salida;
     private $fecha_regreso;
+    private $usuario_regreso;
     private $observaciones;
     private $fecha_registro;
     private $usuario_registro;
@@ -61,8 +64,11 @@ class GetTurnosByAtencionDto
         int $numero,
         string $estado = null,
         DateTime $fecha_uso = null,
+        int $usuario_usa = null,
         DateTime $fecha_salida = null,
+        int $usuario_salida  = null,
         DateTime $fecha_regreso = null,
+        int $usuario_regreso = null,
         string $observaciones = null,
         string $guia_id,
         DateTime $fecha_registro = null,
@@ -83,8 +89,11 @@ class GetTurnosByAtencionDto
         $this->guia_id = $guia_id;
         $this->estado = $estado;
         $this->fecha_uso = $fecha_uso;
+        $this->usuario_usa = $usuario_usa;
         $this->fecha_salida = $fecha_salida;
+        $this->usuario_salida = $usuario_salida;
         $this->fecha_regreso = $fecha_regreso;
+        $this->usuario_salida = $usuario_salida;
         $this->observaciones = $observaciones;
         $this->guia_id = $guia_id;
         $this->fecha_registro = $fecha_registro;
@@ -112,7 +121,7 @@ class GetTurnosByAtencionDto
     }
 
 
-    public function getFechaUso() : DateTime
+    public function getFechaUso() 
     {
         return $this->fecha_uso;
     }
@@ -147,4 +156,15 @@ class GetTurnosByAtencionDto
         return $this->usuario_registro;
     }
 
+    public function getUsuarioUso(){
+        return $this->usuario_usa;
+    }
+
+    public function getUsuarioSalida(){
+        return $this->usuario_salida;
+    }
+
+    public function getUsuarioRegreso(){
+        return $this->usuario_regreso;
+    }
 }

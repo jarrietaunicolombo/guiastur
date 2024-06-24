@@ -16,9 +16,6 @@ class CreateTurnoCommandHandler implements ICreateTurnoCommand{
         $turno = new Turno();
         $turno->numero = $request->getNumero();
         $turno->estado = $request->getEstado();
-        $turno->fecha_uso= $request->getFechaUso();
-        $turno->fecha_salida = $request->getFechaSalida();
-        $turno->fecha_regreso = $request->getFechaRegreso();
         $turno->observaciones = $request->getObservaciones();
         $turno->guia_id = $request->getGuiaId();
         $turno->atencion_id = $request->getAtencionId();

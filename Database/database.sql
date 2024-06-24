@@ -112,7 +112,7 @@ CREATE TABLE turnos (
     numero int(4) NOT NULL,
     estado varchar(30) DEFAULT NULL,
     fecha_uso datetime DEFAULT NULL,
-    usuario_uso INT,
+    usuario_usa INT,
     fecha_salida datetime DEFAULT NULL,
     usuario_salida INT,
     fecha_regreso datetime DEFAULT NULL,
