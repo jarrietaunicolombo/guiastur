@@ -14,7 +14,8 @@ class RecaladaRepository implements IRecaladaRepository
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME]
+                    . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new NotFoundEntryException($message);
             }
             throw Utility::errorHandler($e);
@@ -38,7 +39,8 @@ class RecaladaRepository implements IRecaladaRepository
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Recalada ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Recalada ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME]
+                    . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
@@ -54,7 +56,8 @@ class RecaladaRepository implements IRecaladaRepository
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Recalada ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Recalada ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME]
+                    . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
@@ -67,15 +70,47 @@ class RecaladaRepository implements IRecaladaRepository
         return $recalada->delete();
     }
 
-    public function validateRecalada(int $buqueId, DateTime $fecha): bool{
-        $recaladas = Recalada::find("all", array("conditions" 
-                                                =>array("buque_id = ? AND fecha_zarpe > ?"
-                                                        , $buqueId
-                                                        , $fecha)
-                                            ));
-        if (count($recaladas) > 0) {
-            return false;
+    public function validateRecalada(int $buqueId, DateTime $fecha): bool
+    {
+        try {
+            $recaladas = Recalada::find(
+                "all",
+                array(
+                    "conditions"
+                    => array(
+                            "buque_id = ? AND fecha_zarpe > ?",
+                            $buqueId,
+                            $fecha
+                        )
+                )
+            );
+            if (count($recaladas) > 0) {
+                return false;
+            }
+            return true;
+        } catch (Exception $e) {
+            throw Utility::errorHandler($e);
         }
-        return true;
+    }
+
+    public function findRecaladaInThePort(): array
+    {
+        $nowDate = new DateTime();
+        try {
+            $recaladas = Recalada::find(
+                "all",
+                array(
+                    "conditions"
+                   => array(
+                        "fecha_arribo <= ? AND fecha_zarpe >= ?",
+                        $nowDate,
+                        $nowDate
+                    )
+                )
+            );
+            return $recaladas;
+        } catch (Exception $e) {
+            throw Utility::errorHandler($e);
+        }
     }
 }

@@ -8,4 +8,5 @@ interface ITurnoRepository
     public function update(Turno $turno): Turno;
     public function delete($id): bool;
     public function findByAtencion(int $atencionId): array;
+    public function findByTurnosStateCreateByAtencion(int $atencionId): array;
 }

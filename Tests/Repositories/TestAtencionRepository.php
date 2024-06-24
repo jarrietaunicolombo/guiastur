@@ -26,7 +26,7 @@ class TestAtencionRepository
             $Atencion = $repository->create($Atencion);
             // Assert
             if ($Atencion != null && $Atencion->id > 0) {
-                echo "Atencion creado";
+                self::showAtencionesData(array($Atencion), "ATENCIONES CREADA");
             } else {
                 echo "Atencion No creado";
             }
@@ -45,13 +45,8 @@ class TestAtencionRepository
             $repository = new AtencionRepository();
             $Atencion = $repository->find($id);
 
-            echo "ID: " . $Atencion->id . "<br>";
-            echo "INICIO: " . $Atencion->fecha_inicio . "<br>";
-            echo "CIERRE: " . $Atencion->fecha_cierre . "<br>";
-            echo "CUPOS: " . $Atencion->total_turnos . "<br>";
-            echo "CIERRE: " . $Atencion->observaciones . "<br>";
-            echo "BUQUE: " . $Atencion->recalada->buque->nombre . "<br>";
-            echo "SUPERVISOR: " . $Atencion->supervisor->nombres . "<br>";
+            self::showAtencionesData(array($Atencion), "ATENCION $id");
+
         } catch (Exception $e) {
             echo "ERROR: " . $e->getMessage() . "<br>";
         }
@@ -65,8 +60,7 @@ class TestAtencionRepository
             $Atencion->fecha_cierre = new DateTime();
             $Atencion->total_turnos = $Atencion->total_turistas / 2;
             $Atencion = $repository->update($Atencion);
-
-            echo "OBSERVACIONES: " . $Atencion->observaciones . "<BR>";
+            self::showAtencionesData(array($Atencion), "ATENCION ACTUALIZADA");
         } catch (Exception $e) {
             echo "ERROR: " . $e->getMessage() . "<br>";
         }
@@ -95,15 +89,7 @@ class TestAtencionRepository
                 echo "No existen Atencion para mostrar";
                 return;
             }
-            foreach ($AtencionList as $Atencion) {
-                echo "ID: " . $Atencion->id . "<br>";
-                echo "INICIO: " . $Atencion->fecha_inicio . "<br>";
-                echo "CIERRE: " . $Atencion->fecha_cierre . "<br>";
-                echo "CUPOS: " . $Atencion->total_turnos . "<br>";
-                echo "CIERRE: " . $Atencion->observaciones . "<br>";
-                echo "BUQUE: " . $Atencion->recalada->buque->nombre . "<br>";
-                echo "SUPERVISOR: " . $Atencion->supervisor->nombres . "<br>";
-            }
+           self::showAtencionesData($AtencionList, "TODAS LAS ATENCIONES");
         } catch (Exception $e) {
             echo "ERROR: " . $e->getMessage() . "<br>";
         }
@@ -130,12 +116,43 @@ class TestAtencionRepository
         }
     }
 
+    private static function showAtencionesData($atenciones, string $title)
+    {
+        // Mostrar: [Id, Fecha inicio, Fecha Cierre, Total Turnos, Turnos Disponibles, Observaciones, Nombre del Supervisor, RecaladaId, Buque Id]
+        $output = "<hr/><h3>$title</h3>
+                        <table border=4> <tr> 
+                          <th>BUQUE ID</th> 
+                          <th>NOMBRE</th> 
+                          <th>RECALADA ID</th> 
+                          <th>ATENCION ID</th> 
+                          <th>INICIO</th> 
+                          <th>CIERRE</th> 
+                          <th>TOTAL TURNOS</th> 
+                          <th>TURNOS CREADOS</th> 
+                          <th>TURNOS DISPONIBLES</th> 
+                          <th>SUPERVISOR</th> 
+                          </tr> ";
+        foreach ($atenciones as $atencion) {
+            $output .= "<td>" . $atencion->recalada->buque->id . "</td> 
+                        <td>" . $atencion->recalada->buque->nombre . "</td> 
+                        <td>" . $atencion->recalada->id . "</td> 
+                        <td>" . $atencion->id . "</td> 
+                        <td>" . $atencion->fecha_inicio . "</td> 
+                        <td>" . $atencion->fecha_cierre . "</td> 
+                        <td>" . $atencion->total_turnos . "</td> 
+                        <td>" . count($atencion->turnos) . "</td> 
+                        <td>" . ($atencion->total_turnos - count($atencion->turnos)) . "</td>
+                        <td>" . $atencion->supervisor_id. "</td> </tr>";
 
+        }
+        $output .= "</table>";
+        echo $output;
+    }
 }
 
 // TestAtencionRepository::testSaveAtencionAndRetrieveWithID();
-// TestAtencionRepository::testFindAtencionAndShowData();
+TestAtencionRepository::testFindAtencionAndShowData();
 // TestAtencionRepository::testUpdateAtencionAndShowNewData();
 // TestAtencionRepository::testDeleteAtencionVerifyNonExistence();
 TestAtencionRepository::testShowAllAtencionsAndShowMessageIfEmpty();
-TestAtencionRepository::testValidateAtencionShouldShowYesOrNo();
+// TestAtencionRepository::testValidateAtencionShouldShowYesOrNo();

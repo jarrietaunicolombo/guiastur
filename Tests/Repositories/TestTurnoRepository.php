@@ -27,14 +27,13 @@ class TestTurnoRepository
             $Turno = $repository->create($Turno);
             // Assert
             if ($Turno != null && $Turno->id > 0) {
-                echo "Turno creado";
+                self::showTunosData(array($Turno), "TURNO CREADO");
             } else {
                 echo "Turno No creado";
             }
         } catch (EntityReferenceNotFoundException $e) {
-            echo "ERROR: ".$e->getMessage() ;
-        }
-        catch (Exception $e) {
+            echo "ERROR: " . $e->getMessage();
+        } catch (Exception $e) {
             echo "ERROR: " . $e->getMessage() . "<br>";
         }
     }
@@ -46,14 +45,7 @@ class TestTurnoRepository
             $repository = new TurnoRepository();
             $Turno = $repository->find($id);
 
-            echo "ID: " . $Turno->id . "<br>";
-            echo "NUMERO: " . $Turno->numero . "<br>";
-            echo "USADO: " . $Turno->fecha_uso . "<br>";
-            echo "SALIDA: " . $Turno->fecha_salida . "<br>";
-            echo "REGRESO: " . $Turno->fecha_regreso . "<br>";
-            echo "OBSERVACIONES: " . $Turno->observaciones. "<br>";
-            echo "GUIA: " . $Turno->guia->nombres . "<br>";
-            echo "ATENSION: " . $Turno->atencion->recalada->buque->nombre . "<br>";
+            self::showTunosData(array($Turno), "DATOS DEL TURNO $id");
         } catch (Exception $e) {
             echo "ERROR: " . $e->getMessage() . "<br>";
         }
@@ -75,8 +67,7 @@ class TestTurnoRepository
             $Turno->guia_id = $guia_id;
             $Turno->atencion_id = $atencion;
             $Turno = $repository->update($Turno);
-
-            echo "OBSERVACIONES: " . $Turno->observaciones . "<BR>";
+            self::showTunosData(array($Turno), "TURNO ACTUALIZADO");
         } catch (Exception $e) {
             echo "ERROR: " . $e->getMessage() . "<br>";
         }
@@ -105,42 +96,82 @@ class TestTurnoRepository
                 echo "No existen Turno para mostrar";
                 return;
             }
-            foreach ($TurnoList as $Turno) {
-                echo "ID: " . $Turno->id . "<br>";
-                echo "NUMERO: " . $Turno->numero . "<br>";
-                echo "USADO: " . $Turno->fecha_uso . "<br>";
-                echo "SALIDA: " . $Turno->fecha_salida . "<br>";
-                echo "REGRESO: " . $Turno->fecha_regreso . "<br>";
-                echo "OBSERVACIONES: " . $Turno->observaciones. "<br>";
-                echo "GUIA: " . $Turno->guia->nombres . "<br>";
-                echo "ATENSION: " . $Turno->atencion->recalada->buque->nombre . "<br>";
-            }
+            self::showTunosData($TurnoList, "TODOS LOS TURNOS");
         } catch (Exception $e) {
             echo "ERROR: " . $e->getMessage() . "<br>";
         }
     }
 
-    public static function testGetTunosByAtencionShouldShowList(){
+    public static function testGetTunosByAtencionShouldShowList()
+    {
         try {
-            $atencionId = 2;
+            $atencionId = 4;
             $repository = new TurnoRepository();
             $turnosList = $repository->findByAtencion($atencionId);
-            echo "<br>------------testGetTunosByAtencionShouldShowList------------<br>";
-            foreach ($turnosList as $Turno) {
-                 echo "ID: " . $Turno->id . "<br>";
-                echo "NUMERO: " . $Turno->numero . "<br>";
-                echo "USADO: " . ($Turno->fecha_uso!== NULL ? $Turno->fecha_uso->format("Y-m-d H:i:s") : "")."<br>";
-                echo "SALIDA: " . ($Turno->fecha_salida !== NULL ? $Turno->fecha_salida->format("Y-m-d H:i:s") : ""). "<br>";
-                echo "REGRESO: " . ($Turno->fecha_salida !== NULL ? $Turno->fecha_regreso->format("Y-m-d H:i:s") : "").  "<br>";
-                echo "OBSERVACIONES: " . $Turno->observaciones. "<br>";
-                echo "GUIA: " . $Turno->guia->nombres . "<br>";
-                echo "TOTAL TURNOS: " . $Turno->atencion->total_turnos . "<br>";
-                echo "_______________________________________<br/>";
+           self::showTunosData($turnosList, "TODOS LOS TURNOS DE LA ATENCION $atencionId");
+        } catch (Exception $e) {
+            echo "ERROR: " . $e->getMessage() . "<br>";
+        }
+    }
+
+    public static function testNextTurno(){
+        try {
+            $atencionId = 4;
+            $repository = new TurnoRepository();
+            $turnosList = $repository->findByTurnosStateCreateByAtencion($atencionId);
+            if(count($turnosList) == 0) {
+                echo "NO EXISTEN TURNOS DISPONIBLES PARA LA ATENCION $atencionId";
+                return;
             }
+            $turno = $turnosList[0];
+           self::showTunosData(array($turno), "PROXIMO TURNO DE LA ATENCION $atencionId");
+           self::showTunosData($turnosList, "TURNOS EN COLA DE LA ATENCION $atencionId");
+        } catch (Exception $e) {
+            echo "ERROR: " . $e->getMessage() . "<br>";
         }
-        catch (Exception $e) {
-            echo "ERROR: ". $e->getMessage() . "<br>";
+    }
+
+    private static function showTunosData($turnos, string $title)
+    {
+        // 5.4. Mostrar: [GuiaNombre, BuqueId, RecaladaId, AtencionId, TurnoId, TurnoNumero, Estado, FechaUso, FechaSalida, FechaRegreso, ]
+        $output = "<hr/><h3>$title</h3>
+                        <table border=4> <tr> 
+                          <th>TURNO ID</th> 
+                          <th>NUMERO</th> 
+                          <th>ESTADO</th> 
+                          <th>GUIA CC</th> 
+                          <th>NOMBRE</th> 
+                          <th>USADO</th> 
+                          <th>LIBERADO</th> 
+                          <th>TERMINADO</th> 
+                          <th>CREADO POR</th> 
+                          <th>BUQUE ID</th> 
+                          <th>BUQUE NOMBRE</th> 
+                          <th>RECALADA ID</th> 
+                          <th>ATENCION ID</th> 
+                          <th>SUPERVISOR</th> 
+                          <th>SUPERVISOR NOMBRE</th> 
+                          </tr> ";
+        foreach ($turnos as $turno) {
+            $output .= "<td>" . $turno->id . "</td> 
+                        <td>" . $turno->numero . "</td> 
+                        <td>" . $turno->estado . "</td> 
+                        <td>" . $turno->guia_id . "</td> 
+                        <td>" . $turno->guia->nombres . " " . $turno->guia->apellidos . "</td> 
+                        <td>" . $turno->fecha_uso . "</td> 
+                        <td>" . $turno->fecha_salida . "</td> 
+                        <td>" . $turno->fecha_regreso . "</td> 
+                        <td>" . $turno->usuario_registro . "</td> 
+                        <td>" . $turno->atencion->recalada->buque->id . "</td> 
+                        <td>" . $turno->atencion->recalada->buque->nombre . "</td> 
+                        <td>" . $turno->atencion->recalada->id . "</td> 
+                        <td>" . $turno->atencion->id . "</td> 
+                        <td>" . $turno->atencion->supervisor->cedula . "</td> 
+                        <td>" . $turno->atencion->supervisor->nombres . " " . $turno->atencion->supervisor->apellidos . "</td> 
+                        </tr> ";
         }
+        $output .= "</table>";
+        echo $output;
     }
 }
 
@@ -150,5 +181,5 @@ class TestTurnoRepository
 // TestTurnoRepository::testFindTurnoAndShowData();
 // TestTurnoRepository::testDeleteTurnoVerifyNonExistence();
 TestTurnoRepository::testShowAllTurnosAndShowMessageIfEmpty();
-
 TestTurnoRepository::testGetTunosByAtencionShouldShowList();
+TestTurnoRepository::testNextTurno();

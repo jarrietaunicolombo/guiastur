@@ -18,7 +18,7 @@ class TestCreateTurnoUseCase
              $numero = 0 ;
              $estado = "Creado";
              $observaciones = NULL;
-             $guia_id = '1234567';
+             $guia_id = '7654321';
              $atencion_id = 1;
              $usuario_registro = $guia_id;
         
