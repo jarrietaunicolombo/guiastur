@@ -36,7 +36,7 @@ class TestBuqueRepository
         try {
             $id = 1;
             $repository = new BuqueRepository();
-            $Buque = $repository->find($id);
+            $Buque = $repository->findById($id);
 
             self::showBuqueData( array($Buque), "DATOS DEL BUQUE ID: $id");
 
@@ -49,7 +49,7 @@ class TestBuqueRepository
     {
         try {
             $repository = new BuqueRepository();
-            $Buque = $repository->find(1);
+            $Buque = $repository->findById(1);
             $Buque->nombre = "Paradise";
             $Buque = $repository->update($Buque);
             self::showBuqueData( array($Buque), "Buque Actualizado");
