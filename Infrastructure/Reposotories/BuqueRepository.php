@@ -7,7 +7,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/U
 
 class BuqueRepository implements IBuqueRepository
 {
-    public function find($id): Buque
+    public function findById(int $id): Buque
     {
         try {
             return Buque::find($id);
@@ -38,7 +38,7 @@ class BuqueRepository implements IBuqueRepository
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "$buque ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Buque ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
@@ -47,14 +47,14 @@ class BuqueRepository implements IBuqueRepository
 
     public function update(Buque $buque): Buque
     {
-        $this->find($buque->id);
+        $this->findById($buque->id);
         try {
             $buque->save();
             return $buque;
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "$buque ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Buque ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
@@ -63,7 +63,7 @@ class BuqueRepository implements IBuqueRepository
 
     public function delete($id): bool
     {
-        $buque = $this->find($id);
+        $buque = $this->findById($id);
         return $buque->delete();
     }
 }

@@ -87,7 +87,7 @@ Corresponde al repositorio principal del Sistema de Gestión y Control de Turnos
 
 7.1. Validar Acceso
 
-7.2. Query 7: ValidarUsoTurno (TurnoId) : Si/NO {El turno solo puede ser Usado por el Guia propietario o Supervisor}
+7.2. Query 7: ValidarUsoTurno (TurnoId, GuiaId) : Si/NO {El turno solo puede ser Usado por el Guia propietario o Supervisor}
 
 7.3. Guardar en Sesion: Resultado de Query 7
 
