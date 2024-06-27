@@ -23,14 +23,10 @@ class TestRecaladaRepository
             $Recalada->usuario_registro = 1;
             $repository = new RecaladaRepository();
             $Recalada = $repository->create($Recalada);
-
-            if ($Recalada != null && $Recalada->id > 0) {
-                echo "Recalada creado";
-            } else {
-                echo "Recalada No creado";
-            }
+            self::showRecaladaData(array($Recalada), "RECALADA CREADA" );
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<hr><span style="color: red">ERROR BUSCAR LA RECALADA<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -40,12 +36,10 @@ class TestRecaladaRepository
             $id = 1;
             $repository = new RecaladaRepository();
             $Recalada = $repository->find($id);
-
-            echo "TOTAL TURISTAS: " . $Recalada->total_turistas . "<BR>";
-            echo "BUQUE: " . $Recalada->buque->nombre . "<BR>";
-
+            self::showRecaladaData(array($Recalada), "DATOS DE LA RECALADA $id" );
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<hr><span style="color: red">ERROR BUSCAR LA RECALADA<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -53,14 +47,15 @@ class TestRecaladaRepository
     {
         try {
             $repository = new RecaladaRepository();
-            $Recalada = $repository->find(1);
-            $Recalada->fecha_zarpe = new DateTime();
-            $Recalada->total_turistas = $Recalada->total_turistas / 2;
+            $id = 1;
+            $Recalada = $repository->find($id);
+            $Recalada->fecha_zarpe = (new DateTime())->modify("+2 day");
+            $Recalada->total_turistas = $Recalada->total_turistas * 2;
             $Recalada = $repository->update($Recalada);
-
-            echo "NOMBRE: " . $Recalada->nombre . "<BR>";
+            self::showRecaladaData(array($Recalada), "RECALADA ACTUALIZADA");
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<hr><span style="color: red">ERROR ACTUALIZAR LA RECALADA<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -71,10 +66,10 @@ class TestRecaladaRepository
             $id = 4;
             $repository = new RecaladaRepository();
             $resul = $repository->delete($id);
-            echo $resul ? "Recalada eliminado" : "Recalada no eliminado";
+            echo $resul ? '<hr><span style="color: green"> Recalada ID: ' . $id . ' fue eliminada<br></span>' : '<hr><span style="color: red"> Recalada ID: ' . $id . ' No fue eliminada<br></span>';
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
-
+            echo '<hr><span style="color: red">ERROR ELIMINAR LA RECALADA<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -85,13 +80,14 @@ class TestRecaladaRepository
             $RecaladaList = $repository->findAll();
 
             if (!isset($RecaladaList) || count($RecaladaList) == 0) {
-                echo "No existen Recalada para mostrar";
+                echo '<hr><span style="color: red"> No existen Recaladas para mostrar<br></span>';
                 return;
             }
             self::showRecaladaData($RecaladaList, "TODAS LAS RECALADAS");
-            
+
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<hr><span style="color: red">ERROR LISTAR TODAS LAS RECALADAS<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -106,27 +102,33 @@ class TestRecaladaRepository
             $isValidate = $repository->validateRecalada($buqueId, $fecha);
             // Assert 
             if ($isValidate) {
-                echo "La Recalada es valida para " . $fecha->format("Y-m-d H:i:s");
+                echo '<hr><span style="color: green"> La Recalada es validad para ' . $fecha->format("Y-m-d H:i:s") . '<br></span>';
             } else {
-                echo "La Recalada no es validad para " . $fecha->format("Y-m-d H:i:s");
+                echo '<hr><span style="color: red"> La Atencion NO es validad para ' . $fecha->format("Y-m-d H:i:s") . '<br></span>';
             }
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<hr><span style="color: red">ERROR VALIDAR LA RECALADA <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
     public static function testFindRecaladaInThePortShouldShowList()
     {
-        $repository = new RecaladaRepository();
-        $recaladasIndePort = $repository->findRecaladaInThePort();
-        // Mostrar: la lista [id, Buque, Arribo, Zarpe, Turistas, Pais Origen, número de Atenciones]
-        self::showRecaladaData($recaladasIndePort, "RECALADAS EN EL PUERTO");
+        try {
+            $repository = new RecaladaRepository();
+            $recaladasIndePort = $repository->findRecaladaInThePort();
+            self::showRecaladaData($recaladasIndePort, "RECALADAS EN EL PUERTO");
+        } catch (Exception $e) {
+            echo '<hr><span style="color: red">ERROR OBTENER RECALADAS EN EL PUERTO <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
+        }
+
     }
 
     private static function showRecaladaData($recaladas, string $title)
     {
 
-        $output = "<hr/><h3>$title</h3>
+        $output = "<hr/><h3 style='color: blue;'>$title</h3>
                         <table border=4> <tr> 
                           <th>BUQUE ID</th> 
                           <th>NOMBRE</th> 
@@ -154,12 +156,12 @@ class TestRecaladaRepository
 
 }
 
-// TestRecaladaRepository::testSaveRecaladaAndRetrieveWithID();
-// TestRecaladaRepository::testFindRecaladaAndShowData();
-// TestRecaladaRepository::testUpdateRecaladaAndShowNewData();
-// TestRecaladaRepository::testDeleteRecaladaVerifyNonExistence();
+TestRecaladaRepository::testSaveRecaladaAndRetrieveWithID();
+TestRecaladaRepository::testFindRecaladaAndShowData();
+TestRecaladaRepository::testUpdateRecaladaAndShowNewData();
+TestRecaladaRepository::testDeleteRecaladaVerifyNonExistence();
 TestRecaladaRepository::testShowAllRecaladasAndShowMessageIfEmpty();
-// TestRecaladaRepository::testValidateRecaladaShouldShowYesOrNo();
+TestRecaladaRepository::testValidateRecaladaShouldShowYesOrNo();
 TestRecaladaRepository::testFindRecaladaInThePortShouldShowList();
 
 

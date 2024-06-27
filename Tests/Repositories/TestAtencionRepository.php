@@ -28,13 +28,14 @@ class TestAtencionRepository
             if ($Atencion != null && $Atencion->id > 0) {
                 self::showAtencionesData(array($Atencion), "ATENCIONES CREADA");
             } else {
-                echo "Atencion No creado";
+                echo '<hr><span style="color: red"> La Atencion no fue creada<br></span>';
             }
         } catch (EntityReferenceNotFoundException $e) {
-            echo "ERROR: ".$e->getMessage() ;
-        }
-        catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<span style="color: red">ERROR AL CREAR LA ATENCION <br></span>';
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
+        } catch (Exception $e) {
+             echo '<hr><span style="color: red">ERROR AL CREAR LA ATENCION <br></span>';
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
@@ -48,7 +49,8 @@ class TestAtencionRepository
             self::showAtencionesData(array($Atencion), "ATENCION $id");
 
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<hr><span style="color: red">ERROR AL BUSCAR LA ATENCION <br></span>';
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
@@ -58,11 +60,12 @@ class TestAtencionRepository
             $repository = new AtencionRepository();
             $Atencion = $repository->find(1);
             $Atencion->fecha_cierre = new DateTime();
-            $Atencion->total_turnos = $Atencion->total_turistas / 2;
+            $Atencion->total_turnos = $Atencion->total_turnos / 2;
             $Atencion = $repository->update($Atencion);
             self::showAtencionesData(array($Atencion), "ATENCION ACTUALIZADA");
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<hr><span style="color: red">ERROR AL ACTUALIZAR LA ATENCION <br></span>';
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
@@ -73,9 +76,10 @@ class TestAtencionRepository
             $id = 4;
             $repository = new AtencionRepository();
             $resul = $repository->delete($id);
-            echo $resul ? "Atencion eliminado" : "Atencion no eliminado";
+            echo  $resul ? '<hr><span style="color: green"> La Atencion  fue eliminada<br></span>' : '<hr><span style="color: red"> La Atencion no fue eliminada<br></span>'; 
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<hr><span style="color: red">ERROR AL ELIMINAR LA ATENCION <br></span>';
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
@@ -86,16 +90,18 @@ class TestAtencionRepository
             $AtencionList = $repository->findAll();
 
             if (!isset($AtencionList) || count($AtencionList) == 0) {
-                echo "No existen Atencion para mostrar";
+                echo '<hr><span style="color: red"> No existen atenciones para mostrar<br></span>';
                 return;
             }
-           self::showAtencionesData($AtencionList, "TODAS LAS ATENCIONES");
+            self::showAtencionesData($AtencionList, "TODAS LAS ATENCIONES");
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<hr><span style="color: red">ERROR AL MOSTAR TODAS LAS ATENCIONES <br></span>';
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
-    public static function testValidateAtencionShouldShowYesOrNo(){
+    public static function testValidateAtencionShouldShowYesOrNo()
+    {
         try {
             // Arrange
             $recaladaId = 1;
@@ -105,21 +111,34 @@ class TestAtencionRepository
             // Act
             $isValidate = $repository->validateAtencion($recaladaId, $fecha);
             // Assert 
-            if($isValidate){
-                echo "La Atencion es valida para ".$fecha->format("Y-m-d H:i:s");
-            }
-            else{
-                echo "La Atencion no es validad para ".$fecha->format("Y-m-d H:i:s");
+            if ($isValidate) {
+                echo '<hr><span style="color: green"> La Atencion es validad para ' . $fecha->format("Y-m-d H:i:s") . '<br></span>';
+            } else {
+                echo '<hr><span style="color: red"> La Atencion no es validad para ' . $fecha->format("Y-m-d H:i:s") . '<br></span>';
             }
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR AL VALIDAR LA ATENCION <br></span>';
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
+        }
+    }
+
+    public static function testGetAtencionesByRecaladaShouldShowData()
+    {
+        $recaladaId = 1;
+        $title = "Atenciones de la Recalada $recaladaId";
+        try {
+            $atencionRepository = new AtencionRepository();
+            $atenciones = $atencionRepository->findByRecalada($recaladaId);
+            self::showAtencionesData($atenciones, $title );
+        } catch (Exception $e) {
+            echo '<hr><span style="color: red">ERROR AL OBTENER ATENCIONES POR RECALADA <br></span>';
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
     private static function showAtencionesData($atenciones, string $title)
     {
-        // Mostrar: [Id, Fecha inicio, Fecha Cierre, Total Turnos, Turnos Disponibles, Observaciones, Nombre del Supervisor, RecaladaId, Buque Id]
-        $output = "<hr/><h3>$title</h3>
+        $output = "<hr/><h3 style='color: blue;'>$title</h3>
                         <table border=4> <tr> 
                           <th>BUQUE ID</th> 
                           <th>NOMBRE</th> 
@@ -142,7 +161,7 @@ class TestAtencionRepository
                         <td>" . $atencion->total_turnos . "</td> 
                         <td>" . count($atencion->turnos) . "</td> 
                         <td>" . ($atencion->total_turnos - count($atencion->turnos)) . "</td>
-                        <td>" . $atencion->supervisor_id. "</td> </tr>";
+                        <td>" . $atencion->supervisor_id . "</td> </tr>";
 
         }
         $output .= "</table>";
@@ -150,9 +169,10 @@ class TestAtencionRepository
     }
 }
 
-// TestAtencionRepository::testSaveAtencionAndRetrieveWithID();
+TestAtencionRepository::testSaveAtencionAndRetrieveWithID();
 TestAtencionRepository::testFindAtencionAndShowData();
-// TestAtencionRepository::testUpdateAtencionAndShowNewData();
-// TestAtencionRepository::testDeleteAtencionVerifyNonExistence();
+TestAtencionRepository::testUpdateAtencionAndShowNewData();
+TestAtencionRepository::testDeleteAtencionVerifyNonExistence();
 TestAtencionRepository::testShowAllAtencionsAndShowMessageIfEmpty();
-// TestAtencionRepository::testValidateAtencionShouldShowYesOrNo();
+TestAtencionRepository::testValidateAtencionShouldShowYesOrNo();
+TestAtencionRepository::testGetAtencionesByRecaladaShouldShowData();

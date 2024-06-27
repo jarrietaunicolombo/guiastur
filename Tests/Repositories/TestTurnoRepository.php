@@ -34,7 +34,7 @@ class TestTurnoRepository
         } catch (EntityReferenceNotFoundException $e) {
             echo "ERROR: " . $e->getMessage();
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
@@ -47,7 +47,7 @@ class TestTurnoRepository
 
             self::showTunosData(array($Turno), "DATOS DEL TURNO $id");
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
@@ -69,7 +69,7 @@ class TestTurnoRepository
             $Turno = $repository->update($Turno);
             self::showTunosData(array($Turno), "TURNO ACTUALIZADO");
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
@@ -82,7 +82,7 @@ class TestTurnoRepository
             $resul = $repository->delete($id);
             echo $resul ? "Turno eliminado" : "Turno no eliminado";
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
@@ -98,7 +98,7 @@ class TestTurnoRepository
             }
             self::showTunosData($TurnoList, "TODOS LOS TURNOS");
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
@@ -110,7 +110,7 @@ class TestTurnoRepository
             $turnosList = $repository->findByAtencion($atencionId);
            self::showTunosData($turnosList, "TODOS LOS TURNOS DE LA ATENCION $atencionId");
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 
@@ -127,7 +127,7 @@ class TestTurnoRepository
            self::showTunosData(array($turno), "PROXIMO TURNO DE LA ATENCION $atencionId");
            self::showTunosData($turnosList, "TURNOS EN COLA DE LA ATENCION $atencionId");
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage() . "<br>";
+            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
         }
     }
 

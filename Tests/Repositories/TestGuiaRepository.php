@@ -26,12 +26,14 @@ class TestGuiaRepository
             $repository = new GuiaRepository();
             // Act
             $guia = $repository->create($guia);
-            echo "Guía creado.<br>";
+            self::showGuias(array($guia), "Guia Creado");
         } catch (EntityReferenceNotFoundException $e) {
-            echo "ERROR: ".$e->getMessage() ;
+            echo '<hr><span style="color: red">ERROR AL CRAER EL GUIA <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
         catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR AL CRAER EL GUIA <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -41,10 +43,10 @@ class TestGuiaRepository
             $id = "234567";
             $repository = new GuiaRepository();
             $guia = $repository->find($id);
-
-            echo $guia->nombres. " " . $guia->apellidos."<BR>";
+            self::showGuias(array($guia), "GUIA ID: $id");
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR AL BUSCAR EL GUIA <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -52,13 +54,14 @@ class TestGuiaRepository
     {
         try {
             $repository = new GuiaRepository();
-            $guia = $repository->find("234567");
+            $guiaId = "234567";
+            $guia = $repository->find($guiaId);
             $guia->observaciones = "Guía Actualizado";
             $repository->update($guia);
-
-            echo "Guia actualizado con exito.<BR>";
+            self::showGuias(array($guia), "ACTUALIZADO GUIA ID: $guiaId" );
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR AL ACTUALIZAR EL GUIA <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -68,10 +71,10 @@ class TestGuiaRepository
             $id = 2;
             $repository = new GuiaRepository();
             $repository->delete($id);
-
-            echo "Guía eliminado<br>";
+            echo '<hr><span style="color: green"> El Guia ID: '.$id .' fue eliminado<br></span>';
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR AL ELIMINAR EL GUIA <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -82,22 +85,52 @@ class TestGuiaRepository
             $guiaList = $repository->findAll();
 
             if (!isset($guiaList) || count($guiaList) == 0) {
-                echo "No existen guías para mostrar<br>";
+                echo '<hr><span style="color: red"> No existen Guias para mostrar<br></span>';
                 return;
             }
-            foreach ($guiaList as $guia) {
-                echo "ID: " . $guia->id . "<br>";
-                echo "NOMBRE: " . $guia->nombres . "<br>";
-            }
+            self::showGuias($guiaList, "LISTADO DE TODOS LOS GUIAS" );
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage();
+            echo '<hr><span style="color: red">ERROR LISTAR TODOS LOS GUIAS <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
+
+    private static function showGuias(array $guias, string $title)
+    {
+          $output = "<hr/><h3 style='color: blue;'>$title</h3>
+                        <table border=4> <tr> 
+                          <th>USUARIO ID</th> 
+                          <th>ROL</th> 
+                          <th>CEDULA</th> 
+                          <th>NOMBRES</th> 
+                          <th>APELLIDOS</th> 
+                          <th>GENERO</th> 
+                          <th>FECHA NACIMIENTO</th> 
+                          <th>FOTO</th> 
+                          <th>OBSERVACIONES</th> 
+                          <th>TURNOS</th> 
+                          </tr> ";
+        foreach ($guias as $guia) {
+            $output .= "<td>" . $guia->usuario->id . "</td> 
+                        <td>" . $guia->usuario->rol->nombre . "</td> 
+                        <td>" . $guia->cedula . "</td> 
+                        <td>" . $guia->nombres . "</td> 
+                        <td>" . $guia->apellidos . "</td> 
+                        <td>" . $guia->genero . "</td> 
+                        <td>" . $guia->fecha_nacimiento . "</td> 
+                        <td>" . $guia->foto . "</td> 
+                        <td>" . $guia->observaciones . "</td> 
+                        <td>" . count($guia->turnos) . "</td> 
+                        </tr>";
+        }
+        $output .= "</table>";
+        echo $output;
+    }
+
 }
 
-// TestGuiaRepository::testSaveGuiaAndRetrieveWithID();
-// TestGuiaRepository::testFindGuiaAndShowData();
-// TestGuiaRepository::testUpdateGuiaAndShowNewData();
-// TestGuiaRepository::testFindGuiaAndShowData();
-// TestGuiaRepository::testDeleteGuiaVerifyNonExistence();
+TestGuiaRepository::testSaveGuiaAndRetrieveWithID();
+TestGuiaRepository::testFindGuiaAndShowData();
+TestGuiaRepository::testUpdateGuiaAndShowNewData();
+TestGuiaRepository::testDeleteGuiaVerifyNonExistence();
 TestGuiaRepository::testShowAllGuiasAndShowMessageIfEmpty();
