@@ -4,6 +4,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Reposit
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/DuplicateEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NotFoundEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IAtencionRepository.php";
 
 class AtencionRepository implements IAtencionRepository
 {
@@ -52,10 +53,10 @@ class AtencionRepository implements IAtencionRepository
             $Atencion->save();
             return $Atencion;
         } catch (Exception $e) {
-            $resul = Utility::getDuplicateRecordInfo($e->getMessage());
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Atencion ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
-                throw new DuplicateEntryException($message);
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
@@ -63,16 +64,56 @@ class AtencionRepository implements IAtencionRepository
 
     public function delete($id): bool
     {
-        $Atencion = $this->find($id);
-        return $Atencion->delete();
+        try {
+            $Atencion = $this->find($id);
+            return $Atencion->delete();
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
     }
 
-    public function validateAtencion(int $RecaladaId, DateTime $fecha): bool{
-        $atenciones = Atencion::find("all", array("conditions" => 
-                                    array("recalada_id = ? AND fecha_cierre > ?", $RecaladaId, $fecha)));
-        if (count($atenciones) > 0) {
-            return false;
+    public function validateAtencion(int $RecaladaId, DateTime $fecha): bool
+    {
+        try {
+            $atenciones = Atencion::find(
+                "all",
+                array(
+                    "conditions" =>
+                        array("recalada_id = ? AND fecha_cierre > ?", $RecaladaId, $fecha)
+                )
+            );
+            if (count($atenciones) > 0) {
+                return false;
+            }
+            return true;
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
         }
-        return true;
+    }
+
+    public function findByRecalada(int $recaladaId): array
+    {
+        try {
+            $recalada = Recalada::find($recaladaId);
+            return $recalada->atencions;
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
+
     }
 }

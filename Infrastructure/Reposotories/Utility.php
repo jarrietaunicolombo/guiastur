@@ -125,7 +125,7 @@ class Utility
         }
         if (strstr($errorMessage, UtilConstantsEnum::DB_FORIGN_KEY_REFERENCE)) {
             $result = Utility::getReferencedTableNames($errorMessage);
-            $message = $result[UtilConstantsEnum::TABLE_NAME] . " requiere de un(a) " . $result[UtilConstantsEnum::TABLE_REFERENCE_NAME];
+            $message = "Operación rechazada: Existe relacion ". strtoupper($result[UtilConstantsEnum::TABLE_NAME]) . " y " . strtoupper($result[UtilConstantsEnum::TABLE_REFERENCE_NAME]);
             return new EntityReferenceNotFoundException($message);
         }
         return $error;

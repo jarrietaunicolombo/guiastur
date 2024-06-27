@@ -10,24 +10,21 @@ class TestPaisRepository
     {
         try {
             $Pais = new Pais();
-            $Pais->nombre = "Colombia";
+            $Pais->nombre = "Italia";
             $Pais->nombre = $Pais->nombre.".png";
 
             $Pais->fecha_registro = new DateTime();
             $Pais->usuario_registro = 1;
             $repository = new PaisRepository();
             $Pais = $repository->create($Pais);
-
-            if ($Pais != null && $Pais->id > 0) {
-                echo "Pais creado";
-            } else {
-                echo "Pais No creado";
-            }
+            self::showPaises( array($Pais),  "PAIS CREADO ");
         } catch (EntityReferenceNotFoundException $e) {
-            echo "ERROR: ".$e->getMessage() ;
+            echo '<hr><span style="color: red">ERROR CREAR EL PAIS <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
         catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR CREAR EL PAIS <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -37,11 +34,10 @@ class TestPaisRepository
             $id = 1;
             $repository = new PaisRepository();
             $Pais = $repository->find($id);
-
-            echo $Pais->nombre."<BR>";
-
+            self::showPaises( array($Pais),  "DATOS DEL PAIS ID:  $id ");
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR BUSCAR EL PAIS <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -49,13 +45,14 @@ class TestPaisRepository
     {
         try {
             $repository = new PaisRepository();
-            $Pais = $repository->find(1);
-            $Pais->nombre = "Chile";
+            $id = 2;
+            $Pais = $repository->find($id);
+            $Pais->nombre = "Italy";
             $Pais = $repository->update($Pais);
-
-            echo "NOMBRE: " . $Pais->nombre . "<BR>";
+            self::showPaises( array($Pais),  "PAIS ID:  $id  ACTUALIZADO ");
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR ACTUALIZAR EL PAIS <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -66,10 +63,10 @@ class TestPaisRepository
             $id = 4;
             $repository = new PaisRepository();
             $resul = $repository->delete($id);
-            echo $resul ? "Pais eliminado" : "Pais no eliminado";
+            echo  $resul ? '<hr><span style="color: green"> Pais ID: '.$id .'fue eliminada<br></span>' : '<hr><span style="color: red"> Pais ID: '.$id .' No fue eliminada<br></span>'; 
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
-
+            echo '<hr><span style="color: red">ERROR EL ELIMINAR EL PAIS <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -80,22 +77,40 @@ class TestPaisRepository
             $PaiseList = $repository->findAll();
 
             if (!isset($PaiseList) || count($PaiseList) == 0) {
-                echo "No existen Pais para mostrar";
+                echo '<hr><span style="color: red"> No existen Paises para mostrar<br></span>';
                 return;
             }
-            foreach ($PaiseList as $Paise) {
-                echo "ID: " . $Paise->id . "<br>";
-                echo "NOMBRE: " . $Paise->nombre . "<br>";
-            }
+            self::showPaises( $PaiseList,  "LISTA DE TODOS LOS PAISES");
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR LISTAR TODOS LOS PAISES <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
+    }
+
+    private static function showPaises(array $paises, string $title)
+    {
+          $output = "<hr/><h3 style='color: blue;'>$title</h3>
+                        <table border=4> <tr> 
+                          <th>ID</th> 
+                          <th>NOMBRE</th> 
+                          <th>BANDERA</th> 
+                          <th>RECALADAS</th> 
+                          </tr> ";
+        foreach ($paises as $pais) {
+            $output .= "<td>" . $pais->id . "</td> 
+                        <td>" . $pais->nombre . "</td> 
+                        <td>" . $pais->bandera . "</td> 
+                        <td>" . count($pais->recaladas) . "</td> 
+                        </tr>";
+        }
+        $output .= "</table>";
+        echo $output;
     }
 }
 
-// TestPaisRepository::testSavePaisAndRetrieveWithID();
-// TestPaisRepository::testFindPaisAndShowData();
-// TestPaisRepository::testUpdatePaisAndShowNewData();
-// TestPaisRepository::testDeletePaisVerifyNonExistence();
+TestPaisRepository::testSavePaisAndRetrieveWithID();
+TestPaisRepository::testFindPaisAndShowData();
+TestPaisRepository::testUpdatePaisAndShowNewData();
+TestPaisRepository::testDeletePaisVerifyNonExistence();
 TestPaisRepository::testShowAllPaisesAndShowMessageIfEmpty();
 

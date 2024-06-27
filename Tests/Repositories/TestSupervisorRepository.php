@@ -14,9 +14,9 @@ class TestSupervisorRepository
             $supervisor = new Supervisor();
             $guid = Utility::generateGUID(1);
             $supervisor->cedula = "11223344";
-            $supervisor->rnt =  $guid;
+            $supervisor->rnt = $guid;
             // $supervisor->rnt =  "66711822-95af";
-            $supervisor->nombres = "FULANITO 3 - ". explode("-", $supervisor->rnt)[1];
+            $supervisor->nombres = "FULANITO 3 - " . explode("-", $supervisor->rnt)[1];
             $supervisor->apellidos = "DE TAL";
             $supervisor->fecha_nacimiento = (new DateTime("1990-07-11"))->format('Y-m-d H:i:s');
             $supervisor->genero = "Famenino";
@@ -25,13 +25,14 @@ class TestSupervisorRepository
             $supervisor->usuario_registro = 1;
             $repository = new SupervisorRepository();
             // Act
-            $repository->create($supervisor);
-            echo "Supervisor creado.<br>";
+            $supervisor = $repository->create($supervisor);
+            self::showSupervisor(array($supervisor), "CREADO EL SUPERVISOR ID: $id");
         } catch (EntityReferenceNotFoundException $e) {
-            echo "ERROR: ".$e->getMessage() ;
-        }
-        catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR AL CREAR EL SUPERVISOR <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
+        } catch (Exception $e) {
+            echo '<hr><span style="color: red">ERROR AL ACTUALIZAR EL SUPERVISOR <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -40,11 +41,11 @@ class TestSupervisorRepository
         try {
             $id = "44332211";
             $repository = new SupervisorRepository();
-            $guia = $repository->find($id);
-
-            echo $guia->nombres. " " . $guia->apellidos."<BR>";
+            $supervisor = $repository->find($id);
+            self::showSupervisor(array($supervisor), "DATOS DEL SUPERVISOR ID: $id");
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR AL ACTUALIZAR EL SUPERVISOR <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -52,13 +53,14 @@ class TestSupervisorRepository
     {
         try {
             $repository = new SupervisorRepository();
-            $supervisor = $repository->find("44332211");
+            $id = "44332211";
+            $supervisor = $repository->find($id);
             $supervisor->observaciones = "Supervisor Actualizado";
             $repository->update($supervisor);
-
-            echo "Supervisor actualizado con exito.<BR>";
+            self::showSupervisor(array($supervisor), "ACTUALIZADO SUPERVISOR ID: $id");
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR AL ACTUALIZAR EL SUPERVISOR <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -68,9 +70,10 @@ class TestSupervisorRepository
             $id = "44332211";
             $repository = new SupervisorRepository();
             $repository->delete($id);
-            echo "Supervisor elimimado";
+            echo '<hr><span style="color: green"> El Guia ID: ' . $id . ' fue eliminado<br></span>';
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage(). "<br>";
+            echo '<hr><span style="color: red">ERROR AL ELIMINAR EL SUPERVISOR <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -81,21 +84,51 @@ class TestSupervisorRepository
             $supervisorList = $repository->findAll();
 
             if (!isset($supervisorList) || count($supervisorList) == 0) {
-                echo "No existen supervisores para mostrar";
+                echo '<hr><span style="color: red"> No existen Guias para mostrar<br></span>';
                 return;
             }
-            foreach ($supervisorList as $supervisor) {
-                echo "ID: " .  $supervisor->cedula. "<BR>";
-                echo "NOMBRE: ". $supervisor->nombres. " " . $supervisor->apellidos."<BR>";
-                echo "ROL: ". $supervisor->usuario->rol->nombre."<BR>";
-            }
+            self::showSupervisor($supervisorList, "TODOS LOS SUPERVISORES");
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage();
+            echo '<hr><span style="color: red">ERROR LISTAR TODOS LOS SUPERVISORS <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
+    }
+
+    private static function showSupervisor(array $supervisores, string $title)
+    {
+        $output = "<hr/><h3 style='color: blue;'>$title</h3>
+                        <table border=4> <tr> 
+                          <th>USUARIO ID</th> 
+                          <th>ROL</th> 
+                          <th>CEDULA</th> 
+                          <th>NOMBRES</th> 
+                          <th>APELLIDOS</th> 
+                          <th>GENERO</th> 
+                          <th>FECHA NACIMIENTO</th> 
+                          <th>FOTO</th> 
+                          <th>OBSERVACIONES</th> 
+                          <th>ATENCIONES</th> 
+                          </tr> ";
+        foreach ($supervisores as $supervisor) {
+            $output .= "<td>" . $supervisor->usuario->id . "</td> 
+                        <td>" . $supervisor->usuario->rol->nombre . "</td> 
+                        <td>" . $supervisor->cedula . "</td> 
+                        <td>" . $supervisor->nombres . "</td> 
+                        <td>" . $supervisor->apellidos . "</td> 
+                        <td>" . $supervisor->genero . "</td> 
+                        <td>" . $supervisor->fecha_nacimiento . "</td> 
+                        <td>" . $supervisor->foto . "</td> 
+                        <td>" . $supervisor->observaciones . "</td> 
+                        <td>" . count($supervisor->atencions) . "</td> 
+                        </tr>";
+        }
+        $output .= "</table>";
+        echo $output;
     }
 }
 
-// TestSupervisorRepository::testSaveSupervisorAndRetrieveWithID();
-// TestSupervisorRepository::testFindSupervisorAndShowData();
-// TestSupervisorRepository::testUpdateGuiaAndShowNewData();
+TestSupervisorRepository::testSaveSupervisorAndRetrieveWithID();
+TestSupervisorRepository::testFindSupervisorAndShowData();
+TestSupervisorRepository::testUpdateSupervisorAndShowNewData();
+TestSupervisorRepository::testDeleteSupervisorVerifyNonExistence();
 TestSupervisorRepository::testShowAllSupervisorsAndShowMessageIfEmpty();
