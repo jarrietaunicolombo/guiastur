@@ -54,11 +54,10 @@ class RecaladaRepository implements IRecaladaRepository
             $recalada->save();
             return $recalada;
         } catch (Exception $e) {
-            $resul = Utility::getDuplicateRecordInfo($e->getMessage());
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Recalada ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME]
-                    . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
-                throw new DuplicateEntryException($message);
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
@@ -66,8 +65,17 @@ class RecaladaRepository implements IRecaladaRepository
 
     public function delete($id): bool
     {
-        $recalada = $this->find($id);
-        return $recalada->delete();
+        try {
+            $recalada = $this->find($id);
+            return $recalada->delete();
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
     }
 
     public function validateRecalada(int $buqueId, DateTime $fecha): bool
@@ -101,11 +109,11 @@ class RecaladaRepository implements IRecaladaRepository
                 "all",
                 array(
                     "conditions"
-                   => array(
-                        "fecha_arribo <= ? AND fecha_zarpe >= ?",
-                        $nowDate,
-                        $nowDate
-                    )
+                    => array(
+                            "fecha_arribo <= ? AND fecha_zarpe >= ?",
+                            $nowDate,
+                            $nowDate
+                        )
                 )
             );
             return $recaladas;

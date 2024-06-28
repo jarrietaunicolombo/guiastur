@@ -27,14 +27,15 @@ class TestTurnoRepository
             $Turno = $repository->create($Turno);
             // Assert
             if ($Turno != null && $Turno->id > 0) {
-                self::showTunosData(array($Turno), "TURNO CREADO");
+                self::showTunosData(array($Turno), "EL TURNO FUR CREADO");
             } else {
-                echo "Turno No creado";
+                echo '<hr><span style="color: red">EL TURNO NO FUE CREADO<br></span>';
             }
         } catch (EntityReferenceNotFoundException $e) {
             echo "ERROR: " . $e->getMessage();
         } catch (Exception $e) {
-            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
+            echo '<hr><span style="color: red">ERROR AL CREAR EL TURNO<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -44,10 +45,10 @@ class TestTurnoRepository
             $id = 2;
             $repository = new TurnoRepository();
             $Turno = $repository->find($id);
-
             self::showTunosData(array($Turno), "DATOS DEL TURNO $id");
         } catch (Exception $e) {
-            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
+            echo '<hr><span style="color: red">ERROR AL BUSCAR EL TURNO<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -69,7 +70,8 @@ class TestTurnoRepository
             $Turno = $repository->update($Turno);
             self::showTunosData(array($Turno), "TURNO ACTUALIZADO");
         } catch (Exception $e) {
-            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
+            echo '<hr><span style="color: red">ERROR AL ACTUALIZAR EL TURNO<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -80,9 +82,10 @@ class TestTurnoRepository
             $id = 3;
             $repository = new TurnoRepository();
             $resul = $repository->delete($id);
-            echo $resul ? "Turno eliminado" : "Turno no eliminado";
+            echo $resul ? '<hr><span style="color: green"> Turno ID: ' . $id . 'fue eliminada<br></span>' : '<hr><span style="color: red"> Turno Id: ' . $id . ' No fue eliminada<br></span>';
         } catch (Exception $e) {
-            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
+            echo '<hr><span style="color: red">ERROR AL ELIMINAR EL TURNO<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -93,12 +96,13 @@ class TestTurnoRepository
             $TurnoList = $repository->findAll();
 
             if (!isset($TurnoList) || count($TurnoList) == 0) {
-                echo "No existen Turno para mostrar";
+                echo '<hr><span style="color: red">NO EXISTEN TURNOS PARA MOSTRAR<br></span>';
                 return;
             }
             self::showTunosData($TurnoList, "TODOS LOS TURNOS");
         } catch (Exception $e) {
-            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
+            echo '<hr><span style="color: red">ERROR LISTAR TODOS LOS  TURNOS<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
@@ -108,33 +112,35 @@ class TestTurnoRepository
             $atencionId = 4;
             $repository = new TurnoRepository();
             $turnosList = $repository->findByAtencion($atencionId);
-           self::showTunosData($turnosList, "TODOS LOS TURNOS DE LA ATENCION $atencionId");
+            self::showTunosData($turnosList, "TODOS LOS TURNOS DE LA ATENCION $atencionId");
         } catch (Exception $e) {
-            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
+            echo '<hr><span style="color: red">ERROR AL OBTENER TURNOS POR ATENCION<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
-    public static function testNextTurno(){
+    public static function testNextTurno()
+    {
         try {
             $atencionId = 4;
             $repository = new TurnoRepository();
             $turnosList = $repository->findByTurnosStateCreateByAtencion($atencionId);
-            if(count($turnosList) == 0) {
-                echo "NO EXISTEN TURNOS DISPONIBLES PARA LA ATENCION $atencionId";
+            if (count($turnosList) == 0) {
+                echo '<hr><span style="color: red">NO EXISTEN TURNOS DISPONIBLES PARA LA ATENCION ID: ' . $atencionId . '<br></span>';
                 return;
             }
             $turno = $turnosList[0];
-           self::showTunosData(array($turno), "PROXIMO TURNO DE LA ATENCION $atencionId");
-           self::showTunosData($turnosList, "TURNOS EN COLA DE LA ATENCION $atencionId");
+            self::showTunosData(array($turno), "PROXIMO TURNO DE LA ATENCION $atencionId");
+            self::showTunosData($turnosList, "TURNOS EN COLA DE LA ATENCION $atencionId");
         } catch (Exception $e) {
-            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
+            echo '<hr><span style="color: red">ERROR LISTAR TODOS LOS TURNOS <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
     private static function showTunosData($turnos, string $title)
     {
-        // 5.4. Mostrar: [GuiaNombre, BuqueId, RecaladaId, AtencionId, TurnoId, TurnoNumero, Estado, FechaUso, FechaSalida, FechaRegreso, ]
-        $output = "<hr/><h3>$title</h3>
+        $output = "<hr/><h3 style='color: blue;'>$title</h3>
                         <table border=4> <tr> 
                           <th>TURNO ID</th> 
                           <th>NUMERO</th> 
@@ -175,11 +181,10 @@ class TestTurnoRepository
     }
 }
 
-// TestTurnoRepository::testSaveTurnoAndRetrieveWithID();
-// TestTurnoRepository::testFindTurnoAndShowData();
-// TestTurnoRepository::testUpdateTurnoAndShowNewData();
-// TestTurnoRepository::testFindTurnoAndShowData();
-// TestTurnoRepository::testDeleteTurnoVerifyNonExistence();
+TestTurnoRepository::testSaveTurnoAndRetrieveWithID();
+TestTurnoRepository::testFindTurnoAndShowData();
+TestTurnoRepository::testUpdateTurnoAndShowNewData();
+TestTurnoRepository::testDeleteTurnoVerifyNonExistence();
 TestTurnoRepository::testShowAllTurnosAndShowMessageIfEmpty();
 TestTurnoRepository::testGetTunosByAtencionShouldShowList();
 TestTurnoRepository::testNextTurno();

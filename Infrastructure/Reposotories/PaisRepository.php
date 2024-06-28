@@ -52,10 +52,10 @@ class PaisRepository implements IPaisRepository
             $Pais->save();
             return $Pais;
         } catch (Exception $e) {
-            $resul = Utility::getDuplicateRecordInfo($e->getMessage());
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Pais ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
-                throw new DuplicateEntryException($message);
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
@@ -63,7 +63,16 @@ class PaisRepository implements IPaisRepository
 
     public function delete($id): bool
     {
-        $Pais = $this->find($id);
-        return $Pais->delete();
+        try {
+            $Pais = $this->find($id);
+            return $Pais->delete();
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
     }
 }
