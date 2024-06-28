@@ -52,10 +52,10 @@ class BuqueRepository implements IBuqueRepository
             $buque->save();
             return $buque;
         } catch (Exception $e) {
-            $resul = Utility::getDuplicateRecordInfo($e->getMessage());
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Buque ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
-                throw new DuplicateEntryException($message);
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
@@ -63,7 +63,16 @@ class BuqueRepository implements IBuqueRepository
 
     public function delete($id): bool
     {
-        $buque = $this->findById($id);
-        return $buque->delete();
+        try {
+            $buque = $this->findById($id);
+            return $buque->delete();
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
     }
 }

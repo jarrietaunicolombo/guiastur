@@ -52,10 +52,10 @@ class TurnoRepository implements ITurnoRepository
             $Turno->save();
             return $Turno;
         } catch (Exception $e) {
-            $resul = Utility::getDuplicateRecordInfo($e->getMessage());
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Turno ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
-                throw new DuplicateEntryException($message);
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
@@ -63,8 +63,17 @@ class TurnoRepository implements ITurnoRepository
 
     public function delete($id): bool
     {
-        $Turno = $this->find($id);
-        return $Turno->delete();
+        try {
+            $Turno = $this->find($id);
+            return $Turno->delete();
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
     }
 
     public function findByAtencion(int $atencionId): array
@@ -75,16 +84,18 @@ class TurnoRepository implements ITurnoRepository
 
     public function findByTurnosStateCreateByAtencion(int $atencionId): array
     {
-        try{
+        try {
             $status = "Creado";
-            $turnos = Turno::find("all", array(
-                "conditions"
-                => array(
-                        "estado = ? AND atencion_id = ?",
-                        $status,
-                        $atencionId
-                    )
-            )
+            $turnos = Turno::find(
+                "all",
+                array(
+                    "conditions"
+                    => array(
+                            "estado = ? AND atencion_id = ?",
+                            $status,
+                            $atencionId
+                        )
+                )
             );
             return $turnos;
         } catch (Exception $e) {
