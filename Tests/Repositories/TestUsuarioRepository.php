@@ -2,21 +2,23 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Usuario.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/UsuarioRespository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 use ActiveRecord\DatabaseException;
+use ActiveRecord\Utils;
 
 class TestUsuarioRepository
 {
     public static function testSaveUserAndRetrieveWithID()
     {
         // Arrange
-        $rol = 1;
-        $usuarioAdmin = 2;
+        $rol = 3;
+        $usuarioAdmin = 1;
         try {
             $usuario = new Usuario();
-            $usuario->nombre = "FULANITO DE TAL 2";
-            $usuario->email = "fulanito2@gmail.com";
-            $usuario->password = "UnaPrueba$$$***";
+            $usuario->nombre = "FULANITO DE TAL 3";
+            $usuario->email = "fulanito3@gmail.com";
+            $usuario->password = "Abc123$$$";
             $usuario->rol_id = $rol;
             $usuario->fecha_registro = date('Y-m-d H:i:s', strtotime('now'));
             $usuario->usuario_registro = $usuarioAdmin;
@@ -25,94 +27,140 @@ class TestUsuarioRepository
             $usuario = $repository->create($usuario);
             // Assert
             if ($usuario != null && $usuario->id > 0) {
-                echo "Usuario creado";
+                echo '<hr><span style="gree": red">Usuario Creado<br></span>';
+                self::showUsuarioData(array($usuario), "DATOS DEL USUARIO CON");
             } else {
-                echo "Usuario No creado";
+                echo '<hr><span style="color: red">ERROR GUARDAR EL USUARIO <br></span>';
             }
+        } catch (EntityReferenceNotFoundException $e) {
+            echo '<hr><span style="color: red">ERROR GUARDAR EL USUARIO <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage() ;
+            echo '<hr><span style="color: red">ERROR AL GUARDAR EL USUARIO <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
-    
+
     public static function testFindUserAndShowData()
     {
         try {
-              // Arrange
+            // Arrange
             $id = 1;
             $repository = new UsuarioRepository();
             // Act
             $usuario = $repository->find(2);
             // Assert: 
-            echo $usuario->nombre."<BR>";
-            echo $usuario->email."<BR>";
-           
+            self::showUsuarioData(array($usuario), "DATOS DEL USUARIO CON  $id");
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage();
+            echo '<hr><span style="color: red">ERROR BUSCAR EL USUARIO <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
+
+    public static function testFindUserByEmailAndShowData()
+    {
+        try {
+            // Arrange
+            $email = "fulanito5@gmail.com";
+            $repository = new UsuarioRepository();
+            // Act
+            $usuario = $repository->findByEmail($email);
+            // Assert: 
+            // Assert: 
+            self::showUsuarioData(array($usuario), "DATOS DEL USUARIO CON EMAIL $email");
+        } catch (Exception $e) {
+            echo '<hr><span style="color: red">ERROR BUSCAR EL USUARIO <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
+        }
+    }
+
 
     public static function testUpdaeUserAndShowNewData()
     {
         try {
-              // Arrange
+            // Arrange
             $repository = new UsuarioRepository();
-            $usuario = $repository->find(2);
-            $usuario->nombre = "FULANITO DE TAL XYZ"; 
+            $Id = 2;
+            $usuario = $repository->find($Id);
+            $usuario->nombre = "FULANITO DE TAL XYZ";
             $usuario->email = "fulanitoxyz@gmail.com";
-            $usuario->password = "xxxfulan***"; 
+            $usuario->password = "xxxfulan***";
             //act
             $usuario = $repository->update($usuario);
             // Assert: 
-            echo "NOMBRE: ". $usuario->nombre."<BR>";
-            echo "EMAIL: ". $usuario->email."<BR>";
-            echo "ROL: ". $usuario->rol->nombre."<BR>";
-           
+            self::showUsuarioData(array($usuario), "DATOS DEL USUARIO $Id DE TODOS LOS USUARIOS");
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage();
+            echo '<hr><span style="color: red">ERROR ACTUALIZAR EL USUARIO <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
     public static function testDeleteUserVerifyNonExistence()
     {
         try {
-              // Arrange
+            // Arrange
             $id = 3;
             $repository = new UsuarioRepository();
             // Act
-           $resul =  $repository->delete($id);
+            $resul = $repository->delete($id);
             // Assert: 
-            echo  $resul? "Usuario eliminado" : "Usuario no eliminado";
+            echo $resul ? "Usuario eliminado" : "Usuario no eliminado";
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage();
+            echo '<hr><span style="color: red">ERROR LISTAR TODOS LOS USUARIOS <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
     public static function testShowAllUsersAndShowMessageIfEmpty()
     {
         try {
-              // Arrange
-              $repository = new UsuarioRepository();
-              // Act
-              $userList = $repository->findAll();
-              // assert 
-              if (!isset($userList) || count($userList) == 0) {
-                echo "No existen usuarios para mostrar";
+            // Arrange
+            $repository = new UsuarioRepository();
+            // Act
+            $userList = $repository->findAll();
+            // assert 
+            if (!isset($userList) || count($userList) == 0) {
+                echo '<hr><span style="color: red">NO EXISTEN USUARIOS PARA MOSTRAR<br></span>';
                 return;
-              }
-              foreach ($userList as $user) {
-                echo "ID: ".$user->id."<br>";
-                echo "NOMBRE: ".$user->nombre."<br>";
-                echo "EMAIL: ".$user->email."<br>";
-                echo "ROL: ".$user->rol->nombre."<br>";
-              }
+            }
+            self::showUsuarioData($userList, "LISTADO DE TODOS LOS USUARIOS");
         } catch (Exception $e) {
-            echo "ERROR: ".$e->getMessage();
+            echo '<hr><span style="color: red">ERROR LISTAR TODOS LOS USUARIOS <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
+
         }
     }
+
+    private static function showUsuarioData($usuarios, string $title)
+    {
+        $output = "<hr/><h3 style='color: blue;'>$title</h3>
+                        <table border=4> <tr> 
+                          <th>USUARIO ID</th> 
+                          <th>EMAIL</th> 
+                          <th>NOMBRE</th> 
+                          <th>ESTADO</th> 
+                          <th>TOKEN DE VALIDACION</th> 
+                          <th>ROL ID</th> 
+                          <th>ROL</th> 
+                          </tr> ";
+        foreach ($usuarios as $usuario) {
+            $output .= "<td>" . $usuario->id . "</td> 
+                        <td>" . $usuario->email . "</td> 
+                        <td>" . $usuario->nombre . "</td> 
+                        <td>" . $usuario->estado . "</td> 
+                        <td>" . $usuario->validation_token . "</td> 
+                        <td>" . $usuario->rol_id . "</td> 
+                        <td>" . $usuario->rol->nombre . "</td> 
+                        </tr> ";
+        }
+        $output .= "</table>";
+        echo $output;
+    }
 }
-// TestUsuarioRepository::testSaveUserAndRetrieveWithID();
-// TestUsuarioRepository::testFindUserAndShowData();s
-// TestUsuarioRepository::testUpdaeUserAndShowNewData();
-// TestUsuarioRepository::testDeleteUserVerifyNonExistence();
+TestUsuarioRepository::testSaveUserAndRetrieveWithID();
+TestUsuarioRepository::testFindUserAndShowData();
+TestUsuarioRepository::testUpdaeUserAndShowNewData();
+TestUsuarioRepository::testDeleteUserVerifyNonExistence();
 TestUsuarioRepository::testShowAllUsersAndShowMessageIfEmpty();
+TestUsuarioRepository::testFindUserByEmailAndShowData();

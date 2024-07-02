@@ -2,7 +2,7 @@ CREATE DATABASE Gestion_turnos_guias_bd;
 
 ALTER DATABASE Gestion_turnos_guias_bd
  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE nombre_base_de_datos;
+USE Gestion_turnos_guias_bd;
 SELECT CONCAT('ALTER TABLE ', TABLE_NAME, ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;') 
 FROM INFORMATION_SCHEMA.TABLES 
 WHERE TABLE_SCHEMA = 'Gestion_turnos_guias_bd';
@@ -17,10 +17,10 @@ CREATE TABLE Usuarios (
 	estado VARCHAR(100) DEFAULT 'ACTIVO',
     rol_id INT NOT NULL,
     guia_o_supervisor_id VARCHAR(20),
+    validation_token VARCHAR(250) UNIQUE,
     fecha_registro DATETIME NOT NULL,
     usuario_registro INT 
 ) engine = innodb;
-
 
 CREATE TABLE Rols (
 	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -38,6 +38,7 @@ CREATE TABLE Guias (
     apellidos VARCHAR(100) NOT NULL,
     fecha_nacimiento DATE,
     genero VARCHAR(100),
+    telefono VARCHAR(15),
     foto VARCHAR(200) UNIQUE,
     observaciones TEXT,
     usuario_id INT NOT NULL,
@@ -52,6 +53,7 @@ CREATE TABLE Supervisors (
     apellidos VARCHAR(100) NOT NULL,
     fecha_nacimiento DATE,
     genero VARCHAR(100),
+    telefono VARCHAR(15),
     foto VARCHAR(200) UNIQUE,
     observaciones TEXT,
     usuario_id INT NOT NULL,
@@ -78,13 +80,12 @@ CREATE TABLE Recaladas (
     total_turistas INTEGER(5) NOT NULL,
     observaciones TEXT,
     buque_id INT NOT NULL,
-    pais_origen INT NOT NULL,
+    pais_id INT NOT NULL,
     fecha_registro DATETIME NOT NULL,
     usuario_registro INT
 ) engine = innodb;
 
-
-CREATE TABLE Paises (
+CREATE TABLE Pais (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 	nombre VARCHAR(100) UNIQUE NOT NULL,
     bandera VARCHAR(15) UNIQUE,
@@ -93,13 +94,13 @@ CREATE TABLE Paises (
 ) engine = innodb;
 
 
-CREATE TABLE Atenciones (
+CREATE TABLE Atencions (
 	id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     fecha_inicio DATETIME NOT NULL,
     fecha_cierre  DATETIME,
     total_turnos INTEGER(3) NOT NULL,
     observaciones TEXT,
-    supervisor_id INT,
+    supervisor_id VARCHAR(20),
     recalada_id INT NOT NULL,
     fecha_registro DATETIME NOT NULL,
     usuario_registro INT 
@@ -113,8 +114,11 @@ CREATE TABLE turnos (
     numero int(4) NOT NULL,
     estado varchar(30) DEFAULT NULL,
     fecha_uso datetime DEFAULT NULL,
+    usuario_uso INT,
     fecha_salida datetime DEFAULT NULL,
+    usuario_salida INT,
     fecha_regreso datetime DEFAULT NULL,
+    usuario_regreso INT,
     observaciones text,
     guia_id varchar(20) NOT NULL,
     atencion_id int NOT NULL,
@@ -146,25 +150,26 @@ REFERENCES Buques(id);
 
 ALTER TABLE Recaladas
 ADD CONSTRAINT Fk_Paises_Recalada
-FOREIGN KEY (pais_origen)
-REFERENCES Paises(id);
+FOREIGN KEY (pais_id)
+REFERENCES Pais(id);
 
-ALTER TABLE Atenciones
+ALTER TABLE Atencions
 ADD CONSTRAINT Fk_Atenciones_Recaladas
 FOREIGN KEY (recalada_id)
 REFERENCES Recaladas(id);
 
-ALTER TABLE Atenciones
-ADD CONSTRAINT Fk_Supervisors_Atenciones
+ALTER TABLE Atencions
+ADD CONSTRAINT Fk_Supervisors_Atencions
 FOREIGN KEY (supervisor_id)
 REFERENCES Supervisors(cedula);
 
 ALTER TABLE Turnos
 ADD CONSTRAINT Fk_Turnos_Atenciones
 FOREIGN KEY (atencion_id)
-REFERENCES Atenciones(id);
+REFERENCES Atencions(id);
 
 ALTER TABLE Turnos
 ADD CONSTRAINT Fk_Guias_Turnos
 FOREIGN KEY (guia_id)
 REFERENCES Guias(cedula);
+
