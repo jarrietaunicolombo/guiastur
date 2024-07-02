@@ -119,12 +119,12 @@ class TestTurnoRepository
         }
     }
 
-    public static function testNextTurno()
+    public static function testfindWithStateCreatedByAtencionShouldShowData()
     {
         try {
             $atencionId = 4;
             $repository = new TurnoRepository();
-            $turnosList = $repository->findByTurnosStateCreateByAtencion($atencionId);
+            $turnosList = $repository->findWithStateCreatedByAtencion($atencionId);
             if (count($turnosList) == 0) {
                 echo '<hr><span style="color: red">NO EXISTEN TURNOS DISPONIBLES PARA LA ATENCION ID: ' . $atencionId . '<br></span>';
                 return;
@@ -187,4 +187,4 @@ TestTurnoRepository::testUpdateTurnoAndShowNewData();
 TestTurnoRepository::testDeleteTurnoVerifyNonExistence();
 TestTurnoRepository::testShowAllTurnosAndShowMessageIfEmpty();
 TestTurnoRepository::testGetTunosByAtencionShouldShowList();
-TestTurnoRepository::testNextTurno();
+TestTurnoRepository::testfindWithStateCreatedByAtencionShouldShowData();

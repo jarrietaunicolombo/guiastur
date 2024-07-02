@@ -38,6 +38,7 @@ CREATE TABLE Guias (
     apellidos VARCHAR(100) NOT NULL,
     fecha_nacimiento DATE,
     genero VARCHAR(100),
+    telefono VARCHAR(15),
     foto VARCHAR(200) UNIQUE,
     observaciones TEXT,
     usuario_id INT NOT NULL,
@@ -52,6 +53,7 @@ CREATE TABLE Supervisors (
     apellidos VARCHAR(100) NOT NULL,
     fecha_nacimiento DATE,
     genero VARCHAR(100),
+    telefono VARCHAR(15),
     foto VARCHAR(200) UNIQUE,
     observaciones TEXT,
     usuario_id INT NOT NULL,
@@ -112,7 +114,7 @@ CREATE TABLE turnos (
     numero int(4) NOT NULL,
     estado varchar(30) DEFAULT NULL,
     fecha_uso datetime DEFAULT NULL,
-    usuario_usa INT,
+    usuario_uso INT,
     fecha_salida datetime DEFAULT NULL,
     usuario_salida INT,
     fecha_regreso datetime DEFAULT NULL,
@@ -170,3 +172,4 @@ ALTER TABLE Turnos
 ADD CONSTRAINT Fk_Guias_Turnos
 FOREIGN KEY (guia_id)
 REFERENCES Guias(cedula);
+

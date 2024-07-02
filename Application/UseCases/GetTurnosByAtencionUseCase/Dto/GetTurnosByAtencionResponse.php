@@ -50,7 +50,7 @@ class GetTurnosByAtencionDto
     private $guia_id;
     private $estado;
     private $fecha_uso;
-    private $usuario_usa;
+    private $usuario_uso;
     private $fecha_salida;
     private $usuario_salida;
     private $fecha_regreso;
@@ -64,7 +64,7 @@ class GetTurnosByAtencionDto
         int $numero,
         string $estado = null,
         DateTime $fecha_uso = null,
-        int $usuario_usa = null,
+        int $usuario_uso = null,
         DateTime $fecha_salida = null,
         int $usuario_salida  = null,
         DateTime $fecha_regreso = null,
@@ -89,7 +89,7 @@ class GetTurnosByAtencionDto
         $this->guia_id = $guia_id;
         $this->estado = $estado;
         $this->fecha_uso = $fecha_uso;
-        $this->usuario_usa = $usuario_usa;
+        $this->usuario_uso = $usuario_uso;
         $this->fecha_salida = $fecha_salida;
         $this->usuario_salida = $usuario_salida;
         $this->fecha_regreso = $fecha_regreso;
@@ -157,7 +157,7 @@ class GetTurnosByAtencionDto
     }
 
     public function getUsuarioUso(){
-        return $this->usuario_usa;
+        return $this->usuario_uso;
     }
 
     public function getUsuarioSalida(){

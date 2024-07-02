@@ -82,7 +82,7 @@ class TurnoRepository implements ITurnoRepository
         return $turnos;
     }
 
-    public function findByTurnosStateCreateByAtencion(int $atencionId): array
+    public function findWithStateCreatedByAtencion(int $atencionId): array
     {
         try {
             $status = "Creado";
@@ -99,6 +99,28 @@ class TurnoRepository implements ITurnoRepository
             );
             return $turnos;
         } catch (Exception $e) {
+            throw Utility::errorHandler($e);
+        }
+    }
+
+    public function findNexTurno(int $atencionId): Turno
+    {
+        try {
+            $estado = "Creado";
+            $turno = Turno::find("first",
+                                array("conditions"=>
+                                        array("atencion_id = ? AND estado = ? AND fecha_uso is ?"
+                                                ,$atencionId, $estado, NULL)));
+            if(!isset($turno)) {
+                throw new NotFoundEntryException("No existen turnos disponibles para la Atención Id: $atencionId");
+            }
+           return $turno;
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
             throw Utility::errorHandler($e);
         }
     }
