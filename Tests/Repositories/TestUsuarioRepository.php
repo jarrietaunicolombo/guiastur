@@ -4,9 +4,6 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/U
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
-use ActiveRecord\DatabaseException;
-use ActiveRecord\Utils;
-
 class TestUsuarioRepository
 {
     public static function testSaveUserAndRetrieveWithID()
