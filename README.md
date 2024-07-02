@@ -91,7 +91,7 @@ Corresponde al repositorio principal del Sistema de Gestión y Control de Turnos
 
 7.3. Guardar en Sesion: Resultado de Query 7
 
-7.4. Command 2: Actualizar Turno (TurnoId, FechaUso, Estado:En Uso )
+7.4. Command 2: Actualizar Turno (TurnoId, Estado:En Uso, FechaUso, Usuario Uso )
 
 7.5. Guardar en Sesion: Resultado de Command 2
 
