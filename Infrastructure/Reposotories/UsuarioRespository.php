@@ -23,6 +23,24 @@ class UsuarioRepository implements IUsuarioRepository
         }
     }
 
+    public function findByEmail($email): Usuario
+    {
+        try {
+            $user = Usuario::find_by_email($email);
+            if (!$user) {
+                throw new NotFoundEntryException("Usuario con email $email no existe");
+            }
+            return $user;
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
+    }
+
     public function findAll(): array
     {
         try {
@@ -35,6 +53,7 @@ class UsuarioRepository implements IUsuarioRepository
     public function create(Usuario $usuario): Usuario
     {
         try {
+            $usuario->validation_token = Utility::generateGUID();
             $usuario->save();
             return $usuario;
         } catch (Exception $e) {
@@ -43,7 +62,7 @@ class UsuarioRepository implements IUsuarioRepository
                 $message = "Usuario ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
-            throw  Utility::errorHandler($e);
+            throw Utility::errorHandler($e);
         }
     }
 
@@ -51,21 +70,30 @@ class UsuarioRepository implements IUsuarioRepository
     {
         $this->find($usuario->id);
         try {
-             $usuario->save();
-             return $usuario;
+            $usuario->save();
+            return $usuario;
         } catch (Exception $e) {
-            $resul = Utility::getDuplicateRecordInfo($e->getMessage());
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Usuario ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
-                throw new DuplicateEntryException($message);
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
             }
-            throw  Utility::errorHandler($e);
+            throw Utility::errorHandler($e);
         }
     }
 
     public function delete($id): bool
     {
-        $usuario = $this->find($id);
-        return  $usuario->delete();
+        try {
+            $usuario = $this->find($id);
+            return $usuario->delete();
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
     }
 }
