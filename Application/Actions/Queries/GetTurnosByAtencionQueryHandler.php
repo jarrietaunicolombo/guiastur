@@ -29,7 +29,7 @@ class GetTurnosByAtencionQueryHandler implements IGetTurnosByAtencionQuery
                 $turno->numero,
                 $turno->estado,
                 $turno->fecha_uso,
-                $turno->usuario_usa,
+                $turno->usuario_uso,
                 $turno->fecha_salida,
                 $turno->usuario_salida,
                 $turno->fecha_regreso,
