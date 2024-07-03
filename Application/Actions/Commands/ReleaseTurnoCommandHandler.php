@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/TurnoStatusEnum.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/ReleaseTurno/Dto/ReleaseTurnoRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/ReleaseTurno/Dto/ReleaseTurnoResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/IReleaseTurnoCommand.php";
@@ -14,7 +15,7 @@ class ReleaseTurnoCommandHandler implements IReleaseTurnoCommand{
     }
 
     public function handler(ReleaseTurnoRequest $request) : ReleaseTurnoResponse{
-        $estado = "Liberado";
+        $estado = TurnoStatusEnum::RELEASE;
         $turno = $this->turnoRepository->find($request->getTurnoId());
         $turno->estado = $estado;
         $turno->fecha_salida = new DateTime();

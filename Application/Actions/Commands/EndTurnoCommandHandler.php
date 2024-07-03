@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/TurnoStatusEnum.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/EndTurno/Dto/EndTurnoRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/EndTurno/Dto/EndTurnoResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/IEndTurnoCommand.php";
@@ -13,7 +14,7 @@ class EndTurnoCommandHandler implements IEndTurnoCommand{
     }
 
     public function handler(EndTurnoRequest $request) : EndTurnoResponse{
-        $estado = "Finalizado";
+        $estado = TurnoStatusEnum::FINALIZED;
         $turno = $this->turnoRepository->find($request->getTurnoId());
         $turno->estado = $estado;
         $turno->fecha_regreso = new DateTime();

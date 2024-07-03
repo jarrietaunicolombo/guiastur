@@ -26,7 +26,7 @@ class TestSupervisorRepository
             $repository = new SupervisorRepository();
             // Act
             $supervisor = $repository->create($supervisor);
-            self::showSupervisor(array($supervisor), "CREADO EL SUPERVISOR ID: $id");
+            self::showSupervisor(array($supervisor), "CREADO EL SUPERVISOR ID: $supervisor->cedula");
         } catch (EntityReferenceNotFoundException $e) {
             echo '<hr><span style="color: red">ERROR AL CREAR EL SUPERVISOR <br></span>';
             echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';

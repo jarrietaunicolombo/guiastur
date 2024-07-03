@@ -29,7 +29,7 @@ class ReleaseTurnoUseCase implements IReleaseTurnoUseCase {
     public function releaseTurno(ReleaseTurnoRequest $request): ReleaseTurnoResponse{
         $getTurnoByIdRequest = new GetTurnoByIdRequest($request->getTurnoId());
         $getTurnoByIdResponse = $this->getTurnoByIdQuery->handler($getTurnoByIdRequest);
-        if($getTurnoByIdResponse->getEstado() !==  "En uso"){
+        if($getTurnoByIdResponse->getEstado() !==  TurnoStatusEnum::INUSE){
             throw new ValidateReleaseTurnoException("No se puede liberar el Turno #: ".$getTurnoByIdResponse->getNumero() . ", Atencion Id: ".$getTurnoByIdResponse->getAtencion()->getId(). " El turno no está en uso");
         }    
         
