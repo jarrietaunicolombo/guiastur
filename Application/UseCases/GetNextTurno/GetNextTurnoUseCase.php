@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetNextTurno/Dto/GetNextTurnoRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetNextTurno/Dto/GetNextTurnoResponse.php";
+require_once __DIR__ . "/Dto/GetNextTurnoRequest.php";
+require_once __DIR__ . "/Dto/GetNextTurnoResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/IGetNextTurnoUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetNextTurnoQuery.php";
 
