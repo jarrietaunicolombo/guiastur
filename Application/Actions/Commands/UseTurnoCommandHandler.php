@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/TurnoStatusEnum.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/UseTurno/Dto/UseTurnoRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/UseTurno/Dto/UseTurnoResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/IUseTurnoCommand.php";
@@ -14,7 +15,7 @@ class UseTurnoCommandHandler implements IUseTurnoCommand{
     }
 
     public function handler(UseTurnoRequest $request) : UseTurnoResponse{
-        $estado = "En uso";
+        $estado = TurnoStatusEnum::INUSE;
         $turno = $this->turnoRepository->find($request->getTurnoId());
         $turno->estado = $estado;
         $turno->fecha_uso = new DateTime();

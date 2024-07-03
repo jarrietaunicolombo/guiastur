@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/TurnoStatusEnum.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateTurno/Dto/CreateTurnoRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateTurno/Dto/CreateTurnoResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetTurnosByAtencionUseCase/Dto/GetTurnosByAtencionRequest.php";
@@ -16,7 +17,7 @@ class TestCreateTurnoUseCase
         try {
             // Arrange
              $numero = 0 ;
-             $estado = "Creado";
+             $estado =  TurnoStatusEnum::CREATED;
              $observaciones = NULL;
              $guia_id = '7654321';
              $atencion_id = 1;

@@ -28,7 +28,7 @@ class EndTurnoUseCase implements IEndTurnoUseCase {
     public function endTurno(EndTurnoRequest $request): EndTurnoResponse{
         $getTurnoByIdRequest = new GetTurnoByIdRequest($request->getTurnoId());
         $getTurnoByIdResponse = $this->getTurnoByIdQuery->handler($getTurnoByIdRequest);
-        if($getTurnoByIdResponse->getEstado() !==  "Liberado"){
+        if($getTurnoByIdResponse->getEstado() !==  TurnoStatusEnum::RELEASE){
             throw new ValidateEndTurnoException("No se puede finalizar el Turno #: ".$getTurnoByIdResponse->getNumero() . ", Atencion Id: ".$getTurnoByIdResponse->getAtencion()->getId(). " El turno no está liberado");
         }    
         

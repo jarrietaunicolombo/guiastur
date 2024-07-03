@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/TurnoStatusEnum.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Turno.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/ITurnoRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/DuplicateEntryException.php";
@@ -85,7 +86,7 @@ class TurnoRepository implements ITurnoRepository
     public function findWithStateCreatedByAtencion(int $atencionId): array
     {
         try {
-            $status = "Creado";
+            $status = TurnoStatusEnum::CREATED;
             $turnos = Turno::find(
                 "all",
                 array(
@@ -106,7 +107,7 @@ class TurnoRepository implements ITurnoRepository
     public function findNexTurno(int $atencionId): Turno
     {
         try {
-            $estado = "Creado";
+            $estado = TurnoStatusEnum::CREATED;
             $turno = Turno::find("first",
                                 array("conditions"=>
                                         array("atencion_id = ? AND estado = ? AND fecha_uso is ?"
