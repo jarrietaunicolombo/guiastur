@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateTurno/Dto/CreateTurnoRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateTurno/Dto/CreateTurnoResponse.php";
+require_once __DIR__ . "/Dto/CreateTurnoRequest.php";
+require_once __DIR__ . "/Dto/CreateTurnoResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetTurnosByAtencionUseCase/Dto/GetTurnosByAtencionRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetTurnosByAtencionUseCase/Dto/GetTurnosByAtencionResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/ICreateTurnoUseCase.php";
@@ -10,7 +10,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/Duplic
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NumberTurnosExceededException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NotFoundEntryException.php";
 
-class CreateTurnoUseCase
+class CreateTurnoUseCase implements ICreateTurnoUseCase
 {
 
     private $getTurnosByAtencionQuery;
