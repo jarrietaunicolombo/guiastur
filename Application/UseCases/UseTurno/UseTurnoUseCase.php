@@ -35,8 +35,8 @@ class UseTurnoUseCase implements IUseTurnoUseCase {
         
         $usuarioByIdRequest = new GetUsuarioByIdRequest($request->getUsuarioUsoId());
         $usuarioByIdResponse = $this->getUsuarioByIdQuery->handler($usuarioByIdRequest);
-        if($usuarioByIdResponse->getRolNombre() !== "Super Usuario" 
-            && $usuarioByIdResponse->getRolNombre() !== "Supervisor" 
+        if($usuarioByIdResponse->getRolNombre() !== RolTypeEnum::SUPER_USUARIO 
+            && $usuarioByIdResponse->getRolNombre() !== RolTypeEnum::SUPERVISOR 
             && $usuarioByIdResponse->getId() != $nextTurnoResponse->getGuia()->getUserId())
         {
             throw new ValidateUseTurnoException("No tiene permisos para registar el uso del turno ".$nextTurnoResponse->getNumero() ." del Guia ". $nextTurnoResponse->getGuia()->getNombre());
