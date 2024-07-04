@@ -1,10 +1,11 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Commands/CreateRecaladaCommandHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateRecalada/Dto/CreateRecaladaRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateRecalada/Dto/CreateRecaladaResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateRecalada/CreateRecaladaUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/RecaladaRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/LoginQuery/ValidateRecaladaQueryHandler.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/ValidateRecaladaQueryHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/ValidateRecaladaException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
 
@@ -38,15 +39,37 @@ class TestCreateRecaladaUseCase
             // Act
             $createRecaladaResponse = $createRecaladaUseCase->createRecalada($createRecaladaRequest);
             // Assert
-            echo "RECALADA ID: " . $createRecaladaResponse->getId() . "<br/>";
-            echo "FECHA ARRIBO: " . $createRecaladaResponse->getRecalada()->getFechaArribo()->format("Y-m-d H:i:s") . "<br/>";
-            echo "FECHA ZARPE: " . $createRecaladaResponse->getRecalada()->getFechaZarpe()->format("Y-m-d H:i:s") . "<br/>";
-            echo "TOTAL TURISTAS: " . $createRecaladaResponse->getRecalada()->getTotalTuristas() . "<br/>";
-            echo "BUQUE ID: " . $createRecaladaResponse->getRecalada()->getBuqueId() . "<br/>";
-            echo "PAIS ID: " . $createRecaladaResponse->getRecalada()->getPaisId() . "<br/>";
+            self::showRecaladaData($createRecaladaResponse, "Recalada Creada");
         } catch (Exception $e) {
-            echo "" . $e->getMessage();
+            echo '<hr><span style="color: red">Error al Crear Recalada <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
+    }
+
+    private static function showRecaladaData(CreateRecaladaResponse $response, string $title)
+    {
+        $Recalada = $response->getRecalada();
+
+        $output = "<hr/><h3 style='color: blue;'>$title</h3>
+                        <table border=4> 
+                        <tr> 
+                            <th>RECALADA ID</th> 
+                            <th>FECHA ARRIBO ID</th> 
+                            <th>FECHA DE ZARPE</th> 
+                            <th>OTAL TURISTAS</th> 
+                            <th>BUQUE ID</th> 
+                            <th>PAIS ID</th> 
+                        </tr>
+                        <tr>
+                            <td>" . $response->getId() . "</td> 
+                            <td>" . $Recalada->getFechaArribo()->format("Y-m-d H:i:s") . "</td> 
+                            <td>" . $Recalada->getFechaZarpe()->format("Y-m-d H:i:s")  . "</td> 
+                            <td>" . $Recalada->getTotalTuristas() . "</td> 
+                            <td>" . $Recalada->getBuqueId() . "</td> 
+                            <td>" . $Recalada->getPaisId() . "</td> 
+                        </tr>";
+        $output .= "</table>";
+        echo $output;
     }
 }
 

@@ -5,24 +5,29 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetBuque
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetBuqueById/Dto/GetBuqueByIdRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetBuqueById/Dto/GetBuqueByIdResponse.php";
 
-class TestGetBuqueByIdUseCase{
+class TestGetBuqueByIdUseCase
+{
 
-    public static function testGetBuqueByIdShouldShowData(){
-        // Arrange
-        $buqueRepository = new BuqueRepository();
-        $getBuqueByIdQuery = new GetBuqueByIdQueryHandler($buqueRepository);
-        $getBuqueByIdUseCase = new GetBuqueByIdUseCase($getBuqueByIdQuery);
-        $buqueId = 1;
-        $request = new GetBuqueByIdRequest($buqueId);
-        $response = $getBuqueByIdUseCase->getBuqueById($request);
-        TestGetBuqueByIdUseCase::showBuqueData( array($response), "Datos del Buque ID : $buqueId");
-
-        //Act
-
-        //Assert
+    public static function testGetBuqueByIdShouldShowData()
+    {
+        try {
+            // Arrange
+            $buqueRepository = new BuqueRepository();
+            $getBuqueByIdQuery = new GetBuqueByIdQueryHandler($buqueRepository);
+            $getBuqueByIdUseCase = new GetBuqueByIdUseCase($getBuqueByIdQuery);
+            $buqueId = 1;
+            $request = new GetBuqueByIdRequest($buqueId);
+             //Act
+            $response = $getBuqueByIdUseCase->getBuqueById($request);
+              //Assert
+            TestGetBuqueByIdUseCase::showBuqueData(array($response), "Datos del Buque ID : $buqueId");
+        } catch (Exception $e) {
+            echo '<hr><span style="color: red">Error al Obtener Buque por Id<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
+        }
     }
 
- public static function showBuqueData( $buques, string $title)
+    public static function showBuqueData($buques, string $title)
     {
         $output = "<hr/><h3>$title</h3>
         <table border=4> <tr> 
@@ -39,7 +44,7 @@ class TestGetBuqueByIdUseCase{
             <td>" . $buque->getNombre() . "</td> 
             <td>" . $buque->getFoto() . "</td> 
             <td>" . $buque->getTotalRecaladas() . "</td> 
-            <td>" . $buque->getTotalAtenciones() ."</td></tr>";
+            <td>" . $buque->getTotalAtenciones() . "</td></tr>";
         }
         $output .= "</table>";
         echo $output;
@@ -48,4 +53,4 @@ class TestGetBuqueByIdUseCase{
 
 }
 
-TestGetBuqueByIdUseCase::testGetBuqueByIdShouldShowData( );
+TestGetBuqueByIdUseCase::testGetBuqueByIdShouldShowData();

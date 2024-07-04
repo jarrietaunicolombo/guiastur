@@ -19,24 +19,63 @@ class TestGetTunosByAtencionUseCase
             $getTurnosByAtencionUseCase = new GetTurnosByAtencionUseCase($getTurnosByAtencionQuery);
             $getTurnosByAtencionRequest = new GetTurnosByAtencionRequest($atencionId);
             $response = $getTurnosByAtencionUseCase->getTurnosByAtencion($getTurnosByAtencionRequest);
-            $turnos = $response->getTurnos();
-            echo "<br>___________________TestGetTunosByAtencionShouldShowList_______________________<br>";
-            foreach ($turnos as $turno) {
-                echo "ID: " . $turno->getId() . "<br>";
-                echo "NUMERO: " . $turno->getNumero() . "<br>";
-                echo "USADO: " . ($turno->getFechaUso() !== NULL ? $turno->getFechaUso()->format("Y-m-d H:i:s") : "") . "<br>";
-                echo "SALIDA: " . ($turno->getFechaSalida() !== NULL ? $turno->getFechaSalida()->format("Y-m-d H:i:s") : "") . "<br>";
-                echo "REGRESO: " . ($turno->getFechaRegreso() !== NULL ? $turno->getFechaRegreso()->format("Y-m-d H:i:s") : "") . "<br>";
-                echo "OBSERVACIONES: " . $turno->getObservaciones() . "<br>";
-                echo "GUIA: " . $turno->getGuiaId() . "<br>";
-                echo "ATENSION: " . $response->getAtencionId() . "<br>";
-                echo "TOTAL TURNOS: " . $response->getTotalTurnos() . "<br>";
-                echo "__________________________________________<br>";
-            }
+            self::showTunosData($response, "TURNOS DE LA ATENCION ID: $atencionId");
         } catch (Exception $e) {
-            echo "ERROR: " . $e->getMessage();
-
+            echo '<hr><span style="color: red">Error al Obtener Turnos Por Atencion<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
+    }
+    private static function showTunosData(GetTurnosByAtencionResponse $response, string $title)
+    {
+        $turnos = $response->getTurnos();
+
+        $output = "<hr/><h3 style='color: blue;'>$title</h3>
+                    <table border=4> 
+                        <tr> 
+                            <th>ATENCION ID</th> 
+                            <th>TOTAL TURNOS</th> 
+                        </tr> 
+                        <TR>
+                            <td>" . $response->getAtencionId() . "</td> 
+                            <td>" . $response->getTotalTurnos() . "</td> 
+                        </tr>
+                    </table>
+                    
+                <hr/><h3 style='color: blue;'>TURNOS</h3>
+                    <table border=4> 
+                        <tr> 
+                            <th>TURNO ID</th> 
+                            <th>NUMERO</th> 
+                            <th>ESTADO</th> 
+                            <th>GUIA CC</th> 
+                            <th>USADO</th> 
+                            <th>REGISTRÓ USO</th> 
+                            <th>LIBERADO</th> 
+                            <th>REGISTRÓ SALIDA</th> 
+                            <th>TERMINADO</th> 
+                            <th>REGISTRÓ REGRESO</th>  
+                            <th>CREADO</th> 
+                            <th>CREADO POR</th> 
+                        </tr> ";
+        foreach ($turnos as $turno) {
+            $output .= "<tr> 
+                            <td>" . $turno->getId() . "</td> 
+                            <td>" . $turno->getNumero() . "</td> 
+                            <td>" . $turno->getEstado() . "</td> 
+                            <td>" . $turno->getGuiaId() . "</td> 
+                            <td>" . (($turno->getFechaUso())?$turno->getFechaUso()->format("Y-md H:i:s") : "")."</td> 
+                            <td>" . $turno->getUsuarioUso() . "</td> 
+                            <td>" . (($turno->getFechaSalida())?$turno->getFechaSalida()->format("Y-md H:i:s") : "")."</td> 
+                            <td>" . $turno->getUsuarioSalida() . "</td>
+                            <td>" . (($turno->getFechaRegreso())?$turno->getFechaRegreso()->format("Y-md H:i:s") : "")."</td> 
+                            <td>" . $turno->getUsuarioRegreso() . "</td>
+                            <td>" . $turno->getObservaciones() . "</td> 
+                            <td>" . (($turno->getFechaRegistro())?$turno->getFechaRegistro()->format("Y-md H:i:s") : "")."</td> 
+                            <td>" . $turno->getUsuarioRegistro() . "</td>
+                        </tr> ";
+        }
+        $output .= "</table>";
+        echo $output;
     }
 }
 TestGetTunosByAtencionUseCase::TestGetTunosByAtencionShouldShowList();
