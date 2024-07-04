@@ -24,7 +24,7 @@ CREATE TABLE Usuarios (
 
 CREATE TABLE Rols (
 	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    nombre VARCHAR(20) NOT NULL,
+    nombre VARCHAR(20) NOT NULL UNIQUE,
     descripcion TEXT,
     icono VARCHAR(25),
     fecha_registro DATETIME NOT NULL,

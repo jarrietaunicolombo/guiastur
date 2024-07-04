@@ -34,8 +34,8 @@ class EndTurnoUseCase implements IEndTurnoUseCase {
         
         $usuarioByIdRequest = new GetUsuarioByIdRequest($request->getUsuarioIdUso());
         $usuarioByIdResponse = $this->getUsuarioByIdQuery->handler($usuarioByIdRequest);
-        if($usuarioByIdResponse->getRolNombre() !== "Super Usuario" 
-            && $usuarioByIdResponse->getRolNombre() !== "Supervisor" 
+        if($usuarioByIdResponse->getRolNombre() !== RolTypeEnum::SUPER_USUARIO 
+            && $usuarioByIdResponse->getRolNombre() !== RolTypeEnum::SUPERVISOR
             && $usuarioByIdResponse->getId() != $getTurnoByIdResponse->getGuia()->getUsuarioId())
         {
             throw new ValidateEndTurnoException("No tiene permisos para terminar el turno ".$getTurnoByIdResponse->getNumero() ." del Guia ". $getTurnoByIdResponse->getGuia()->getNombre());
