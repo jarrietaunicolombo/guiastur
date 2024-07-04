@@ -20,7 +20,8 @@ class TestGetAtencionesByRecaladaUseCase
             $response = $getAtencionesByRecaladaUseCase->getAtencionesByRecalada($request);
             self::showAtencionesResponseData($response, "Atenciones de la Recalada $recaladaId");
         } catch (Exception $e) {
-            echo '<span style="color: red"> '. $e->getMessage() . '<br></span>';
+            echo '<hr><span style="color: red">Error al Obtener Ateciones por Recalada<br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 

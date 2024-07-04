@@ -2,6 +2,7 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Commands/CreateAtencionCommandHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/ValidateAtencionQueryHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateAtencion/Dto/CreateAtencionRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateAtencion/Dto/CreateAtencionResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateAtencion/CreateAtencionUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/AtencionRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
@@ -39,20 +40,45 @@ class TestCreateAtencionUseCase
             $createAtencionResponse = $createAtencionUseCase->createAtencion($createAtencionRequest);
 
             // Assert
-            echo "ATENCION ID: " . $createAtencionResponse->getId() . "<br/>";
-            echo "FECHA INICIO: " . $createAtencionResponse->getAtencion()->getFechaInicio()->format("Y-m-d H:i:s") . "<br/>";
-            echo "FECHA CIERRE: " . $createAtencionResponse->getAtencion()->getFechaCierre()->format("Y-m-d H:i:s") . "<br/>";
-            echo "TOTAL TURNOS: " . $createAtencionResponse->getAtencion()->getTotalTurnos() . "<br/>";
-            echo "OBSERVACIONES: " . $createAtencionResponse->getAtencion()->getObservaciones() . "<br/>";
-            echo "SUPERVISOR ID: " . $createAtencionResponse->getAtencion()->getSupervisorId() . "<br/>";
-            echo "RECALADA ID: " . $createAtencionResponse->getAtencion()->getRecaladaId() . "<br/>";
-            echo "USUARIO REGISTRO ID: " . $createAtencionResponse->getAtencion()->getUsuarioRegistro() . "<br/>";
-            echo "FECHA REGISTRO: " . $createAtencionResponse->getAtencion()->getFechaRegistro()->format("Y-m-d H:i:s") . "<br/>";
+            self::showAtencionResponseData( $createAtencionResponse,"Atencion Creada");
         } catch (Exception $e) {
-            echo "" . $e->getMessage();
+            echo '<hr><span style="color: red">Error al Crear Atencion <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
+    private static function showAtencionResponseData(CreateAtencionResponse $atenconResponse, string $title)
+    {
+        $atencion = $atenconResponse->getAtencion();
+        $output = "<hr/><h3>$title</h3>
+        <table border=4> 
+            <tr> 
+                <th>BUQUE ID</th> 
+                <th>FECHA INICIO</th> 
+                <th>FECHA CIERRE ID ID</th> 
+                <th>TOTAL TURNOS</th> 
+                <th>OBSERVACIONES</th> 
+                <th>SUPERVISOR ID</th> 
+                <th>RECALADA ID</th> 
+                <th>FECHA REGISTRO</th> 
+                <th>USUARIO REGISTRO</th> 
+            </tr>
+            <tr>
+                <td>" . $atenconResponse->getId() . "</td> 
+                <td>" . $atencion->getFechaInicio()->format("Y-m-d H:i:s") . "</td> 
+                <td>" . $atencion->getFechaCierre()->format("Y-m-d H:i:s") . "</td> 
+                <td>" . $atencion->getTotalTurnos() . "</td> 
+                <td>" . $atencion->getObservaciones() . "</td> 
+                <td>" . $atencion->getSupervisorId() . "</td> 
+                <td>" . $atencion->getRecaladaId() . "</td> 
+                <td>" . $atencion->getFechaRegistro()->format("Y-m-d H:i:s") . "</td> 
+                <td>" . $atencion->getUsuarioRegistro() . "</td> 
+            </tr>
+          </table>";
+        
+        echo $output;
+    }
+    
 }
 
 TestCreateAtencionUseCase::TestCreateAtencionUseShouldShowData();

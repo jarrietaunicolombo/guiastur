@@ -93,7 +93,7 @@ class GetTurnosByAtencionDto
         $this->fecha_salida = $fecha_salida;
         $this->usuario_salida = $usuario_salida;
         $this->fecha_regreso = $fecha_regreso;
-        $this->usuario_salida = $usuario_salida;
+        $this->usuario_regreso = $usuario_regreso;
         $this->observaciones = $observaciones;
         $this->guia_id = $guia_id;
         $this->fecha_registro = $fecha_registro;

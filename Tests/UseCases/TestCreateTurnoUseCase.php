@@ -2,8 +2,6 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/TurnoStatusEnum.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateTurno/Dto/CreateTurnoRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateTurno/Dto/CreateTurnoResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetTurnosByAtencionUseCase/Dto/GetTurnosByAtencionRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetTurnosByAtencionUseCase/Dto/GetTurnosByAtencionResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/GetTurnosByAtencionQueryHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Commands/CreateTurnoCommandHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateTurno/CreateTurnoUseCase.php";
@@ -20,7 +18,7 @@ class TestCreateTurnoUseCase
              $estado =  TurnoStatusEnum::CREATED;
              $observaciones = NULL;
              $guia_id = '7654321';
-             $atencion_id = 1;
+             $atencion_id = 2;
              $usuario_registro = $guia_id;
         
             $createTurnoRequest = new CreateTurnoRequest(
@@ -40,17 +38,37 @@ class TestCreateTurnoUseCase
             $createTurnoResponse = $createTurnoUseCase->createTurno($createTurnoRequest);
 
             // Assert
-            echo "TURNO ID: " . $createTurnoResponse->getId() . "<br/>";
-            echo "NUMERO: " . $createTurnoResponse->getTurno()->getNumero(). "<br/>";
-            echo "OBSERVACIONES: " . $createTurnoResponse->getTurno()->getObservaciones() . "<br/>";
-            echo "GUIA ID: " . $createTurnoResponse->getTurno()->getGuiaId() . "<br/>";
-            echo "ATENCION ID: " . $createTurnoResponse->getTurno()->getAtencionId() . "<br/>";
-            echo "FECHA REGISTRO: " . $createTurnoResponse->getTurno()->getFechaRegistro()->format("Y-m-d H:i:s") . "<br/>";
+            self::showTunosData($createTurnoResponse, "Turno Creado");
         } catch (Exception $e) {
-            echo "" . $e->getMessage();
+            echo '<hr><span style="color: red">Error al Crear Turno <br></span>';
+            echo '<span style="color: red"> ' . $e->getMessage() . '<br></span>';
         }
     }
 
+    private static function showTunosData(CreateTurnoResponse $response, string $title)
+    {
+        $turno = $response->getTurno();
+        $output = "<hr/><h3 style='color: blue;'>$title</h3>
+                    <table border=4> 
+                        <tr> 
+                          <th>TURNO ID</th> 
+                          <th>NUMERO</th> 
+                          <th>OBSERVACIONES</th> 
+                          <th>GUIA CC</th> 
+                          <th>ATENCION ID</th> 
+                          <th>FECHA REGISTRO</th> 
+                        </tr>
+                        <tr>
+                            <td>" . $response->getId()  . "</td> 
+                            <td>" . $turno->getNumero() . "</td> 
+                            <td>" . $turno->getObservaciones()  . "</td> 
+                            <td>" . $turno->getGuiaId() . "</td> 
+                            <td>" . $turno->getAtencionId(). "</td> 
+                            <td>" . $turno->getFechaRegistro()->format("Y-m-d H:i:s") . "</td> 
+                        </tr> ";
+        $output .= "</table>";
+        echo $output;
+    }
 }
 
 TestCreateTurnoUseCase::TestCreateTurnoUseShouldShowData();

@@ -68,7 +68,7 @@ class LoginResponse
         $this->rol = $rol;
     }
 
-    public function getGuiaOSupervisor(): string
+    public function getGuiaOSupervisor()
     {
         return $this->guia_o_supervisor;
     }
