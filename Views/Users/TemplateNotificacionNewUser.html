@@ -1,0 +1,61 @@
+<!-- email_template.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .header {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            text-align: center;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Bienvenido</h1>
+        </div>
+        <div class="content">
+            <p>Atento saludo estimado [[nombre]],</p>
+            <p>Bienvenido a nuestro Sistema de Gestión de Turnos para Guías Turistas.</p>
+            <p>Su ID de acceso es: <strong>[[email]]</strong></p>
+            <p>Su Clave de acceso es: <strong>[[pass]]</strong></p>
+            <p>Su Rol es: <strong>[[rol]]</strong></p>
+            <p>
+                <a href="[[url]]">Pulse aquí para activar su cuenta.</a>
+            </p>
+            <p>Gracias.</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 Sistema de Gestión de Turnos</p>
+        </div>
+    </div>
+</body>
+</html>
