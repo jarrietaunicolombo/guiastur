@@ -240,7 +240,7 @@ class DependencyInjection
     }
         
 }
-echo "Clase ". get_class(DependencyInjection::getTransactionManager());
+
 
 
 
