@@ -1,16 +1,16 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Rol.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IRolRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Supervisor.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/ISupervisorRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/DuplicateEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NotFoundEntryException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
 
-class RolRepository implements IRolRepository
+class SupervisorRepository implements ISupervisorRepository
 {
-    public function find($id): Rol
+    public function find($id): Supervisor
     {
         try {
-            return Rol::find($id);
+            return Supervisor::find($id);
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -24,35 +24,34 @@ class RolRepository implements IRolRepository
     public function findAll(): array
     {
         try {
-            return Rol::all();
+            return Supervisor::all();
         } catch (Exception $e) {
             throw Utility::errorHandler($e);
         }
     }
 
-    public function create(Rol $rol): Rol
+    public function create(Supervisor $supervisor): Supervisor
     {
         try {
-            $rol->save();
-            return $rol;
+            $supervisor->save();
+            return $supervisor;
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Rol ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Supervisor ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
     }
 
-    public function update(Rol $rol): Rol
+    public function update(Supervisor $supervisor)
     {
-        $this->find($rol->id);
+        $this->find($supervisor->id);
         try {
-            $rol->save();
-            return $rol;
+            $supervisor->save();
         } catch (Exception $e) {
-            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
                 $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new NotFoundEntryException($message);
@@ -61,13 +60,13 @@ class RolRepository implements IRolRepository
         }
     }
 
-    public function delete($id): bool
+    public function delete($id)
     {
         try {
-            $rol = $this->find($id);
-            return $rol->delete();
+            $supervisor = $this->find($id);
+            $supervisor->delete();
         } catch (Exception $e) {
-            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
                 $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new NotFoundEntryException($message);

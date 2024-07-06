@@ -1,14 +1,18 @@
 <?php
-
+session_start();
 // require_once '../Application/UseCases/GetRoles/GetRolesService.php';
 require_once '../../DependencyInjection.php';
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
 
 
 class CreateUserController
 {
     public function createUser()
     {
+        $roles = unserialize(@$_SESSION["Roles.All"]);
+        if (!isset($roles) || count($roles) <1 ){
+            $roles = DependencyInjection::getRolesServce()->getRoles();
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 // Recibir los datos del formulario

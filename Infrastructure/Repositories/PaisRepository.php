@@ -1,16 +1,16 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Buque.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IBuqueRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Pais.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IPaisRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/DuplicateEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NotFoundEntryException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
 
-class BuqueRepository implements IBuqueRepository
+class PaisRepository implements IPaisRepository
 {
-    public function findById(int $id): Buque
+    public function find($id): Pais
     {
         try {
-            return Buque::find($id);
+            return Pais::find($id);
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -24,33 +24,33 @@ class BuqueRepository implements IBuqueRepository
     public function findAll(): array
     {
         try {
-            return Buque::all();
+            return Pais::all();
         } catch (Exception $e) {
             throw Utility::errorHandler($e);
         }
     }
 
-    public function create(Buque $buque): Buque
+    public function create(Pais $Pais): Pais
     {
         try {
-            $buque->save();
-            return $buque;
+            $Pais->save();
+            return $Pais;
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Buque ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Pais ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
     }
 
-    public function update(Buque $buque): Buque
+    public function update(Pais $Pais): Pais
     {
-        $this->findById($buque->id);
+        $this->find($Pais->id);
         try {
-            $buque->save();
-            return $buque;
+            $Pais->save();
+            return $Pais;
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -64,8 +64,8 @@ class BuqueRepository implements IBuqueRepository
     public function delete($id): bool
     {
         try {
-            $buque = $this->findById($id);
-            return $buque->delete();
+            $Pais = $this->find($id);
+            return $Pais->delete();
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {

@@ -3,8 +3,8 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Commands/
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateBuque/Dto/CreateBuqueRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateBuque/Dto/CreateBuqueResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateBuque/CreateBuqueUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/BuqueRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/BuqueRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
 
 
 class TestCreateBuqueUseCase

@@ -1,16 +1,16 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Guia.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IGuiaRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Buque.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IBuqueRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/DuplicateEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NotFoundEntryException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
 
-class GuiaRepository implements IGuiaRepository
+class BuqueRepository implements IBuqueRepository
 {
-    public function find($id): Guia
+    public function findById(int $id): Buque
     {
         try {
-            return Guia::find($id);
+            return Buque::find($id);
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -24,32 +24,33 @@ class GuiaRepository implements IGuiaRepository
     public function findAll(): array
     {
         try {
-            return Guia::all();
+            return Buque::all();
         } catch (Exception $e) {
             throw Utility::errorHandler($e);
         }
     }
 
-    public function create(Guia $guia): Guia
+    public function create(Buque $buque): Buque
     {
         try {
-            $guia->save();
-            return $guia;
+            $buque->save();
+            return $buque;
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Guia ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Buque ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
     }
 
-    public function update(Guia $guia)
+    public function update(Buque $buque): Buque
     {
-        $this->find($guia->id);
+        $this->findById($buque->id);
         try {
-            $guia->save();
+            $buque->save();
+            return $buque;
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -60,11 +61,11 @@ class GuiaRepository implements IGuiaRepository
         }
     }
 
-    public function delete($id): void
+    public function delete($id): bool
     {
         try {
-            $guia = $this->find($id);
-            $guia->delete();
+            $buque = $this->findById($id);
+            return $buque->delete();
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
