@@ -1,36 +1,16 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Usuario.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IUsuarioRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Guia.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IGuiaRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/DuplicateEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NotFoundEntryException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
 
-use ActiveRecord\DatabaseException;
-
-class UsuarioRepository implements IUsuarioRepository
+class GuiaRepository implements IGuiaRepository
 {
-    public function find($id): Usuario
+    public function find($id): Guia
     {
         try {
-            return Usuario::find($id);
-        } catch (Exception $e) {
-            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
-            if (count($resul) > 0) {
-                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
-                throw new NotFoundEntryException($message);
-            }
-            throw Utility::errorHandler($e);
-        }
-    }
-
-    public function findByEmail($email): Usuario
-    {
-        try {
-            $user = Usuario::find_by_email($email);
-            if (!$user) {
-                throw new NotFoundEntryException("Usuario con email $email no existe");
-            }
-            return $user;
+            return Guia::find($id);
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -44,34 +24,32 @@ class UsuarioRepository implements IUsuarioRepository
     public function findAll(): array
     {
         try {
-            return Usuario::all();
+            return Guia::all();
         } catch (Exception $e) {
             throw Utility::errorHandler($e);
         }
     }
 
-    public function create(Usuario $usuario): Usuario
+    public function create(Guia $guia): Guia
     {
         try {
-            $usuario->validation_token = Utility::generateGUID();
-            $usuario->save();
-            return $usuario;
+            $guia->save();
+            return $guia;
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Usuario ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Guia ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
     }
 
-    public function update(Usuario $usuario): Usuario
+    public function update(Guia $guia)
     {
-        $this->find($usuario->id);
+        $this->find($guia->id);
         try {
-            $usuario->save();
-            return $usuario;
+            $guia->save();
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -82,11 +60,11 @@ class UsuarioRepository implements IUsuarioRepository
         }
     }
 
-    public function delete($id): bool
+    public function delete($id): void
     {
         try {
-            $usuario = $this->find($id);
-            return $usuario->delete();
+            $guia = $this->find($id);
+            $guia->delete();
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {

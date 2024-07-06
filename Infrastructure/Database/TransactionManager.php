@@ -1,7 +1,7 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] ."guiastur/Application/Contracts/Repositories/ITransactionManager.php";
 require_once $_SERVER["DOCUMENT_ROOT"] ."guiastur/Infrastructure/Libs/Orm/Config.php";
-
+use ActiveRecord\ConnectionManager;
 class TransactionManager implements ITransactionManager{
     private $connectionDb;
 

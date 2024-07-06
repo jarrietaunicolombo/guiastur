@@ -1,16 +1,16 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Pais.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IPaisRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Rol.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IRolRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/DuplicateEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NotFoundEntryException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Reposotories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
 
-class PaisRepository implements IPaisRepository
+class RolRepository implements IRolRepository
 {
-    public function find($id): Pais
+    public function find($id): Rol
     {
         try {
-            return Pais::find($id);
+            return Rol::find($id);
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -24,33 +24,33 @@ class PaisRepository implements IPaisRepository
     public function findAll(): array
     {
         try {
-            return Pais::all();
+            return Rol::all();
         } catch (Exception $e) {
             throw Utility::errorHandler($e);
         }
     }
 
-    public function create(Pais $Pais): Pais
+    public function create(Rol $rol): Rol
     {
         try {
-            $Pais->save();
-            return $Pais;
+            $rol->save();
+            return $rol;
         } catch (Exception $e) {
             $resul = Utility::getDuplicateRecordInfo($e->getMessage());
             if (count($resul) > 0) {
-                $message = "Pais ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                $message = "Rol ya existe: " . $resul[UtilConstantsEnum::COLUMN_NAME] . ": " . $resul[UtilConstantsEnum::COLUMN_VALUE];
                 throw new DuplicateEntryException($message);
             }
             throw Utility::errorHandler($e);
         }
     }
 
-    public function update(Pais $Pais): Pais
+    public function update(Rol $rol): Rol
     {
-        $this->find($Pais->id);
+        $this->find($rol->id);
         try {
-            $Pais->save();
-            return $Pais;
+            $rol->save();
+            return $rol;
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -64,8 +64,8 @@ class PaisRepository implements IPaisRepository
     public function delete($id): bool
     {
         try {
-            $Pais = $this->find($id);
-            return $Pais->delete();
+            $rol = $this->find($id);
+            return $rol->delete();
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
