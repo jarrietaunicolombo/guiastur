@@ -7,8 +7,8 @@
 </head>
 <body>
     <h2>Usuario Creado</h2>
-    <?php if (isset($_SESSION['createUserResponse'])): 
-        $usuarioResponse = $_SESSION['createUserResponse'];
+    <?php if (@isset($_SESSION['createUserResponse'])): 
+        $usuarioResponse = @$_SESSION['createUserResponse'];
         $usuarioCreated = $usuarioResponse->getUsuario();
         ?>
         <table border="4">

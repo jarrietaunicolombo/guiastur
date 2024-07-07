@@ -6,7 +6,7 @@ class ClassLoader
         'TransactionManager' => 'Infrastructure/Database/TransactionManager.php',
         // Infrastructure Repositories
         'AtencionRepository' => 'Infrastructure/Repositories/AtencionRepository.php',
-        'Utility' => 'Infrastructure/Repositories/Utility.php',
+        //'Utility' => 'Infrastructure/Repositories/Utility.php',
         'BuqueRepository' => 'Infrastructure/Repositories/BuqueRepository.php',
         'GuiaRepository' => 'Infrastructure/Repositories/GuiaRepository.php',
         'SupervisorRepository' => 'Infrastructure/Repositories/SupervisorRepository.php',

@@ -4,7 +4,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/ExternalServic
 class TestEmailSender{
     public static function testSendEmailShouldShowResponseMessage(){
         // Arrange
-        $destinationEmail = "jarrietaarrieta@hotmail.com";
+        $destinationEmail = "92031576@yopmail.com";
         $destinationName = "JOHN CARLOS ARRIETA ARRIETA";
         $subject = "Notificacion de prueba";
         $body = "Si ves esto es porque funciona el notificador de mensajes por correo";
