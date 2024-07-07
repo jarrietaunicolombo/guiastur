@@ -1,66 +1,102 @@
 <?php
-session_start();
-// require_once '../Application/UseCases/GetRoles/GetRolesService.php';
-require_once '../../DependencyInjection.php';
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Model/EmailDestinationModel.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetRoles/Dto/GetRolesResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/Users/LoginController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/ValidatePermissionException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateUser/Dto/CreateUserResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateUser/Dto/CreateUserRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/RolTypeEnum.php";
+require_once '../../DependencyInjection.php';
 
 
 class CreateUserController
 {
-    public function createUser()
-    {
-        $roles = unserialize(@$_SESSION["Roles.All"]);
-        if (!isset($roles) || count($roles) <1 ){
-            $roles = DependencyInjection::getRolesServce()->getRoles();
-        }
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            try {
-                // Recibir los datos del formulario
-                $email = $_POST['email'];
-                $password = Utility::generateGUID(2);
-                $nombre = $_POST['nombre'];
-                $rol_id = $_POST['rol_id'];
-                $usuario_registro = $_POST['usuario_registro'];
-                $createUserRequest = new CreateUserRequest($email, $password, $nombre, $rol_id, $usuario_registro);
-                $createUserUseCase = DependencyInjection::getCreateUserServce();
-                $createUserResponse = $createUserUseCase->createUser($createUserRequest);
-                $subjetMessage = "Tiene un usuario creado en Sistema de gestion de turnos para guias Turistas";
-                $bodyMessage = $this->generateBodyMessage($createUserResponse);
-                $emailDestinationModel = new EmailDestinationModel(
-                    $createUserResponse->getUsuario()->getEmail(),
-                    $createUserResponse->getUsuario()->getNombre(),
-                    $subjetMessage,
-                    $bodyMessage
-                );
-                $emailServerService = DependencyInjection::getEmailSenderServce();
-               $emailResponse =  $emailServerService->send($emailDestinationModel);
-                // Guardar la respuesta en la sesión
-                $_SESSION['createUserResponse'] = $createUserResponse;
-                
-                // Redirigir a la vista de mostrar usuario
-                header("Location: ../../Views/Users/index.php?action=create_user&message=$emailResponse");
-                exit();
-            } catch (Exception $e) {
-                $error = 'Error al Crear Usuario: ' . $e->getMessage();
-                $this->showCreateForm($error);
+    public function createUser(array $request){
+        SessionUtility::startSession();
+        try {
+            DependencyInjection::getTransactionManager()->begin();
+            $userLogin = @$_SESSION[ItemsInSessionEnum::USER_LOGIN];
+            if ($userLogin->getRol() == RolTypeEnum::GUIA) {
+                throw new ValidatePermissionException();
             }
-        } else {
-            // Obtener los roles usando el servicio
-            $rolesService = DependencyInjection::getRolesServce();
-            $rolesResponse = $rolesService->getRoles();
+
+            $rolesResponse = @$_SESSION[ItemsInSessionEnum::LIST_ROLES];
+            if (!isset($rolesResponse) ) {
+                $rolesResponse = DependencyInjection::getRolesServce()->getRoles();
+                $_SESSION[ItemsInSessionEnum::LIST_ROLES] = $rolesResponse;
+            }
             $roles = $rolesResponse->getRoles();
-            // Mostrar el formulario con los roles
-            $this->showCreateForm(null, $roles);
+
+            $email = $_POST['email'];
+            $password = Utility::generateGUID(2);
+            $nombre = $_POST['nombre'];
+            $rol_id = (int)$_POST['rol_id'];
+            
+            $rolSelected = array_filter($roles, function ($rol)  use ($rol_id) {
+                return $rol->getId() == $rol_id;
+            });
+
+            $rolSelected = reset($rolSelected);
+
+            if ($userLogin->getRol() === RolTypeEnum::SUPERVISOR 
+                && $rolSelected->getNombre() === RolTypeEnum::SUPER_USUARIO) {
+                throw new ValidatePermissionException();
+            }
+
+            if ($userLogin->getRol() === RolTypeEnum::SUPERVISOR 
+                && $rolSelected->getNombre() === RolTypeEnum::SUPERVISOR) {
+                throw new ValidatePermissionException();
+            }
+                
+            $usuario_registro = $userLogin->getId();
+            $createUserRequest = new CreateUserRequest(
+                $email, $password, $nombre, $rol_id, $usuario_registro
+            );
+            
+            $createUserUseCase = DependencyInjection::getCreateUserServce();
+            $createUserResponse = $createUserUseCase->createUser($createUserRequest);
+            $subjetMessage = "Usuario ".$createUserResponse->getRolNombre()." creado en Sistema de gestion de turnos para guias de Turismo";
+            $bodyMessage = $this->generateBodyMessage($createUserResponse);
+            $emailDestinationModel = new EmailDestinationModel(
+                $createUserResponse->getUsuario()->getEmail(),
+                $createUserResponse->getUsuario()->getNombre(),
+                $subjetMessage,
+                $bodyMessage
+            );
+            $emailServerService = DependencyInjection::getEmailSenderServce();
+            $emailResponse = $emailServerService->send($emailDestinationModel);
+            if(strstr($emailResponse,"No pudo ser enviada")) {
+                throw new EmailSenderException($emailResponse);
+            }
+            $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] = $emailResponse;
+            // $uri = "/Views/Users/index.php";
+            // $url = UrlHelper::getUrl($uri);
+            DependencyInjection::getTransactionManager()->commit();
+            header("Location: ../../Views/Users/index.php?action=create");
+            exit();
+        }
+        catch (Exception $e) {
+                DependencyInjection::getTransactionManager()->rollback();
+                $errorMessage = 'Error al Crear Usuario: ' . $e->getMessage();
+                $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $errorMessage;
+                header("Location: ../../Views/Users/index.php?action=create");
+                exit();
         }
     }
 
     private function showCreateForm($error = null, $roles = [])
     {
-        $accion = "show_user";
-        require_once '../../Views/Users/create.php';
+        $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $error;
+        $uri = "/Views/Users/create.php";
+        $url = UrlHelper::getUrl($uri);
+        header("Location: $url");
     }
 
-    private function generateBodyMessage(CreateUserResponse $response) {
+    private function generateBodyMessage(CreateUserResponse $response)
+    {
         $nombre = $response->getUsuario()->getNombre();
         $email = $response->getUsuario()->getEmail();
         $rol = $response->getRolNombre();
@@ -72,10 +108,10 @@ class CreateUserController
         $template = "../../Views/Users/TemplateNotificacionNewUser.html";
         $htmlTemplate = file_get_contents($template);
         $htmlContent = str_replace(
-            ['[[nombre]]', '[[email]]','[[pass]]' ,'[[rol]]', '[[url]]'],
+            ['[[nombre]]', '[[email]]', '[[pass]]', '[[rol]]', '[[url]]'],
             [$nombre, $email, $password, $rol, $url],
             $htmlTemplate
         );
         return $htmlContent;
-    }   
+    }
 }

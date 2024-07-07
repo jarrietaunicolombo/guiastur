@@ -52,7 +52,8 @@ class EmailSenderService implements IEmailSenderService {
             $this->mailer->send();
             return $responseMessage;
         } catch (Exception $e) {
-            return "No pudo ser enviada la notificacion al correo ".$request->getDestinationEmail().", ERROR: ".$e->getMessage();
+            $errorMessage = "No pudo ser enviada la notificacion al correo ".$request->getDestinationEmail().", ERROR: ".$e->getMessage();
+            return $errorMessage ;
         } 
     }
 }
