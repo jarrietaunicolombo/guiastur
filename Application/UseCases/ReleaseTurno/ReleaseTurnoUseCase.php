@@ -9,7 +9,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetUsuarioByIdQuery.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/IReleaseTurnoCommand.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/IReleaseTurnoUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/ValidateReleaseTurnoException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/invalidReleaseTurnoException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/RolTypeEnum.php";
 
 
@@ -31,7 +31,7 @@ class ReleaseTurnoUseCase implements IReleaseTurnoUseCase {
         $getTurnoByIdRequest = new GetTurnoByIdRequest($request->getTurnoId());
         $getTurnoByIdResponse = $this->getTurnoByIdQuery->handler($getTurnoByIdRequest);
         if($getTurnoByIdResponse->getEstado() !==  TurnoStatusEnum::INUSE){
-            throw new ValidateReleaseTurnoException("No se puede liberar el Turno #: ".$getTurnoByIdResponse->getNumero() . ", Atencion Id: ".$getTurnoByIdResponse->getAtencion()->getId(). " El turno no está en uso");
+            throw new InvalidReleaseTurnoException("No se puede liberar el Turno #: ".$getTurnoByIdResponse->getNumero() . ", Atencion Id: ".$getTurnoByIdResponse->getAtencion()->getId(). " El turno no está en uso");
         }    
         
         $usuarioByIdRequest = new GetUsuarioByIdRequest($request->getUsuarioIdUso());
@@ -40,7 +40,7 @@ class ReleaseTurnoUseCase implements IReleaseTurnoUseCase {
             && $usuarioByIdResponse->getRolNombre() !== RolTypeEnum::SUPERVISOR 
             && $usuarioByIdResponse->getId() != $getTurnoByIdResponse->getGuia()->getUsuarioId())
         {
-            throw new ValidateReleaseTurnoException("No tiene permisos liberar el turno ".$getTurnoByIdResponse->getNumero() ." del Guia ". $getTurnoByIdResponse->getGuia()->getNombre());
+            throw new InvalidReleaseTurnoException("No tiene permisos liberar el turno ".$getTurnoByIdResponse->getNumero() ." del Guia ". $getTurnoByIdResponse->getGuia()->getNombre());
         }  
 
         return $this->releaseTurnoCommand->handler($request);

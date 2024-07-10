@@ -9,7 +9,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetUsuarioByIdQuery.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/IEndTurnoCommand.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/IEndTurnoUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/ValidateEndTurnoException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/invalidEndTurnoException.php";
 
 class EndTurnoUseCase implements IEndTurnoUseCase {
     private $getTurnoByIdQuery;
@@ -29,7 +29,7 @@ class EndTurnoUseCase implements IEndTurnoUseCase {
         $getTurnoByIdRequest = new GetTurnoByIdRequest($request->getTurnoId());
         $getTurnoByIdResponse = $this->getTurnoByIdQuery->handler($getTurnoByIdRequest);
         if($getTurnoByIdResponse->getEstado() !==  TurnoStatusEnum::RELEASE){
-            throw new ValidateEndTurnoException("No se puede finalizar el Turno #: ".$getTurnoByIdResponse->getNumero() . ", Atencion Id: ".$getTurnoByIdResponse->getAtencion()->getId(). " El turno no está liberado");
+            throw new InvalidEndTurnoException("No se puede finalizar el Turno #: ".$getTurnoByIdResponse->getNumero() . ", Atencion Id: ".$getTurnoByIdResponse->getAtencion()->getId(). " El turno no está liberado");
         }    
         
         $usuarioByIdRequest = new GetUsuarioByIdRequest($request->getUsuarioIdUso());
@@ -38,7 +38,7 @@ class EndTurnoUseCase implements IEndTurnoUseCase {
             && $usuarioByIdResponse->getRolNombre() !== RolTypeEnum::SUPERVISOR
             && $usuarioByIdResponse->getId() != $getTurnoByIdResponse->getGuia()->getUsuarioId())
         {
-            throw new ValidateEndTurnoException("No tiene permisos para terminar el turno ".$getTurnoByIdResponse->getNumero() ." del Guia ". $getTurnoByIdResponse->getGuia()->getNombre());
+            throw new InvalidEndTurnoException("No tiene permisos para terminar el turno ".$getTurnoByIdResponse->getNumero() ." del Guia ". $getTurnoByIdResponse->getGuia()->getNombre());
         }  
 
         return $this->endTurnoCommand->handler($request);

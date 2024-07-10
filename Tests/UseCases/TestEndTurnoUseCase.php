@@ -7,7 +7,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/G
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/EndTurno/EndTurnoUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/TurnoRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/UsuarioRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/ValidateEndTurnoException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/InvalidEndTurnoException.php";
 
 class TestEndTurnoUseCase
 {

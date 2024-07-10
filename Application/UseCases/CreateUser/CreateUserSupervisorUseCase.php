@@ -1,19 +1,21 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/ICreateUserSupervisorUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/ICreateUserSupervisorCommand.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/ICreateUserUseCase.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/ICreateUserCommand.php";
 require_once __DIR__ . "/Dto/CreateUserSupervisorRequest.php";
 require_once __DIR__ . "/Dto/CreateUserSupervisorResponse.php";
+require_once __DIR__ . "/Dto/CreateUserResponse.php";
+require_once __DIR__ . "/Dto/CreateUserResponse.php";
 
 
-class CreateUserSupervisorUseCase implements ICreateUserSupervisorUseCase {
-    private $createUserSupervisorCommand;
+class CreateUserSupervisorUseCase implements ICreateUserUseCase {
+    private $createUserCommand;
 
-    public function __construct(ICreateUserSupervisorCommand $createUserSupervisorCommand)
+    public function __construct(ICreateUserCommand $createUserCommand)
     {
-        $this->createUserSupervisorCommand = $createUserSupervisorCommand;
+        $this->createUserCommand = $createUserCommand;
     }
 
-    public function createUserSupervisor(CreateUserSupervisorRequest $request) : CreateUserSupervisorResponse{
-      return  $this->createUserSupervisorCommand->handler($request);
+    public function createUser(CreateUserRequest $request) : CreateUserResponse{
+      return  $this->createUserCommand->handler($request);
     }
 }

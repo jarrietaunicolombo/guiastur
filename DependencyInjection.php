@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ ."/ClassLoader.php";
+require_once __DIR__ . "/ClassLoader.php";
 class DependencyInjection
 {
 
@@ -161,7 +161,7 @@ class DependencyInjection
         return new CreateTurnoUseCase($getTurnosByAtencionQuery, $createTurnoCommand);
     }
 
-    public static function getCreateUserGuiaServce(): ICreateUserGuiaUseCase
+    public static function getCreateUserGuiaServce(): ICreateUserUseCase
     {
         ClassLoader::loadClass("GuiaRepository");
         ClassLoader::loadClass("CreateUserGuiaCommandHandler");
@@ -171,7 +171,7 @@ class DependencyInjection
         return new CreateUserGuiaUseCase($createUserGuiaCommand);
     }
 
-    public static function getCreateUserSupervisorServce(): ICreateUserSupervisorUseCase
+    public static function getCreateUserSupervisorServce(): ICreateUserUseCase
     {
         ClassLoader::loadClass("SupervisorRepository");
         ClassLoader::loadClass("CreateUserSupervisorCommandHandler");
@@ -238,7 +238,23 @@ class DependencyInjection
         ClassLoader::loadClass("TransactionManager");
         return new TransactionManager();
     }
-        
+
+    public static function getUsuarioByTokenQuery(): IGetUserByTokenQuery
+    {
+        ClassLoader::loadClass("UsuarioRepository");
+        ClassLoader::loadClass("GetUserByTokenQueryHandler");
+        $repository = new UsuarioRepository();
+        return new GetUserByTokenQueryHandler($repository);
+    }
+
+    public static function getUpdateUsuarioByActivatedCommand(): IUpdateUsuarioByActivatedCommand
+    {
+        ClassLoader::loadClass("UsuarioRepository");
+        ClassLoader::loadClass("UpdateUsuarioByActivatedCommandHandler");
+        $repository = new UsuarioRepository();
+        return new UpdateUsuarioByActivatedCommandHandler($repository);
+    }
+
 }
 
 

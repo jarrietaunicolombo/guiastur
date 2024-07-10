@@ -1,19 +1,19 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/ICreateUserGuiaUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/ICreateUserGuiaCommand.php";
-require_once __DIR__ . "/Dto/CreateUserGuiaRequest.php";
-require_once __DIR__ . "/Dto/CreateUserGuiaResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/ICreateUserUseCase.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/ICreateUserCommand.php";
+require_once __DIR__ . "/Dto/CreateUserSupervisorRequest.php";
+require_once __DIR__ . "/Dto/CreateUserSupervisorResponse.php"; 
 
 
-class CreateUserGuiaUseCase implements ICreateUserGuiaUseCase {
-    private $createUserGuiaCommand;
+class CreateUserGuiaUseCase implements ICreateUserUseCase {
+    private $createUserCommand;
 
-    public function __construct(ICreateUserGuiaCommand $createUserGuiaCommand)
+    public function __construct(ICreateUserCommand $createUserCommand)
     {
-        $this->createUserGuiaCommand = $createUserGuiaCommand;
+        $this->createUserCommand = $createUserCommand;
     }
 
-    public function createUserGuia(CreateUserGuiaRequest $request) : CreateUserGuiaResponse{
-      return  $this->createUserGuiaCommand->handler($request);
+    public function createUser(CreateUserRequest $request) : CreateUserResponse{
+      return  $this->createUserCommand->handler($request);
     }
 }
