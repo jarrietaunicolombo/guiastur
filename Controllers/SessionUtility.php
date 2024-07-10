@@ -7,12 +7,20 @@ class SessionUtility
             session_start();
         }
     }
+
+    public static function clearAllSession(){
+      session_unset();
+      @$_SESSION[ItemsInSessionEnum::USER_LOGIN] = null;
+      session_destroy();
+    }
 }
 
 abstract class ItemsInSessionEnum
 {
     const USER_LOGIN = "User.Login";
     const USER_PERMISSION = "User.Permission";
+    const USER_ACTIVATING = "User.Activating";
+    const USER_REQUEST_ACTIVATING = "User.Request.Activating";
     const FOUND_USER = "User.Find";
     const LIST_USERS = "User.List";
     const FOUND_GUIA = "Guia.Find";
@@ -33,7 +41,10 @@ abstract class ItemsInSessionEnum
     const LIST_TURNOS = "Turno.List";
     const ERROR_MESSAGE = "Error.Message";
     const INFO_MESSAGE = "Information.Message";
+    const ERROR_MESSAGES = "Error.Messages";
 }
+
+
 
 // Clase utilitaria para manejar URLs
 class UrlHelper {

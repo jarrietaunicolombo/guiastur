@@ -39,7 +39,10 @@ class TestCreateUserSupervisorUseCase
             self::showUsuarioResponse($createUserResponse, "Usuario Creado");
 
             // Arange
-            $createUserSupervisorRequest = new CreateUserSupervisorRequest($cedula, $rnt, $createUserResponse);
+            $createUserSupervisorRequest = new CreateUserSupervisorRequest(
+                $cedula, $rnt, $createUserResponse
+            
+            );
             $guiaRepository = new SupervisorRepository();
             $createUserSupervisorCommand = new CreateUserSupervisorCommandHandler($guiaRepository);
             $createUserSupervisorUseCase = new CreateUserSupervisorUseCase($createUserSupervisorCommand);

@@ -14,10 +14,14 @@ class TransactionManager implements ITransactionManager{
     }
 
     public function commit() {
-        $this->connectionDb->commit();
+        if ($this->connectionDb->connection->inTransaction()) {
+             $this->connectionDb->commit();
+        }
     }
 
     public function rollback() {
-        $this->connectionDb->rollback();
+       if ($this->connectionDb->connection->inTransaction()) {
+            $this->connectionDb->rollback();
+        }
     }
 }

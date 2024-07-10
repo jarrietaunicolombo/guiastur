@@ -9,7 +9,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/IUseTurnoCommand.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetUsuarioByIdQuery.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/IUseTurnoUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/ValidateUseTurnoException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/invalidUseTurnoException.php";
 
 
 class UseTurnoUseCase implements IUseTurnoUseCase {
@@ -30,7 +30,7 @@ class UseTurnoUseCase implements IUseTurnoUseCase {
         $nextTurnoRequest = new GetNextTurnoRequest($request->getAtencionId());
         $nextTurnoResponse = $this->getGetNextTurnoQuery->handler($nextTurnoRequest);
         if($nextTurnoResponse->getId() !=  $request->getTurnoId()){
-            throw new ValidateUseTurnoException("Uso de turno rechazado, Proximo Turno Numero: ".$nextTurnoResponse->getNumero()."");
+            throw new InvalidUseTurnoException("Uso de turno rechazado, Proximo Turno Numero: ".$nextTurnoResponse->getNumero()."");
         }    
         
         $usuarioByIdRequest = new GetUsuarioByIdRequest($request->getUsuarioUsoId());
@@ -39,7 +39,7 @@ class UseTurnoUseCase implements IUseTurnoUseCase {
             && $usuarioByIdResponse->getRolNombre() !== RolTypeEnum::SUPERVISOR 
             && $usuarioByIdResponse->getId() != $nextTurnoResponse->getGuia()->getUserId())
         {
-            throw new ValidateUseTurnoException("No tiene permisos para registar el uso del turno ".$nextTurnoResponse->getNumero() ." del Guia ". $nextTurnoResponse->getGuia()->getNombre());
+            throw new InvalidUseTurnoException("No tiene permisos para registar el uso del turno ".$nextTurnoResponse->getNumero() ." del Guia ". $nextTurnoResponse->getGuia()->getNombre());
         }  
 
         return $this->useTurnoCommand->handler($request);

@@ -6,7 +6,6 @@ class ClassLoader
         'TransactionManager' => 'Infrastructure/Database/TransactionManager.php',
         // Infrastructure Repositories
         'AtencionRepository' => 'Infrastructure/Repositories/AtencionRepository.php',
-        //'Utility' => 'Infrastructure/Repositories/Utility.php',
         'BuqueRepository' => 'Infrastructure/Repositories/BuqueRepository.php',
         'GuiaRepository' => 'Infrastructure/Repositories/GuiaRepository.php',
         'SupervisorRepository' => 'Infrastructure/Repositories/SupervisorRepository.php',
@@ -31,6 +30,7 @@ class ClassLoader
         'ReleaseTurnoCommandHandler' => 'Application/Actions/Commands/ReleaseTurnoCommandHandler.php',
         'CreateUserCommandHandler' => 'Application/Actions/Commands/CreateUser/CreateUserCommandHandler.php',
         'UseTurnoCommandHandler' => 'Application/Actions/Commands/UseTurnoCommandHandler.php',
+        'UpdateUsuarioByActivatedCommandHandler' => 'Application/Actions/Commands/UpdateUsuarioByActivatedCommandHandler.php',
 
         // Application Queries
         'GetAtencionesByRecaladaQueryHandler' => 'Application/Actions/Queries/GetAtencionesByRecaladaQueryHandler.php',
@@ -45,6 +45,7 @@ class ClassLoader
         'GetPaisesQueryHandler' => 'Application/Actions/Queries/GetPaisesQueryHandler.php',
         'GetRolesQueryHandler' => 'Application/Actions/Queries/GetRolesQueryHandler.php',
         'ValidateRecaladaQueryHandler' => 'Application/Actions/Queries/ValidateRecaladaQueryHandler.php',
+        'GetUserByTokenQueryHandler' => 'Application/Actions/Queries/GetUserByTokenQueryHandler.php',
        
         // Application UseCases
         'CreateAtencionUseCase' => 'Application/UseCases/CreateAtencion/CreateAtencionUseCase.php',

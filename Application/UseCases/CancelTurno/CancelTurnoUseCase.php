@@ -9,7 +9,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetUsuarioByIdQuery.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/ICancelTurnoCommand.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/ICancelTurnoUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/ValidateCancelTurnoException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/invalidCancelTurnoException.php";
 
 class CancelTurnoUseCase implements ICancelTurnoUseCase{
     private $getTurnoByIdQuery;
@@ -30,7 +30,7 @@ class CancelTurnoUseCase implements ICancelTurnoUseCase{
         $getTurnoByIdResponse = $this->getTurnoByIdQuery->handler($getTurnoByIdRequest);
         if($getTurnoByIdResponse->getEstado() !==  TurnoStatusEnum::CREATED || 
             $getTurnoByIdResponse->getEstado() !==  TurnoStatusEnum::INUSE){
-            throw new ValidateCancelTurnoException("No se puede finalizar el Turno #: ".$getTurnoByIdResponse->getNumero() . ", Atencion Id: ".$getTurnoByIdResponse->getAtencion()->getId(). " El turno no está Creado, ni esta en Uso");
+            throw new InvalidCancelTurnoException("No se puede finalizar el Turno #: ".$getTurnoByIdResponse->getNumero() . ", Atencion Id: ".$getTurnoByIdResponse->getAtencion()->getId(). " El turno no está Creado, ni esta en Uso");
         }
         
         $usuarioByIdRequest = new GetUsuarioByIdRequest($request->getUsuarioCancelId());
@@ -39,7 +39,7 @@ class CancelTurnoUseCase implements ICancelTurnoUseCase{
             && $usuarioByIdResponse->getRolNombre() !== RolTypeEnum::SUPERVISOR
             && $usuarioByIdResponse->getId() != $getTurnoByIdResponse->getGuia()->getUsuarioId())
         {
-            throw new ValidateCancelTurnoException("No tiene permisos para terminar el turno ".$getTurnoByIdResponse->getNumero() ." del Guia ". $getTurnoByIdResponse->getGuia()->getNombre());
+            throw new InvalidCancelTurnoException("No tiene permisos para terminar el turno ".$getTurnoByIdResponse->getNumero() ." del Guia ". $getTurnoByIdResponse->getGuia()->getNombre());
         }  
 
         return $this->endTurnoCommand->handler($request);

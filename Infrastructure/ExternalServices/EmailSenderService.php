@@ -17,7 +17,7 @@ class EmailSenderService implements IEmailSenderService {
     // private $host = "smtp-mail.outlook.com";
     private $userServer = 'gestionguiasturismo@gmail.com';
     private $userName = 'Gestor de Turnos Para Guias de Turismo';
-    private $passServer = "LA CLAVE";
+    private $passServer = "ljqw kcyr mdkn yvcc";
     private $smtpSecure = "tls";
     private $portServer = 587;
 
@@ -43,7 +43,7 @@ class EmailSenderService implements IEmailSenderService {
         try{
             $this->config();
             $dateTime = (new DateTime())->format("Y-m-d H:i:s");
-            $responseMessage = "Notifiacion enviada al correo ". $request->getDestinationEmail() . " el ".$dateTime;
+            $responseMessage = "Revise su correo ". $request->getDestinationEmail() . " para mayor informacion";
             $this->mailer->setFrom($this->userServer,$this->userName);
             $this->mailer->addAddress($request->getDestinationEmail(), $request->getDestinationName());
             $this->mailer->isHTML(true);

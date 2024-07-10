@@ -9,7 +9,7 @@ use ActiveRecord\DatabaseException;
 
 class UsuarioRepository implements IUsuarioRepository
 {
-    public function find($id): Usuario
+    public function find(int $id): Usuario
     {
         try {
             return Usuario::find($id);
@@ -23,12 +23,30 @@ class UsuarioRepository implements IUsuarioRepository
         }
     }
 
-    public function findByEmail($email): Usuario
+    public function findByEmail(string $email): Usuario
     {
         try {
             $user = Usuario::find_by_email($email);
             if (!$user) {
                 throw new NotFoundEntryException("Usuario con email $email no existe");
+            }
+            return $user;
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
+    }
+
+    public function findByToken(string $token): Usuario
+    {
+        try {
+            $user = Usuario::find_by_validation_token($token);
+            if (!$user) {
+                throw new NotFoundEntryException("Usuario con Token $token no existe");
             }
             return $user;
         } catch (Exception $e) {
@@ -82,7 +100,7 @@ class UsuarioRepository implements IUsuarioRepository
         }
     }
 
-    public function delete($id): bool
+    public function delete(int $id): bool
     {
         try {
             $usuario = $this->find($id);
