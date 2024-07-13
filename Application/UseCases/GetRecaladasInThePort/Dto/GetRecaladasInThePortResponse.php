@@ -32,15 +32,15 @@ class GetRecaladasInThePortResponse
             throw new InvalidArgumentException("El BuqueId es requerido para Obtener Las Recaladas En El Puerto");
         }
 
-        if ($buque_nombre === NULL || empty(trim($buque_nombre))) {
+        if ($buque_nombre === null || empty(trim($buque_nombre))) {
             throw new InvalidArgumentException("El Nombre del Buque es requerido para Obtener Las Recaladas En El Puerto");
         }
 
-        if ($fecha_arribo === NULL) {
+        if ($fecha_arribo === null) {
             throw new InvalidArgumentException("La Fecha de Arribo es requerida para Obtener Las Recaladas En El Puerto");
         }
 
-        if ($fecha_zarpe === NULL) {
+        if ($fecha_zarpe === null) {
             throw new InvalidArgumentException("La Fecha de Zarpe es requerida para Obtener Las Recaladas En El Puerto");
         }
 
@@ -52,7 +52,7 @@ class GetRecaladasInThePortResponse
             throw new InvalidArgumentException("El PaisId  requerido para Obtener Las Recaladas En El Puerto");
         }
 
-        if ($pais_nombre === NULL || empty(trim($pais_nombre))) {
+        if ($pais_nombre === null || empty(trim($pais_nombre))) {
             throw new InvalidArgumentException("El Nombre del Pais es requerido para Obtener Las Recaladas En El Puerto");
         }
 

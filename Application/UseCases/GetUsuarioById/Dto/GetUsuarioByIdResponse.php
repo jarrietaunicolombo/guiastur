@@ -20,38 +20,38 @@ class GetUsuarioByIdResponse
         string $nombre,
         string $email,
         string $estado,
-        string $guia_o_supervisor = NULL,
-        string $validation_token = NULL,
+        string $guia_o_supervisor = null,
+        string $validation_token = null,
         DateTime $fecha_registro,
         int $usuario_registro,
         int $rol_id,
         string $rol_nombre
     ) {
-        if($id === NULL || $id < 1){
+        if($id === null || $id < 1){
             throw new InvalidArgumentException("El ID del Usuario es requerido para Obtener Usuario Por Id");
         }
 
-        if($nombre === NULL || empty(trim($nombre))) {
+        if($nombre === null || empty(trim($nombre))) {
             throw new InvalidArgumentException("El Nombre del Usuario es requerido para Obtener Usuario Por Id");
         }
 
-        if($estado === NULL || empty(trim($estado))) {
+        if($estado === null || empty(trim($estado))) {
             throw new InvalidArgumentException("El Estado del Usuario es requerido para Obtener Usuario Por Id");
         }
 
-        if($email === NULL || empty(trim($email))) {
+        if($email === null || empty(trim($email))) {
             throw new InvalidArgumentException("El Email del Usuario es requerido para Obtener Usuario Por Id");
         }
 
-        if($estado === NULL || empty(trim($estado))) {
+        if($estado === null || empty(trim($estado))) {
             throw new InvalidArgumentException("El Estado del Usuario es requerido para Obtener Usuario Por Id");
         }
 
-        if($rol_id === NULL ||  $rol_id < 1){
+        if($rol_id === null ||  $rol_id < 1){
             throw new InvalidArgumentException("El Rol Id del Usuario es requerido para Obtener Usuario Por Id");
         }
         
-        if($rol_nombre === NULL || empty(trim($nombre))){
+        if($rol_nombre === null || empty(trim($nombre))){
             throw new InvalidArgumentException("El Nombre del ROl del Usuario es requerido para Obtener Usuario Por Id");
         }
 

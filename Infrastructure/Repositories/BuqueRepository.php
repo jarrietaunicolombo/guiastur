@@ -61,7 +61,7 @@ class BuqueRepository implements IBuqueRepository
         }
     }
 
-    public function delete($id): bool
+    public function delete(int $id): bool
     {
         try {
             $buque = $this->findById($id);

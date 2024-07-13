@@ -5,7 +5,7 @@ class GetTurnoByIdRequest
     private $turnoId;
     public function __construct(int $turnoId)
     {
-        if ($turnoId === NULL || $turnoId < 1) {
+        if ($turnoId === null || $turnoId < 1) {
             throw new InvalidArgumentException("El Id del turno es requerido para Liberare el Turno");
         }
         $this->turnoId = $turnoId;

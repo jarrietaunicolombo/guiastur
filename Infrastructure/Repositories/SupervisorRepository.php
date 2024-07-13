@@ -7,7 +7,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/U
 
 class SupervisorRepository implements ISupervisorRepository
 {
-    public function find($id): Supervisor
+    public function find(string $id): Supervisor
     {
         try {
             return Supervisor::find($id);
@@ -60,7 +60,7 @@ class SupervisorRepository implements ISupervisorRepository
         }
     }
 
-    public function delete($id)
+    public function delete(string $id)
     {
         try {
             $supervisor = $this->find($id);

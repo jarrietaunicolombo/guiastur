@@ -255,6 +255,16 @@ class DependencyInjection
         return new UpdateUsuarioByActivatedCommandHandler($repository);
     }
 
+    public static function getBuquesService(): IGetBuquesService
+    {
+        ClassLoader::loadClass("BuqueRepository");  
+        ClassLoader::loadClass("GetBuquesQueryHandler");
+        ClassLoader::loadClass("GetBuquesService");
+        $repository = new BuqueRepository();
+        $query = new GetBuquesQueryHandler($repository);
+        return new GetBuquesService($query);
+    }
+
 }
 
 

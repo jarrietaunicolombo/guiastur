@@ -7,13 +7,13 @@ class GetTurnosByAtencionResponse
 
     public function __construct(int $total_turnos, int $atencion_id, array $turnos)
     {
-        if ($total_turnos === NULL || $total_turnos <= 0) {
+        if ($total_turnos === null || $total_turnos <= 0) {
             throw new \InvalidArgumentException("El Numero de Turnos es requerido para obtener Turnos por Atencion");
         }
-        if ($atencion_id === NULL || $atencion_id <= 0) {
+        if ($atencion_id === null || $atencion_id <= 0) {
             throw new \InvalidArgumentException("El AtencionId es requerido para obtener Turnos por Atencion");
         }
-        if ($turnos === NULL) {
+        if ($turnos === null) {
             throw new \InvalidArgumentException("El TurnoDto es requerido para obtener Turnos por Atencion");
         }
         if (count($turnos) <= 0) {
@@ -74,14 +74,14 @@ class GetTurnosByAtencionDto
         DateTime $fecha_registro = null,
         int $usuario_registro = null
     ) {
-        if ($id === NULL || $id <= 0) {
+        if ($id === null || $id <= 0) {
             throw new InvalidArgumentException("El ID del Turno es requerido al Obtener Turnos por Atencion");
         }
-        if ($numero === NULL || $numero <= 0) {
+        if ($numero === null || $numero <= 0) {
             throw new InvalidArgumentException("El Numero del Turno es requerido al Obtener Turnos por Atencion");
         }
 
-        if ($guia_id === NULL || empty(trim($guia_id))) {
+        if ($guia_id === null || empty(trim($guia_id))) {
             throw new InvalidArgumentException("El Id del Guia es requerido al Obtener Turnos por Atencion");
         }
         $this->id = $id;

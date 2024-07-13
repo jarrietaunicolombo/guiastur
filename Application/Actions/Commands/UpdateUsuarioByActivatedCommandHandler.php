@@ -19,7 +19,7 @@ class UpdateUsuarioByActivatedCommandHandler implements IUpdateUsuarioByActivate
         $usuario->estado = $estado;
         $usuario->guia_o_supervisor_id = $request->getGuiaOSupervisorId();
         $usuario->password = $request->getPassword();
-        $usuario->validation_token = NULL;
+        $usuario->validation_token = null;
         $usuario->fecha_registro = new DateTime();
         $usuario = $this->usuarioRepository->update($usuario);
         return new UpdateUsuarioByActivatedResponse(

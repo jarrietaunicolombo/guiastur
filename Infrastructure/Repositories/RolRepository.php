@@ -7,7 +7,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/U
 
 class RolRepository implements IRolRepository
 {
-    public function find($id): Rol
+    public function find(int $id): Rol
     {
         try {
             return Rol::find($id);
@@ -61,7 +61,7 @@ class RolRepository implements IRolRepository
         }
     }
 
-    public function delete($id): bool
+    public function delete(int $id): bool
     {
         try {
             $rol = $this->find($id);

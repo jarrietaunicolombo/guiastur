@@ -17,7 +17,7 @@ class CancelTurnoCommandHandler implements ICancelTurnoCommand{
         $estado = TurnoStatusEnum::CANCELLED;
         $turno = $this->turnoRepository->find($request->getTurnoId());
         $turno->estado = $estado;
-        $observaciones = ($turno->obsevaciones !== NULL)
+        $observaciones = ($turno->obsevaciones !== null)
                             ?  $turno->obsevaciones . "\n".TurnoStatusEnum::CANCELLED .": ". $request->getObservaciones() 
                             : TurnoStatusEnum::CANCELLED .": ". $request->getObservaciones();
         $turno->obsevaciones = $observaciones;

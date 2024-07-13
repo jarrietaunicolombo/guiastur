@@ -1,32 +1,28 @@
 <?php
-require_once '../../Controllers/Users/CreateUserController.php';
 require_once '../../Controllers/SessionUtility.php';
-require_once '../../DependencyInjection.php';
-require_once '../../Application/UseCases/GetRoles/Dto/GetRolesResponse.php';
+require_once '../../Application/UseCases/Login/Dto/LoginResponse.php';
 
 SessionUtility::startSession();
-$rolesResponse = @$_SESSION[ItemsInSessionEnum::LIST_ROLES];
-if (!isset($rolesResponse)) {
-    $rolesResponse = DependencyInjection::getRolesServce()->getRoles();
-    $_SESSION[ItemsInSessionEnum::LIST_ROLES] = $rolesResponse;
-}
 $usuarioLogin = $_SESSION[ItemsInSessionEnum::USER_LOGIN];
 if (!isset($usuarioLogin)) {
+    SessionUtility::clearAllSession();
+    SessionUtility::startSession();
     $errorMessage = "Accion denegada, primero debe iniciar sesion";
     $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $errorMessage;
-    header('Location: login.php');
+    header('Location: ../Users/login.php');
     exit;
 }
 
-$errorMessage = @$_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ?? @$_GET["error"];
-$infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"];
+$errorMessage = $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ?? "";
+$infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Registro</title>
+    <title>Crear Buque</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -105,7 +101,8 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
             margin-top: 5px;
         }
 
-        .form-group input[type="submit"], .form-group button {
+        .form-group input[type="submit"],
+        .form-group button {
             width: 48%;
             padding: 10px;
             border: none;
@@ -113,60 +110,63 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
             cursor: pointer;
             font-size: 16px;
         }
+
         .form-group input[type="submit"] {
             background-color: #28a745;
             color: #fff;
             margin-right: 4%;
         }
+
         .form-group button {
             background-color: #dc3545;
             color: #fff;
         }
+
+        .form-group input[type="submit"]:hover,
+        .form-group button:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="header">
-        <h1>Formulario de Registro</h1>
+        <h1>Crear Buque</h1>
     </div>
 
     <div class="form-wrapper">
         <div class="form-container">
-            <h2>Crear Usuario</h2>
-            <div style="color: red;"><?= @$errorMessage ?></div>
-            <div style="color: green;"><?= @$infoMessage ?></div>
+            <h2>Ingrese los datos del buque</h2>
 
             <form action="index.php" method="post">
                 <input type="hidden" name="action" value="create">
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="codigo">Código:</label>
+                    <input type="text" id="codigo" name="codigo" placeholder="El codigo del buque">
                 </div>
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" required>
+                    <input type="text" id="nombre" name="nombre" required placeholder="El nombre del buque">
                 </div>
                 <div class="form-group">
-                    <label for="rol_id">Rol:</label>
-                    <select id="rol_id" name="rol_id" required>
-                        <?php foreach ($rolesResponse->getRoles() as $rol): ?>
-                            <option value="<?= $rol->getId() ?>"><?= $rol->getNombre() ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <strong>Usuario:</strong>
+                    <span><?= @$usuarioLogin->getNombre() ?></span>
                 </div>
-                    <input type="hidden" name="usuario_registro" value="<?= $usuarioLogin->getId() ?>">
                 <div class="form-group">
-                <input type="submit" value="Crear Usuario">
+                    <input type="submit" value="Crear Buque">
                 </div>
             </form>
         </div>
     </div>
-
+    <hr style="width: 35%;">
+    <span style="color: red;"><?= $errorMessage ?></span>
+    <span style="color: blue;"><?= $infoMessage ?></span>
 </body>
+
 </html>
-
 <?php
-unset($_SESSION[ItemsInSessionEnum::ERROR_MESSAGE]);
-unset($_SESSION[ItemsInSessionEnum::INFO_MESSAGE]);
-?>
 
+SessionUtility::deleteItemInSession(ItemsInSessionEnum::ERROR_MESSAGE);
+SessionUtility::deleteItemInSession(ItemsInSessionEnum::INFO_MESSAGE);
+?>

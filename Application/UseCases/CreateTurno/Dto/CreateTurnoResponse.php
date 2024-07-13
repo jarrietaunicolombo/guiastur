@@ -6,11 +6,11 @@ class CreateTurnoResponse
     private $turno;
 
     public function __construct(int $id, CreateTurnoRequest $turno){
-        if ($id === NULL || $id <= 0) {
+        if ($id === null || $id <= 0) {
             throw new InvalidArgumentException("El Id del Turno es requerido al crear un nuevo Turno");
         }
 
-        if ($turno === NULL) {
+        if ($turno === null) {
             throw new InvalidArgumentException("Los datos del Turno son requeridos al ser creado");
         }
 

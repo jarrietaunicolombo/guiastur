@@ -7,7 +7,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/U
 
 class RecaladaRepository implements IRecaladaRepository
 {
-    public function find($id): Recalada
+    public function find(int $id): Recalada
     {
         try {
             return Recalada::find($id);
@@ -63,7 +63,7 @@ class RecaladaRepository implements IRecaladaRepository
         }
     }
 
-    public function delete($id): bool
+    public function delete(int $id): bool
     {
         try {
             $recalada = $this->find($id);

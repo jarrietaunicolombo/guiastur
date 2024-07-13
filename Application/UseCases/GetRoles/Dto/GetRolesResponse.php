@@ -3,7 +3,7 @@
 class GetRolesResponse{
     private $roles;
     public function __construct(array $roles){
-        if ($roles === NULL) {
+        if ($roles === null) {
             $roles = array();
         }
         $this->roles = $roles;
@@ -20,11 +20,11 @@ class RolResponse{
     private $descripcion;
     private $icono;
 
-    public function __construct(int $id, string $nombre, string $descripcion = NULL, string $icono = NULL) {
-        if($id === NULL || $id < 1) {
+    public function __construct(int $id, string $nombre, string $descripcion = null, string $icono = null) {
+        if($id === null || $id < 1) {
             throw new \InvalidArgumentException("El Id es requerido para Obtener los Roles");
         }
-        if($nombre === NULL || empty(trim($nombre))) {
+        if($nombre === null || empty(trim($nombre))) {
             throw new \InvalidArgumentException("El Nombre es requerido para Obtener los Roles");
         }
 

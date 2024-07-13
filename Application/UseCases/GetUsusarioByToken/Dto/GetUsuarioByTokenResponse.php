@@ -22,33 +22,33 @@ class GetUsuarioByTokenResponse
         string $token,
         string $estado
     ) {
-        if ($id === NULL || $id < 1) {
+        if ($id === null || $id < 1) {
             throw new \InvalidArgumentException("El Id es requerido al Obtener Usuario Por Token");
         }
 
-        if ($email === NULL || empty(trim($email))) {
+        if ($email === null || empty(trim($email))) {
             throw new \InvalidArgumentException("El Email es requerido al Obtener Usuario Por Token");
         }
-        if ($password === NULL || empty(trim($password))) {
+        if ($password === null || empty(trim($password))) {
             throw new \InvalidArgumentException("El Password es requerido al Obtener Usuario Por Token");
         }
 
-        if ($nombre === NULL || empty(trim($nombre))) {
+        if ($nombre === null || empty(trim($nombre))) {
             throw new \InvalidArgumentException("El Nombre es requerido al Obtener Usuario Por Token");
         }
 
-        if ($rol_id === NULL || $rol_id < 1) {
+        if ($rol_id === null || $rol_id < 1) {
             throw new \InvalidArgumentException("El Id del Rol es requerido al Obtener Usuario Por Token");
         }
 
-        if ($rol_nombre === NULL || empty(trim($rol_nombre))) {
+        if ($rol_nombre === null || empty(trim($rol_nombre))) {
             throw new \InvalidArgumentException("El Nombre del Rol es requerido al Obtener Usuario Por Token");
         }
 
-        if ($token === NULL || empty(trim($token))) {
+        if ($token === null || empty(trim($token))) {
             throw new \InvalidArgumentException("El Token es requerido al Obtener Usuario Por Token");
         }
-        if ($estado === NULL || empty(trim($estado))) {
+        if ($estado === null || empty(trim($estado))) {
             throw new \InvalidArgumentException("El Estado es requerido al Obtener Usuario Por Token");
         }
 
