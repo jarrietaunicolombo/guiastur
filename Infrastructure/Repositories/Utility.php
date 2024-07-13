@@ -146,6 +146,6 @@ abstract class UtilConstantsEnum
     const DB_SELECT_ERROR_CODE = "SQLSTATE[HY000] [1049]";
     const DB_TABLE_NAME_ERROR_CODE = "SQLSTATE[42S02]";
     const DB_NOT_FOUND_ERROR = "Couldn't find";
-    const DB_FIELD_NOT_NULL_ERROR = "SQLSTATE[HY000]: General error: 1364";
+    const DB_FIELD_NOT_null_ERROR = "SQLSTATE[HY000]: General error: 1364";
     const DB_FORIGN_KEY_REFERENCE = "a foreign key constraint fails";
 }

@@ -6,5 +6,5 @@ interface IBuqueRepository
     public function findAll(): array;
     public function create(Buque $buque): Buque;
     public function update(Buque $buque): Buque;
-    public function delete($id): bool;
+    public function delete(int $id): bool;
 }

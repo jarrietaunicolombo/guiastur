@@ -31,7 +31,7 @@ class CreateBuqueRequest
         $this->usuario_registro = $usuario_registro;
     }
 
-    public function getCodigo(): string
+    public function getCodigo()
     {
         return $this->codigo;
     }

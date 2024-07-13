@@ -48,12 +48,12 @@ class ActivateUserAccountController
             }
 
             $userActivating = @$_SESSION[ItemsInSessionEnum::USER_ACTIVATING];
-            if ($userActivating == NULL) {
+            if ($userActivating == null) {
                 throw new InvalidPermissionException();
             }
 
             $token = @$request["token"];
-            if ($token == NULL) {
+            if ($token == null) {
                 throw new InvalidPermissionException();
             }
             if ($userActivating->getToken() !== $token) {
@@ -127,8 +127,8 @@ class ActivateUserAccountController
             }
 
             $trasactionDb->begin();
-            $createUserRequest = NULL;
-            $createUserService = NULL;
+            $createUserRequest = null;
+            $createUserService = null;
             if ($userActivating->getRolNombre() == RolTypeEnum::GUIA) {
                 $createUserRequest = new CreateUserGuiaRequest(
                     $userActivating->getId(),
@@ -145,8 +145,8 @@ class ActivateUserAccountController
                     $request["genero"],
                     $fechaNacimiento,
                     $request["telefono"],
-                    NULL, // Foto
-                    NULL, // Observaciones
+                    null, // Foto
+                    null, // Observaciones
                     $userActivating->getId()
                 );
                 $createUserService = DependencyInjection::getCreateUserGuiaServce();
@@ -166,8 +166,8 @@ class ActivateUserAccountController
                     $request["genero"],
                     $fechaNacimiento,
                     $request["telefono"],
-                    NULL, // Foto
-                    NULL, // Observaciones
+                    null, // Foto
+                    null, // Observaciones
                     $userActivating->getId()
                 );
                 $createUserService = DependencyInjection::getCreateUserSupervisorServce();

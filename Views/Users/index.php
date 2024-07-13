@@ -10,7 +10,7 @@ require_once '../../Controllers/SessionUtility.php';
 $actionGet = @$_GET['action'];
 $actionPost = @$_POST['action'];
 $action = $actionGet ?? $actionPost;
-if ($action === NULL) {
+if ($action === null) {
     clear_session("Accion invalida");
     exit;
 }

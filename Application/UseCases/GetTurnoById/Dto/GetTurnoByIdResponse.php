@@ -32,30 +32,30 @@ class GetTurnoByIdResponse
         DateTime $fecha_registro,
         int $usuario_registro
     ) {
-        if ($id === NULL || $id < 1) {
+        if ($id === null || $id < 1) {
             throw new InvalidArgumentException("El ID del Turno es requerido para Obtener el Turno por Id");
         }
-        if ($estado === NULL || empty(trim($estado <= 0))) {
+        if ($estado === null || empty(trim($estado <= 0))) {
             throw new InvalidArgumentException("El Estado del Turno es requerido para Obtener el Turno por Id");
         }
 
-        if ($numero === NULL || $numero < 1) {
+        if ($numero === null || $numero < 1) {
             throw new InvalidArgumentException("El Numero del Turno es requerido para Obtener el Turno por Id");
         }
 
-        if ($guia === NULL) {
+        if ($guia === null) {
             throw new InvalidArgumentException("El Guia es requerido para Obtener el Turno por Id");
         }
 
-        if ($atencion === NULL) {
+        if ($atencion === null) {
             throw new InvalidArgumentException("La Atencion es requerida para Obtener el Turno por Id");
         }
 
-        if ($fecha_registro === NULL) {
+        if ($fecha_registro === null) {
             throw new InvalidArgumentException("La Fecha de Registro es requerida para Obtener el Turno por Id");
         }
 
-        if ($usuario_registro === NULL) {
+        if ($usuario_registro === null) {
             throw new InvalidArgumentException("El Usuario que Registró es requerido para Obtener el Turno por Id");
         }
 
@@ -150,19 +150,19 @@ class GuiaTurnoDto{
     private $foto;
 
     public function __construct(int $usuario_id, string $cedula, string $rnt, string $nombre, string $telefono = null, string $foto = null) {
-        if($usuario_id === NULL || $usuario_id < 1) {
+        if($usuario_id === null || $usuario_id < 1) {
             throw new InvalidArgumentException("El Id del Usuario Guia es requerida para Obtener el Turno por Id");
         }
         
-        if($cedula === NULL || empty(trim($cedula))) {
+        if($cedula === null || empty(trim($cedula))) {
             throw new InvalidArgumentException("La Cedula del Guia es requerida para Obtener el Turno por Id");
         }
 
-        if($rnt === NULL || empty(trim($rnt))) {
+        if($rnt === null || empty(trim($rnt))) {
             throw new InvalidArgumentException("El RNT del Guia es requerido para Obtener el Turno por Id");
         }
 
-        if($nombre === NULL || empty(trim($nombre))) {
+        if($nombre === null || empty(trim($nombre))) {
             throw new InvalidArgumentException("El Nombre del Guia es requerido para Obtener el Turno por Id");
         }
         $this->usuario_id = $usuario_id;
@@ -205,16 +205,16 @@ class AtencionTurnoDto{
     private $fecha_cierre;
     private $total_turnos;
 
-    public function __construct(int $id, DateTime $fecha_inicio , DateTime $fecha_cierre = NULL, int $total_turnos) {
-        if($id === NULL || $id < 1 ) {
+    public function __construct(int $id, DateTime $fecha_inicio , DateTime $fecha_cierre = null, int $total_turnos) {
+        if($id === null || $id < 1 ) {
             throw new InvalidArgumentException("El Id de la Atencion es requerido para Obtener el Turno por Id");
         }
 
-        if($fecha_inicio === NULL) {
+        if($fecha_inicio === null) {
             throw new InvalidArgumentException("La Fecha de Inicio de la Atencion es requerida para Obtener el Turno por Id");
         }
 
-        if($total_turnos === NULL || $total_turnos < 1) {
+        if($total_turnos === null || $total_turnos < 1) {
             throw new InvalidArgumentException("El Total Tornos de la Atencion es requerido para Obtener el Turno por Id");
         }
 

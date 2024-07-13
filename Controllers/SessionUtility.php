@@ -8,10 +8,20 @@ class SessionUtility
         }
     }
 
-    public static function clearAllSession(){
-      session_unset();
-      @$_SESSION[ItemsInSessionEnum::USER_LOGIN] = null;
-      session_destroy();
+    public static function clearAllSession()
+    {
+        $itemsInSession = ItemsInSessionEnum::getConstansValues();
+        foreach ($itemsInSession as $value ) {
+            $itemsInSession[$value] = null;
+            unset($itemsInSession[$value]);
+        }
+        session_unset();
+        session_destroy();
+    }
+
+    public static function deleteItemInSession(string $item){
+        @$_SESSION[$item] = null;
+        unset($_SESSION[$item]);
     }
 }
 
@@ -42,13 +52,26 @@ abstract class ItemsInSessionEnum
     const ERROR_MESSAGE = "Error.Message";
     const INFO_MESSAGE = "Information.Message";
     const ERROR_MESSAGES = "Error.Messages";
+
+    public static function getConstansValues(): array
+    {
+        $reflect = new ReflectionClass(__CLASS__);
+        $constProperties = $reflect->getConstants();
+        $values = array();
+        foreach ($constProperties as $constantName => $value) {
+            $values[] = $value;
+        }
+        return $values;
+    }
 }
 
 
 
 // Clase utilitaria para manejar URLs
-class UrlHelper {
-    public static function getUrl($uri) {
+class UrlHelper
+{
+    public static function getUrl($uri)
+    {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
         $host = $_SERVER['HTTP_HOST'];
         $port = $_SERVER['SERVER_PORT'];
@@ -56,8 +79,7 @@ class UrlHelper {
         if (($protocol === 'http://' && $port != 80) || ($protocol === 'https://' && $port != 443)) {
             $baseUrl .= ":" . $port;
         }
-        $fullUrl = $baseUrl."/guiastur". $uri;
+        $fullUrl = $baseUrl . "/guiastur" . $uri;
         return $fullUrl;
     }
 }
-

@@ -7,7 +7,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/U
 
 class GuiaRepository implements IGuiaRepository
 {
-    public function find($id): Guia
+    public function find(string $id): Guia
     {
         try {
             return Guia::find($id);
@@ -60,7 +60,7 @@ class GuiaRepository implements IGuiaRepository
         }
     }
 
-    public function delete($id): void
+    public function delete(string $id): void
     {
         try {
             $guia = $this->find($id);

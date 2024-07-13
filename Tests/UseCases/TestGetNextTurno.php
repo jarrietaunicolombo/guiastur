@@ -55,11 +55,11 @@ class TestGetNextTurnoUseCase
             <TR>
                 <TD>" . $turno->getId() . "</td>
                 <TD>" . $turno->getNumero() . "</td>
-                <TD>" . ($turno->getFechaUso() !== NULL ? $turno->getFechaUso()->format("Y-m-d H:i:s") : "") . "</td>
+                <TD>" . ($turno->getFechaUso() !== null ? $turno->getFechaUso()->format("Y-m-d H:i:s") : "") . "</td>
                 <TD>" . $turno->getUsuarioUso() . "</td>
-                <TD>" . ($turno->getFechaSalida() !== NULL ? $turno->getFechaSalida()->format("Y-m-d H:i:s") : "") . "</td>
+                <TD>" . ($turno->getFechaSalida() !== null ? $turno->getFechaSalida()->format("Y-m-d H:i:s") : "") . "</td>
                 <TD>" . $turno->getUsuarioUso() . "</td>
-                <TD>" . ($turno->getFechaRegreso() !== NULL ? $turno->getFechaRegreso()->format("Y-m-d H:i:s") : "") . "</td>
+                <TD>" . ($turno->getFechaRegreso() !== null ? $turno->getFechaRegreso()->format("Y-m-d H:i:s") : "") . "</td>
                 <TD>" . $turno->getUsuarioUso() . "</td>
                 <TD>" . $turno->getObservaciones() . "</td>
                 <TD>" . $turno->getGuia()->getCedula() . "</td>

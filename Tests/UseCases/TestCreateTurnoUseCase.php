@@ -16,7 +16,7 @@ class TestCreateTurnoUseCase
             // Arrange
              $numero = 0 ;
              $estado =  TurnoStatusEnum::CREATED;
-             $observaciones = NULL;
+             $observaciones = null;
              $guia_id = '7654321';
              $atencion_id = 2;
              $usuario_registro = $guia_id;

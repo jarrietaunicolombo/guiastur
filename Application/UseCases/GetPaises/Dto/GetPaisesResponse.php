@@ -3,7 +3,7 @@
 class GetPaisesResponse{
     private $paises;
     public function __construct(array $paises){
-        if ($paises === NULL) {
+        if ($paises === null) {
             $paises = array();
         }
         $this->paises = $paises;
@@ -20,10 +20,10 @@ class PaisResponse{
     private $bandera;
 
     public function __construct(int $id, string $nombre, string $bandera = null) {
-        if($id === NULL || $id < 1) {
+        if($id === null || $id < 1) {
             throw new \InvalidArgumentException("El Id es requerido para Obtener los Paises");
         }
-        if($nombre === NULL || empty(trim($nombre))) {
+        if($nombre === null || empty(trim($nombre))) {
             throw new \InvalidArgumentException("El Nombre es requerido para Obtener los Paises");
         }
 

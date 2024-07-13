@@ -7,7 +7,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/U
 
 class PaisRepository implements IPaisRepository
 {
-    public function find($id): Pais
+    public function find(int $id): Pais
     {
         try {
             return Pais::find($id);
@@ -61,7 +61,7 @@ class PaisRepository implements IPaisRepository
         }
     }
 
-    public function delete($id): bool
+    public function delete(int $id): bool
     {
         try {
             $Pais = $this->find($id);

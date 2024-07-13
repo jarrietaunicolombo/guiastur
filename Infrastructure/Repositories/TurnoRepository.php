@@ -8,7 +8,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/U
 
 class TurnoRepository implements ITurnoRepository
 {
-    public function find($id): Turno
+    public function find(int $id): Turno
     {
         try {
             return Turno::find($id);
@@ -62,7 +62,7 @@ class TurnoRepository implements ITurnoRepository
         }
     }
 
-    public function delete($id): bool
+    public function delete(int $id): bool
     {
         try {
             $Turno = $this->find($id);
@@ -111,7 +111,7 @@ class TurnoRepository implements ITurnoRepository
             $turno = Turno::find("first",
                                 array("conditions"=>
                                         array("atencion_id = ? AND estado = ? AND fecha_uso is ?"
-                                                ,$atencionId, $estado, NULL)));
+                                                ,$atencionId, $estado, null)));
             if(!isset($turno)) {
                 throw new NotFoundEntryException("No existen turnos disponibles para la Atención Id: $atencionId");
             }

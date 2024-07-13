@@ -6,7 +6,7 @@ class GetAtencionesByRecaladaResponse
     private $recalada;
     private $atenciones;
 
-    public function __construct(BuqueResponse $buque = NULL, RecaladaResponse $recalada  = NULL, array $atenciones = array())
+    public function __construct(BuqueResponse $buque = null, RecaladaResponse $recalada  = null, array $atenciones = array())
     {
         $this->buque = $buque;
         $this->recalada = $recalada;
@@ -107,9 +107,9 @@ class AtencionResponse {
         int $total_turnos = 0,
         int $total_turnos_creados = 0,
         int $turnos_disponibles = 0,
-        string $observaciones = NULL,
-        string $supervisor_id = NULL,
-        string $supervisor_nombre = NULL
+        string $observaciones = null,
+        string $supervisor_id = null,
+        string $supervisor_nombre = null
     ) {
         if ($id < 1) {
             throw new \InvalidArgumentException("El ID de la atención es requerido para Obtener Atenciones Por Recalada");

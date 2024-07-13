@@ -11,19 +11,19 @@ class EmailDestinationModel{
                     , string $subject
                     , string $body)
     {
-        if($destinationEmail === NULL || empty(trim($destinationEmail))){
+        if($destinationEmail === null || empty(trim($destinationEmail))){
             throw new \InvalidArgumentException("El Email del destinatario es requerido para enviar la notificacion");
         }
 
-        if($destinationName === NULL || empty(trim($destinationName))){
+        if($destinationName === null || empty(trim($destinationName))){
             throw new \InvalidArgumentException("El Nombre del destinatario es requerido para enviar la notificacion");
         }
 
-        if($subject === NULL || empty(trim($subject))){
+        if($subject === null || empty(trim($subject))){
             throw new \InvalidArgumentException("El Asunto es requerido para enviar la notificacion");
         }
         
-        if($body === NULL || empty(trim($body))){
+        if($body === null || empty(trim($body))){
             throw new \InvalidArgumentException("El Cuerpo del mensaje es requerido para enviar la notificacion");
         }
 

@@ -46,6 +46,7 @@ class ClassLoader
         'GetRolesQueryHandler' => 'Application/Actions/Queries/GetRolesQueryHandler.php',
         'ValidateRecaladaQueryHandler' => 'Application/Actions/Queries/ValidateRecaladaQueryHandler.php',
         'GetUserByTokenQueryHandler' => 'Application/Actions/Queries/GetUserByTokenQueryHandler.php',
+        'GetBuquesQueryHandler' => 'Application/Actions/Queries/GetBuquesQueryHandler.php',
        
         // Application UseCases
         'CreateAtencionUseCase' => 'Application/UseCases/CreateAtencion/CreateAtencionUseCase.php',
@@ -67,6 +68,7 @@ class ClassLoader
         'CreateRecaladaUseCase' => 'Application/UseCases/CreateRecalada/CreateRecaladaUseCase.php',
         'GetPaisesService' => 'Application/UseCases/GetPaises/GetPaisesService.php',
         'GetRolesService' => 'Application/UseCases/GetRoles/GetRolesService.php',
+        'GetBuquesService' => 'Application/UseCases/GetBuques/GetBuquesService.php',
     ];
 
     public static function loadClass($className)

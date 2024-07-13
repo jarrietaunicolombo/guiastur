@@ -22,15 +22,15 @@ class CreateTurnoRequest
             throw new InvalidArgumentException("El Numero del Turno es requerido para crear un nuevo Turno");
         }
 
-        if ($guia_id === NULL || empty(trim($guia_id))) {
+        if ($guia_id === null || empty(trim($guia_id))) {
             throw new InvalidArgumentException("El Id del Guia es requerido para crear un nuevo Turno");
         }
 
-        if ($atencion_id === NULL || $atencion_id <= 0) {
+        if ($atencion_id === null || $atencion_id <= 0) {
             throw new InvalidArgumentException("El Id de la Atencion es requerido para crear un nuevo Turno");
         }
 
-        if ($usuario_registro === NULL || $usuario_registro <= 0) {
+        if ($usuario_registro === null || $usuario_registro <= 0) {
             throw new InvalidArgumentException("El Id del Usuario que registra es requerido para crear un nuevo Turno");
         }
 

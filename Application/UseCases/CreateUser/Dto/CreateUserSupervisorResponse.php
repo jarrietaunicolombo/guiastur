@@ -18,8 +18,8 @@ class CreateUserSupervisorResponse extends CreateUserSupervisorRequest
         string $genero,
         DateTime $fecha_nacimiento,
         string $telefono,
-        string $foto = NULL,
-        string $observaciones = NULL,
+        string $foto = null,
+        string $observaciones = null,
         int $usuario_create,
         DateTime $fecha_registro
     ) {
@@ -58,27 +58,27 @@ class CreateUserSupervisorResponse extends CreateUserSupervisorRequest
             throw new InvalidArgumentException("El Usuario creador  es requerido al crear un nuevo Usuario Supervisor");
         }
 
-        if ($cedula === NULL || empty(trim($cedula))) {
+        if ($cedula === null || empty(trim($cedula))) {
             throw new InvalidArgumentException("La Cedula es requerida al crear un nuevo usuario guia");
         }
 
-        if ($rnt === NULL || empty(trim($rnt))) {
+        if ($rnt === null || empty(trim($rnt))) {
             throw new InvalidArgumentException("El RNT  es requerido al crear un nuevo Usuario Supervisor ");
         }
 
-        if ($nombres === NULL || empty(trim($nombres))) {
+        if ($nombres === null || empty(trim($nombres))) {
             throw new InvalidArgumentException("El Nombre  es requerido al crear un nuevo Usuario Supervisor ");
         }
 
-        if ($apellidos === NULL || empty(trim($apellidos))) {
+        if ($apellidos === null || empty(trim($apellidos))) {
             throw new InvalidArgumentException("Los Apellidos son requeridos ");
         }
 
-        if ($genero === NULL || empty(trim($genero))) {
+        if ($genero === null || empty(trim($genero))) {
             throw new InvalidArgumentException("El Genero  es requerido al crear un nuevo Usuario Supervisor ");
         }
 
-        if ($fecha_nacimiento === NULL) {
+        if ($fecha_nacimiento === null) {
             throw new InvalidArgumentException("La Fecha de nacimiento es requerida ");
         }
 
@@ -86,16 +86,16 @@ class CreateUserSupervisorResponse extends CreateUserSupervisorRequest
             throw new InvalidArgumentException("La Fecha de nacimiento no puede ser mayor a la fecha de creacion del nuevo usuario guia");
         }
 
-        if ($telefono === NULL || empty(trim($telefono))) {
+        if ($telefono === null || empty(trim($telefono))) {
             throw new InvalidArgumentException("El Telefono   es requerido al crear un nuevo Usuario Supervisor ");
         }
 
-        if ($fecha_registro === NULL) {
+        if ($fecha_registro === null) {
             throw new InvalidArgumentException("La Fecha de registro es requerida al crear un nuevo Usuario Supervisor ");
         }
 
         
-        if ($usuario_create === NULL) {
+        if ($usuario_create === null) {
             throw new InvalidArgumentException("El Usuario que registra es requerido al crear un nuevo Usuario Supervisor ");
         }
 

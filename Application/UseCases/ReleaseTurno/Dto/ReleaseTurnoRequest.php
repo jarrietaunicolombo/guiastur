@@ -7,11 +7,11 @@ class ReleaseTurnoRequest
 
     public function __construct(int $turnoId, int $usuarioIdUso)
     {
-        if ($turnoId === NULL || $usuarioIdUso < 1) {
+        if ($turnoId === null || $usuarioIdUso < 1) {
             throw new InvalidArgumentException("El Id del turno es requerido para Liberare el Turno");
         }
 
-        if ($usuarioIdUso === NULL || $usuarioIdUso < 1) {
+        if ($usuarioIdUso === null || $usuarioIdUso < 1) {
             throw new InvalidArgumentException("El Id Usuario que libera es requerido para Liberare el Turno");
         }
         $this->turnoId = $turnoId;
