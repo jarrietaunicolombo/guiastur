@@ -138,11 +138,11 @@ class AtencionResponse {
         return $this->id;
     }
 
-    public function getFechaInicio() {
+    public function getFechaInicio() : DateTime {
         return $this->fecha_inicio;
     }
 
-    public function getFechaCierre() {
+    public function getFechaCierre() : DateTime {
         return $this->fecha_cierre;
     }
 
@@ -162,10 +162,10 @@ class AtencionResponse {
         return $this->observaciones;
     }
 
-    public function getSupervisorId() {
+    public function getSupervisorId() : string {
         return $this->supervisor_id;
     }
-    public function getSupervisorNombre() {
+    public function getSupervisorNombre() : string {
         return $this->supervisor_nombre;
     }
 }

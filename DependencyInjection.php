@@ -265,6 +265,27 @@ class DependencyInjection
         return new GetBuquesService($query);
     }
 
+    public static function getRecaladasService(): IGetRecaladasService
+    {
+        ClassLoader::loadClass("RecaladaRepository");  
+        ClassLoader::loadClass("GetRecaladasQueryHandler");
+        ClassLoader::loadClass("GetRecaladasService");
+        $repository = new RecaladaRepository();
+        $query = new GetRecaladasQueryHandler($repository);
+        return new GetRecaladasService($query);
+    }
+
+
+    public static function getRecaladasByBuqueService(): IGetRecaladasByBuqueService
+    {
+        ClassLoader::loadClass("RecaladaRepository");  
+        ClassLoader::loadClass("GetRecaladasByBuqueQueryHandler");
+        ClassLoader::loadClass("GetRecaladasByBuqueService");
+        $repository = new RecaladaRepository();
+        $query = new GetRecaladasByBuqueQueryHandler($repository);
+        return new GetRecaladasByBuqueService($query);
+    }
+
 }
 
 

@@ -1,7 +1,9 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetBuques/Dto/GetBuquesResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetRecaladas/Dto/GetRecaladasResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetRecaladasInThePort/Dto/GetRecaladasInThePortResponse.php";
+
 SessionUtility::startSession();
 $usuarioLogin = $_SESSION[ItemsInSessionEnum::USER_LOGIN];
 if (!isset($usuarioLogin)) {
@@ -12,7 +14,7 @@ if (!isset($usuarioLogin)) {
     header('Location: ../Users/login.php');
     exit;
 }
-$buquesResponse = @$_SESSION[ItemsInSessionEnum::LIST_BUQUES] ?? null;
+$recaladasResponse = @$_SESSION[ItemsInSessionEnum::LIST_RECALADAS] ?? null;
 $errorMessage = $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ?? "";
 $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 ?>
@@ -123,7 +125,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 
 <body>
     <div class="header">
-        <h1>Reporte de Buques</h1>
+        <h1>Reporte de Recaladas</h1>
     </div>
     <div class="container">
         <?php if ($errorMessage): ?>
@@ -132,44 +134,41 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         <?php if ($infoMessage): ?>
             <span class="message success"><?php echo $infoMessage; ?></span>
         <?php endif; ?>
-        <?php if ($buquesResponse === null || count($buquesResponse->getBuques()) < 1): ?>
-            <span class="message error">No existe informacion sobre buques</span>
+        <?php if ($recaladasResponse === null || count($recaladasResponse->getRecaladas()) < 1): ?>
+            <span class="message error">No existe informacion sobre Recaladas</span>
         <?php else: ?>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>CODIGO</th>
-                            <th>NOMBRE</th>
-                            <!-- <th>FOTO</th> -->
-                            <th>RECALADAS</th>
+                            <th>BUQUE</th>
+                            <th>ARRIBO</th>
+                            <th>ZARPE</th>
+                            <th>TURISTAS</th>
+                            <th>PAIS</th>
                             <th>ATENCIONES</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($buquesResponse->getBuques() as $buque): ?>
+                        <?php foreach ($recaladasResponse->getRecaladas() as $recalada): ?>
                             <tr>
-                                <td><?=  $buque->getId(); ?></td>
-                                <td><?=  $buque->getCodigo(); ?></td>
-                                <td><?=  $buque->getNombre(); ?></td>
-                                <!-- <td>
-                                    <?php if ($buque->getFoto()): ?>
-                                        <img src="<?php echo $buque->getFoto(); ?>" alt="Foto del Buque" class="photo">
-                                    <?php else: ?>
-                                        No disponible
-                                    <?php endif; ?>
-                                </td> -->
-                                <td><?php
-                                     if ($buque->getTotalRecaladas() > 0):
+                                <td><?=  $recalada->getRecaladaId(); ?></td>
+                                <td><?=  $recalada->getBuqueNombre(); ?></td>
+                                <td><?=  $recalada->getFechaArribo()->format("Y-m-d H:i:s"); ?></td>
+                                <td><?=  $recalada->getFechaZarpe()->format("Y-m-d H:i:s"); ?></td>
+                                <td><?=  $recalada->getTotalTuristas(); ?></td>
+                                <td><?=  $recalada->getPaisNombre(); ?></td>
+                                <td>
+                                <?php
+                                     if ($recalada->getNumeroAtenciones() > 0):
                                     ?>
-                                        <a href="../Recaladas/index.php?action=listbybuque&buque=<?= $buque->getId()?>"><?=  $buque->getTotalRecaladas() ?></a>
+                                        <a href="../Atenciones/index.php?action=listbyrecalada&recalada=<?= $recalada->getRecaladaId()?>"><?=  $recalada->getNumeroAtenciones() ?></a>
                                     <?php
                                     else :
-                                      echo  $buque->getTotalRecaladas();
+                                      echo  $recalada->getNumeroAtenciones();
                                      endif;  ?>
                                     </td>
-                                <td><?= $buque->getTotalAtenciones() ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -182,7 +181,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 </html>
 
 <?php
-// SessionUtility::deleteItemInSession(ItemsInSessionEnum::LIST_BUQUES);
+// SessionUtility::deleteItemInSession(ItemsInSessionEnum::LIST_RECALADAS);
 ;
 SessionUtility::deleteItemInSession(ItemsInSessionEnum::ERROR_MESSAGE);
 SessionUtility::deleteItemInSession(ItemsInSessionEnum::INFO_MESSAGE);

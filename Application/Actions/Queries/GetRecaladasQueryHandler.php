@@ -1,9 +1,9 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetRecaladas/Dto/GetRecaladasResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetRecaladasInThePortQuery.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetRecaladasQuery.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IRecaladaRepository.php";
 
-class GetRecaladasInThePortQueryHandler implements IGetRecaladasInThePortQuery
+class GetRecaladasQueryHandler implements IGetRecaladasQuery
 {
 
     private $recaladaRepository;
@@ -15,10 +15,10 @@ class GetRecaladasInThePortQueryHandler implements IGetRecaladasInThePortQuery
 
     public function handler(): GetRecaladasResponse
     {
-        $recaladas = $this->recaladaRepository->findRecaladaInThePort();
-        $getRecaladasInThePort = array();
+        $recaladas = $this->recaladaRepository->findAll();
+        $recaladasEntities = array();
         foreach ($recaladas as $recalada) {
-            $getRecaladasInThePort[] = new RecaladaResponseDto(
+            $recaladasEntities[] = new RecaladaResponseDto(
                 $recalada->id,
                 $recalada->buque->id,
                 $recalada->buque->nombre,
@@ -31,6 +31,6 @@ class GetRecaladasInThePortQueryHandler implements IGetRecaladasInThePortQuery
                 count($recalada->atencions)
             );
         }
-        return new GetRecaladasResponse($getRecaladasInThePort);
+        return new GetRecaladasResponse($recaladasEntities);
     }
 }

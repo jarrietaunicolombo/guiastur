@@ -212,11 +212,6 @@ class ActivateUserAccountController
             $_SESSION[ItemsInSessionEnum::ERROR_MESSAGES] = $errorMessages;
             $_SESSION[ItemsInSessionEnum::USER_REQUEST_ACTIVATING] = $request;
             header("Location: ../../Views/Users/activate.php");
-        } catch (InvalidRequestParameterException $e) {
-            $trasactionDb->rollback();
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGES] = $errorMessages;
-            $_SESSION[ItemsInSessionEnum::USER_REQUEST_ACTIVATING] = $request;
-            header("Location: ../../Views/Users/activate.php");
         } catch (DuplicateEntryException $e) {
             $trasactionDb->rollback();
             $_SESSION[ItemsInSessionEnum::ERROR_MESSAGES] = $errorMessages;
