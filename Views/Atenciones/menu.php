@@ -1,8 +1,6 @@
+
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
-// require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-// require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/Users/LoginController.php";
-// LoginController::validateAccess();
 SessionUtility::startSession();
 ?>
 <!DOCTYPE html>
@@ -31,17 +29,16 @@ SessionUtility::startSession();
 </head>
 <body>
 
-<h2><?= @$_SESSION[ItemsInSessionEnum::WELCOME_MESSAGE]?></h2>
+<h2><?= @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE]?></h2>
 
-<h3>Menú Principal</h3>
+<h3>Menú Recaladas</h3>
 <div class="menu">
-    <a href="Users/menu.php">Usuario</a>
-    <a href="Buques/menu.php">Buques</a>
-    <a href="Paises/menu.php">Paises</a>
-    <a href="Recaladas/menu.php">Recaladas</a>
-    <a href="Atenciones/menu.php">Atenciones</a>
-    <a href="Turnos/menu.php">Turnos</a>
-    <a href="Users/index.php?action=logout">Salir</a>
+    <a href="index.php?action=create">Crear</a>
+    <a href="index.php">Buscar</a>
+    <a href="index.php?action=listall">Mostrar todas</a>
+    <a href="index.php?action=listinport">Mostrar En el Puerto</a>
+    <a href="index.php">Editar</a>
+    <a href="../index.php">Menu Principal</a>
 </div>
 
 </body>

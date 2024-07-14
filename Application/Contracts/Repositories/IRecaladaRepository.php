@@ -9,4 +9,5 @@ interface IRecaladaRepository
     public function delete(int $id): bool;
     public function validateRecalada(int $buqueId, DateTime $fecha): bool;
     public function findRecaladaInThePort(): array;
+    public function findByBuqueId(int $buqueId): array;
 }

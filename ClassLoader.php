@@ -47,6 +47,8 @@ class ClassLoader
         'ValidateRecaladaQueryHandler' => 'Application/Actions/Queries/ValidateRecaladaQueryHandler.php',
         'GetUserByTokenQueryHandler' => 'Application/Actions/Queries/GetUserByTokenQueryHandler.php',
         'GetBuquesQueryHandler' => 'Application/Actions/Queries/GetBuquesQueryHandler.php',
+        'GetRecaladasQueryHandler' => 'Application/Actions/Queries/GetRecaladasQueryHandler.php',
+        'GetRecaladasByBuqueQueryHandler' => 'Application/Actions/Queries/GetRecaladasByBuqueQueryHandler.php',
        
         // Application UseCases
         'CreateAtencionUseCase' => 'Application/UseCases/CreateAtencion/CreateAtencionUseCase.php',
@@ -69,6 +71,8 @@ class ClassLoader
         'GetPaisesService' => 'Application/UseCases/GetPaises/GetPaisesService.php',
         'GetRolesService' => 'Application/UseCases/GetRoles/GetRolesService.php',
         'GetBuquesService' => 'Application/UseCases/GetBuques/GetBuquesService.php',
+        'GetRecaladasService' => 'Application/UseCases/GetRecaladas/GetRecaladasService.php',
+        'GetRecaladasByBuqueService' => 'Application/UseCases/GetRecaladasByBuque/GetRecaladasByBuqueService.php',
     ];
 
     public static function loadClass($className)

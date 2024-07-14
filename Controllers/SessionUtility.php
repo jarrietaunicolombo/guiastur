@@ -39,19 +39,26 @@ abstract class ItemsInSessionEnum
     const LIST_SUPERVISORES = "Supervisor.List";
     const FOUND_BUQUE = "Buque.Find";
     const LIST_BUQUES = "Buque.List";
+    const BUQUE_REQUEST_CREATING = "Buque.Request.Creation";
     const FOUND_PAIS = "Pais.Find";
     const LIST_PAISES = "Pais.List";
+    const PAIS_REQUEST_CREATING = "Pais.Request.Creation";
     const FOUND_ROL = "Rol.Find";
     const LIST_ROLES = "Rol.List";
+    const ROL_REQUEST_CREATING = "Rol.Request.Creation";
     const FOUND_RECALADA = "Recalada.Find";
     const LIST_RECALADAS = "Recalada.List";
+    const RECALADA_REQUEST_CREATING = "Recalada.Request.Creation";
     const FOUND_ATENCION = "Atencion.Find";
     const LIST_ATENCIONES = "Atencion.List";
+    const ATENCION_REQUEST_CREATING = "Atencion.Request.Creation";
     const FOUND_TURNO = "Turno.Find";
     const LIST_TURNOS = "Turno.List";
+    const TURNO_REQUEST_CREATING = "Turno.Request.Creation";
     const ERROR_MESSAGE = "Error.Message";
     const INFO_MESSAGE = "Information.Message";
     const ERROR_MESSAGES = "Error.Messages";
+    const WELCOME_MESSAGE =  "Welcome.Message";
 
     public static function getConstansValues(): array
     {

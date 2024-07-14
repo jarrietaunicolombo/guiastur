@@ -121,4 +121,23 @@ class RecaladaRepository implements IRecaladaRepository
             throw Utility::errorHandler($e);
         }
     }
+
+    public function findByBuqueId(int $buqueId): array
+    {
+        try {
+            $recaladas = Recalada::find(
+                "all",
+                array(
+                    "conditions"
+                    => array(
+                            "buque_id = ?",
+                            $buqueId
+                        )
+                )
+            );
+            return $recaladas;
+        } catch (Exception $e) {
+            throw Utility::errorHandler($e);
+        }
+    }
 }

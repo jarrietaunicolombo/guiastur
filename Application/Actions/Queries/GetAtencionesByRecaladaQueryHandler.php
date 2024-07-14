@@ -19,7 +19,7 @@ class GetAtencionesByRecaladaQueryHandler implements IGetAtencionesByRecaladaQue
     public function handler(GetAtencionesByRecaladaRequest $request): GetAtencionesByRecaladaResponse
     {
 
-        $atencionesEntities = $this->atencionRepository->findByRecalada($request->getId());
+        $atencionesEntities = $this->atencionRepository->findByRecalada($request->getRecaladaId());
         if (count($atencionesEntities) < 1) {
             return new GetAtencionesByRecaladaResponse(null, null, array());
         }
@@ -31,8 +31,8 @@ class GetAtencionesByRecaladaQueryHandler implements IGetAtencionesByRecaladaQue
         foreach ($atencionesEntities as $atencionEntity) {
             $atencionResponse = new AtencionResponse(
                 $atencionEntity->id,
-                $atencionEntity->fecha_inicio,
-                $atencionEntity->fecha_cierre,
+                new \DateTime($atencionEntity->fecha_inicio),
+                new \DateTime($atencionEntity->fecha_cierre),
                 $atencionEntity->total_turnos,
                 count($atencionEntity->turnos),
                 ($atencionEntity->total_turnos - count($atencionEntity->turnos)),

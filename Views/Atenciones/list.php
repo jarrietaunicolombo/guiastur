@@ -1,7 +1,8 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetBuques/Dto/GetBuquesResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaResponse.php";
+
 SessionUtility::startSession();
 $usuarioLogin = $_SESSION[ItemsInSessionEnum::USER_LOGIN];
 if (!isset($usuarioLogin)) {
@@ -12,7 +13,7 @@ if (!isset($usuarioLogin)) {
     header('Location: ../Users/login.php');
     exit;
 }
-$buquesResponse = @$_SESSION[ItemsInSessionEnum::LIST_BUQUES] ?? null;
+$atencionesResponse = @$_SESSION[ItemsInSessionEnum::LIST_ATENCIONES] ?? null;
 $errorMessage = $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ?? "";
 $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 ?>
@@ -123,57 +124,59 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 
 <body>
     <div class="header">
-        <h1>Reporte de Buques</h1>
+        <h1>Atenciones Por Recalada </h1>
     </div>
     <div class="container">
         <?php if ($errorMessage): ?>
-            <span class="message error"><?php echo $errorMessage; ?></span>
+            <span class="message error"><?=  $errorMessage; ?></span>
         <?php endif; ?>
         <?php if ($infoMessage): ?>
-            <span class="message success"><?php echo $infoMessage; ?></span>
+            <span class="message success"><?= $infoMessage; ?></span>
         <?php endif; ?>
-        <?php if ($buquesResponse === null || count($buquesResponse->getBuques()) < 1): ?>
-            <span class="message error">No existe informacion sobre buques</span>
-        <?php else: ?>
+        <?php if ($atencionesResponse === null || count($atencionesResponse->getAtenciones()) < 1): ?>
+            <span class="message error">No existe informacion sobre Atenciones para este Recalada</span>
+        <?php else: 
+            $buque = $atencionesResponse->getBuque();
+            $recalada = $atencionesResponse->getRecalada();
+            $atenciones = $atencionesResponse->getAtenciones();
+            ?>
             <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>CODIGO</th>
-                            <th>NOMBRE</th>
-                            <!-- <th>FOTO</th> -->
-                            <th>RECALADAS</th>
-                            <th>ATENCIONES</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($buquesResponse->getBuques() as $buque): ?>
-                            <tr>
-                                <td><?=  $buque->getId(); ?></td>
-                                <td><?=  $buque->getCodigo(); ?></td>
-                                <td><?=  $buque->getNombre(); ?></td>
-                                <!-- <td>
-                                    <?php if ($buque->getFoto()): ?>
-                                        <img src="<?php echo $buque->getFoto(); ?>" alt="Foto del Buque" class="photo">
-                                    <?php else: ?>
-                                        No disponible
-                                    <?php endif; ?>
-                                </td> -->
-                                <td><?php
-                                     if ($buque->getTotalRecaladas() > 0):
-                                    ?>
-                                        <a href="../Recaladas/index.php?action=listbybuque&buque=<?= $buque->getId()?>"><?=  $buque->getTotalRecaladas() ?></a>
-                                    <?php
-                                    else :
-                                      echo  $buque->getTotalRecaladas();
-                                     endif;  ?>
-                                    </td>
-                                <td><?= $buque->getTotalAtenciones() ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+            <table> 
+                <tr> 
+                    <th>BUQUE</th> 
+                    <th>RECALADA ID</th> 
+                    <th>PAIS</th> 
+                </tr>
+                <tr>
+                    <td><?= $buque->getNombre() ?></td> 
+                    <td><?= $recalada->getId() ?></td> 
+                    <td><?= $recalada->getPais() ?></td> 
+                 </tr>
+          </table>
+        <table> 
+            <tr> 
+                <th>ID</th> 
+                <th>INICIO</th> 
+                <th>CIERRE</th> 
+                <th>TURNOS</th> 
+                <th>TURNOS CREADOS</th> 
+                <th>TURNOS DISPONIBLES</th> 
+                <th>SUPERVISOR</th> 
+            </tr>
+          <?php
+                foreach ($atenciones as $atencionDto):
+            ?>
+            <tr>
+                <td><?= $atencionDto->getId() ?></td> 
+                <td><?= $atencionDto->getFechaInicio()->format("Y-m-d H:i:s") ?></td> 
+                <td><?= $atencionDto->getFechaCierre()->format("Y-m-d H:i:s") ?></td> 
+                <td><?= $atencionDto->getTotalTurnos() ?></td> 
+                <td><?= $atencionDto->getTotalTurnosCreados() ?></td> 
+                <td><?= $atencionDto->getTurnosDisponibles() ?></td> 
+                <td><?= $atencionDto->getSupervisorNombre() ?></td> 
+            </tr>
+        <?php endforeach; ?>
+        </table>
             </div>
         <?php endif; ?>
     </div>
@@ -182,7 +185,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 </html>
 
 <?php
-// SessionUtility::deleteItemInSession(ItemsInSessionEnum::LIST_BUQUES);
+// SessionUtility::deleteItemInSession(ItemsInSessionEnum::LIST_ATENCIONES);
 ;
 SessionUtility::deleteItemInSession(ItemsInSessionEnum::ERROR_MESSAGE);
 SessionUtility::deleteItemInSession(ItemsInSessionEnum::INFO_MESSAGE);

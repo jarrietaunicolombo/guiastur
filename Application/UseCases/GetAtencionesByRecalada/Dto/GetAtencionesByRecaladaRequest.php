@@ -13,7 +13,7 @@ class GetAtencionesByRecaladaRequest{
     }
 
 
-    public function getId()
+    public function getRecaladaId()
     {
         return $this->recaladaId;
     }

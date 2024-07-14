@@ -27,7 +27,7 @@ class LoginController
             $InformationMessage = "Hola " . $loginResponse->getRol() . " " . $loginResponse->getNombre();
             SessionUtility::startSession();
             $_SESSION[ItemsInSessionEnum::USER_LOGIN]=$loginResponse;
-            $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] = $InformationMessage;
+            $_SESSION[ItemsInSessionEnum::WELCOME_MESSAGE] = $InformationMessage;
             header("Location: ../../Views/index.php");
         } catch (Exception $e) { 
             SessionUtility::clearAllSession();
