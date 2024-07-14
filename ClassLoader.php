@@ -49,6 +49,7 @@ class ClassLoader
         'GetBuquesQueryHandler' => 'Application/Actions/Queries/GetBuquesQueryHandler.php',
         'GetRecaladasQueryHandler' => 'Application/Actions/Queries/GetRecaladasQueryHandler.php',
         'GetRecaladasByBuqueQueryHandler' => 'Application/Actions/Queries/GetRecaladasByBuqueQueryHandler.php',
+        'GetNextTurnosAllQueryHandler' => 'Application/Actions/Queries/GetNextTurnosAllQueryHandler.php',
        
         // Application UseCases
         'CreateAtencionUseCase' => 'Application/UseCases/CreateAtencion/CreateAtencionUseCase.php',
@@ -62,7 +63,7 @@ class ClassLoader
         'GetBuqueByIdUseCase' => 'Application/UseCases/GetBuqueById/GetBuqueByIdUseCase.php',
         'GetNextTurnoUseCase' => 'Application/UseCases/GetNextTurno/GetNextTurnoUseCase.php',
         'GetRecaladasInThePortUseCase' => 'Application/UseCases/GetRecaladasInThePort/GetRecaladasInThePortUseCase.php',
-        'GetTurnosByAtencionUseCase' => 'Application/UseCases/GetTurnosByAtencionUseCase/GetTurnosByAtencionUseCase.php',
+        'GetTurnosByAtencionUseCase' => 'Application/UseCases/GetTurnosByAtencion/GetTurnosByAtencionUseCase.php',
         'LoginUseCase' => 'Application/UseCases/Login/LoginUseCase.php',
         'ReleaseTurnoUseCase' => 'Application/UseCases/ReleaseTurno/ReleaseTurnoUseCase.php',
         'UseTurnoUseCase' => 'Application/UseCases/UseTurno/UseTurnoUseCase.php',
@@ -73,6 +74,7 @@ class ClassLoader
         'GetBuquesService' => 'Application/UseCases/GetBuques/GetBuquesService.php',
         'GetRecaladasService' => 'Application/UseCases/GetRecaladas/GetRecaladasService.php',
         'GetRecaladasByBuqueService' => 'Application/UseCases/GetRecaladasByBuque/GetRecaladasByBuqueService.php',
+        'GetNextTurnosAllService' => 'Application/UseCases/GetNextTurno/GetNextTurnosAllService.php',
     ];
 
     public static function loadClass($className)

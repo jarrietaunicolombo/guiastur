@@ -286,6 +286,17 @@ class DependencyInjection
         return new GetRecaladasByBuqueService($query);
     }
 
+
+    public static function getGetNextTurnosAllService(): IGetNextTurnosAllService
+    {
+        ClassLoader::loadClass("TurnoRepository");  
+        ClassLoader::loadClass("GetNextTurnosAllQueryHandler");
+        ClassLoader::loadClass("GetNextTurnosAllService");
+        $repository = new TurnoRepository();
+        $query = new GetNextTurnosAllQueryHandler($repository);
+        return new GetNextTurnosAllService($query);
+    }
+
 }
 
 
