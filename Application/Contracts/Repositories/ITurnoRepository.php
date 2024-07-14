@@ -10,4 +10,5 @@ interface ITurnoRepository
     public function findByAtencion(int $atencionId): array;
     public function findWithStateCreatedByAtencion(int $atencionId): array;
     public function findNexTurno(int $atencionId) : Turno;
+    public function findNexTurnosAll(): array;
 }

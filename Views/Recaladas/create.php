@@ -208,7 +208,7 @@ else if($infoMessage){
                 <form action="index.php" method="POST">
                     <input type="hidden" name="action" value="create">
                     <div class="form-group">
-                        <label for="buque_id">Buque ID:</label>
+                        <label for="buque_id">Buque:</label>
                         <select name="buque_id" id="buque_id" required>
                             <option value="" disabled selected>Seleccione uno...</option>
                             <?php
@@ -223,7 +223,7 @@ else if($infoMessage){
                     </div>
 
                     <div class="form-group">
-                        <label for="pais_id">País ID:</label>
+                        <label for="pais_id">País:</label>
                         <select name="pais_id" id="pais_id" required>
                             <option value="" disabled selected>Seleccione uno...</option>
                             <?php

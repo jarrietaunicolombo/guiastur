@@ -96,6 +96,7 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            margin-bottom: 10px;
         }
 
         .form-group input[type="submit"] {

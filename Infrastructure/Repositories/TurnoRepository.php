@@ -108,14 +108,61 @@ class TurnoRepository implements ITurnoRepository
     {
         try {
             $estado = TurnoStatusEnum::CREATED;
-            $turno = Turno::find("first",
-                                array("conditions"=>
-                                        array("atencion_id = ? AND estado = ? AND fecha_uso is ?"
-                                                ,$atencionId, $estado, null)));
-            if(!isset($turno)) {
+            $turno = Turno::find(
+                "first",
+                array(
+                    "conditions" =>
+                        array(
+                            "atencion_id = ? AND estado = ? AND fecha_uso is ?"
+                            ,
+                            $atencionId,
+                            $estado,
+                            null
+                        )
+                )
+            );
+            if (!isset($turno)) {
                 throw new NotFoundEntryException("No existen turnos disponibles para la Atención Id: $atencionId");
             }
-           return $turno;
+            return $turno;
+        } catch (Exception $e) {
+            $resul = Utility::getNotFoundRecordInfo($e->getMessage());
+            if (count($resul) > 0) {
+                $message = "No existe un " . $resul[UtilConstantsEnum::TABLE_NAME] . " con ID: " . $resul[UtilConstantsEnum::COLUMN_VALUE];
+                throw new NotFoundEntryException($message);
+            }
+            throw Utility::errorHandler($e);
+        }
+    }
+
+    public function findNexTurnosAll(): array
+    {
+        try {
+            $fecha = (new DateTime())->format('Y-m-d');
+            $atenciones = Atencion::find("all", array("conditions" => array("Date(fecha_inicio) = ?", $fecha)));
+            if (!isset($atenciones) ||  count($atenciones) == 0) {
+                throw new NotFoundEntryException("No existen atenciones programadas para hoy");
+            }
+            $nextTurnos = array();
+            $estado = TurnoStatusEnum::CREATED;
+            foreach ($atenciones as $atencion) {
+                $turno = Turno::find(
+                    "first",
+                    array(
+                        "conditions" =>
+                            array(
+                                "atencion_id = ? AND estado = ? AND fecha_uso is ?",
+                                $atencion->id,
+                                $estado,
+                                null
+                            )
+                    )
+                );
+                if (isset($turno)) {
+                    $nextTurnos[] = $turno;
+                }
+            }
+            return $nextTurnos;
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -126,3 +173,4 @@ class TurnoRepository implements ITurnoRepository
         }
     }
 }
+
