@@ -31,13 +31,13 @@ SessionUtility::startSession();
 
 <h2><?= @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE]?></h2>
 
-<h3>Menú Recaladas</h3>
+<h3>Menú Atenciones</h3>
 <div class="menu">
     <a href="index.php?action=create">Crear</a>
-    <a href="index.php">Buscar</a>
-    <a href="index.php?action=listall">Mostrar todas</a>
-    <a href="index.php?action=listinport">Mostrar En el Puerto</a>
-    <a href="index.php">Editar</a>
+    <!-- <a href="index.php">Buscar</a> -->
+    <!-- <a href="index.php?action=listall">Mostrar todas</a> -->
+    <a href="">Mostrar En el Puerto</a>
+    <!-- <a href="index.php">Editar</a> -->
     <a href="../index.php">Menu Principal</a>
 </div>
 

@@ -20,6 +20,8 @@ class UseTurnoCommandHandler implements IUseTurnoCommand{
         $turno->estado = $estado;
         $turno->fecha_uso = new DateTime();
         $turno->usuario_uso = $request->getUsuarioUsoId();
+        $observaciones =  $request->getObservaciones() ?? null;
+        $turno->observaciones = (isset($observaciones) && !empty(trim($observaciones)))? "Usado: ".$observaciones : null;
         $turno = $this->turnoRepository->update($turno);
         return new UseTurnoResponse(
             $turno->id,

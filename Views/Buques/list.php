@@ -150,9 +150,9 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                     <tbody>
                         <?php foreach ($buquesResponse->getBuques() as $buque): ?>
                             <tr>
-                                <td><?=  $buque->getId(); ?></td>
-                                <td><?=  $buque->getCodigo(); ?></td>
-                                <td><?=  $buque->getNombre(); ?></td>
+                                <td><?= $buque->getId(); ?></td>
+                                <td><?= $buque->getCodigo(); ?></td>
+                                <td><?= $buque->getNombre(); ?></td>
                                 <!-- <td>
                                     <?php if ($buque->getFoto()): ?>
                                         <img src="<?php echo $buque->getFoto(); ?>" alt="Foto del Buque" class="photo">
@@ -160,15 +160,10 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                                         No disponible
                                     <?php endif; ?>
                                 </td> -->
-                                <td><?php
-                                     if ($buque->getTotalRecaladas() > 0):
-                                    ?>
-                                        <a href="../Recaladas/index.php?action=listbybuque&buque=<?= $buque->getId()?>"><?=  $buque->getTotalRecaladas() ?></a>
-                                    <?php
-                                    else :
-                                      echo  $buque->getTotalRecaladas();
-                                     endif;  ?>
-                                    </td>
+                                <td>
+                                    <a
+                                        href="../Recaladas/index.php?action=listbybuque&buque=<?= $buque->getId() ?>"><?= $buque->getTotalRecaladas() ?></a>
+                                </td>
                                 <td><?= $buque->getTotalAtenciones() ?></td>
                             </tr>
                         <?php endforeach; ?>

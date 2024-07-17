@@ -64,22 +64,22 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         }
 
         .message {
-            padding: 10px;
-            margin: 20px 0;
-            border-radius: 5px;
-            font-weight: bold;
+            padding: 8px 12px;
+            margin: 10px 0;
+            border-radius: 3px;
+            font-weight: 500;
         }
 
         .message.error {
-            color: #d8000c;
-            background-color: #ffbaba;
-            border: 1px solid #d8000c;
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
         }
 
         .message.success {
-            color: #4F8A10;
-            background-color: #DFF2BF;
-            border: 1px solid #4F8A10;
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
         }
 
         .table-container {
@@ -136,6 +136,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         <?php endif; ?>
         <?php if ($recaladasResponse === null || count($recaladasResponse->getRecaladas()) < 1): ?>
             <span class="message error">No existe informacion sobre Recaladas</span>
+
         <?php else: ?>
             <div class="table-container">
                 <table>
@@ -153,22 +154,16 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                     <tbody>
                         <?php foreach ($recaladasResponse->getRecaladas() as $recalada): ?>
                             <tr>
-                                <td><?=  $recalada->getRecaladaId(); ?></td>
-                                <td><?=  $recalada->getBuqueNombre(); ?></td>
-                                <td><?=  $recalada->getFechaArribo()->format("Y-m-d H:i:s"); ?></td>
-                                <td><?=  $recalada->getFechaZarpe()->format("Y-m-d H:i:s"); ?></td>
-                                <td><?=  $recalada->getTotalTuristas(); ?></td>
-                                <td><?=  $recalada->getPaisNombre(); ?></td>
+                                <td><?= $recalada->getRecaladaId(); ?></td>
+                                <td><?= $recalada->getBuqueNombre(); ?></td>
+                                <td><?= $recalada->getFechaArribo()->format("Y-m-d H:i:s"); ?></td>
+                                <td><?= $recalada->getFechaZarpe()->format("Y-m-d H:i:s"); ?></td>
+                                <td><?= $recalada->getTotalTuristas(); ?></td>
+                                <td><?= $recalada->getPaisNombre(); ?></td>
                                 <td>
-                                <?php
-                                     if ($recalada->getNumeroAtenciones() > 0):
-                                    ?>
-                                        <a href="../Atenciones/index.php?action=listbyrecalada&recalada=<?= $recalada->getRecaladaId()?>"><?=  $recalada->getNumeroAtenciones() ?></a>
-                                    <?php
-                                    else :
-                                      echo  $recalada->getNumeroAtenciones();
-                                     endif;  ?>
-                                    </td>
+                                    <a
+                                        href="../Atenciones/index.php?action=listbyrecalada&recalada=<?= $recalada->getRecaladaId() ?>"><?= $recalada->getNumeroAtenciones() ?></a>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

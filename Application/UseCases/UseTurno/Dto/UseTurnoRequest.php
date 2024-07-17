@@ -3,8 +3,9 @@ class UseTurnoRequest{
     private $turnoId; 
     private $usuarioUsoId; 
     private $atencionId;
+    private $observaciones;
     
-    public function __construct(int $turnoId, int $usuarioUsoId, int $atencionId) {
+    public function __construct(int $turnoId, int $usuarioUsoId, int $atencionId, string $observaciones = null) {
         if(!isset($turnoId) || $turnoId < 1){
             throw new \InvalidArgumentException("El Id del Tunro es requerido para Usar el Turno");
         }
@@ -20,6 +21,7 @@ class UseTurnoRequest{
         $this->turnoId = $turnoId;
         $this->usuarioUsoId = $usuarioUsoId;
         $this->atencionId = $atencionId;
+        $this->observaciones = $observaciones;
     }
 
     public function getTurnoId(): int {
@@ -34,5 +36,7 @@ class UseTurnoRequest{
         return $this->atencionId;
     }
 
-
+    public function getObservaciones(){
+        $this->observaciones;
+    }
 }

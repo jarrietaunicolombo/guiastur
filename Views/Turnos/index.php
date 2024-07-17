@@ -1,6 +1,7 @@
 <?php
 require_once '../../Controllers/Turnos/GetTurnosByAtencionController.php';
 require_once '../../Controllers/Turnos/GetNextTurnosAllController.php';
+require_once '../../Controllers/Turnos/UseTurnoController.php';
 
 
 $actionGet = @$_GET['action'];
@@ -23,13 +24,17 @@ switch ($action) {
     //     (new GetRecaladasInThePortController())->handleRequest($_GET);
     //     break;
     case 'listbyatencion':
-            (new GetTurnosByAtencionController())->handleRequest($_GET);
-            break;
+        (new GetTurnosByAtencionController())->handleRequest($_GET);
+        break;
     case 'listnextall':
-                (new GetNextTurnosAllController())->handleRequest($_GET);
-                break;
+         (new GetNextTurnosAllController())->handleRequest($_GET);
+        break;
+    case 'usarturno':
+        echo (new UseTurnoController())->handleRequest($_POST);
+        exit();
+
     default:
-        clear_session() ;
+        clear_session();
         break;
 }
 
@@ -37,7 +42,7 @@ switch ($action) {
 function clear_session(string $message = "")
 {
     SessionUtility::clearAllSession();
-    SessionUtility::startSession() ;
+    SessionUtility::startSession();
     $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $message;
     header('Location: ../Users/login.php');
     exit;
