@@ -63,22 +63,22 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         }
 
         .message {
-            padding: 10px;
-            margin: 20px 0;
-            border-radius: 5px;
-            font-weight: bold;
+            padding: 8px 12px;
+            margin: 10px 0;
+            border-radius: 3px;
+            font-weight: 500;
         }
 
         .message.error {
-            color: #d8000c;
-            background-color: #ffbaba;
-            border: 1px solid #d8000c;
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
         }
 
         .message.success {
-            color: #4F8A10;
-            background-color: #DFF2BF;
-            border: 1px solid #4F8A10;
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
         }
 
         .table-container {
@@ -128,14 +128,15 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
     </div>
     <div class="container">
         <?php if ($errorMessage): ?>
-            <span class="message error"><?=  $errorMessage; ?></span>
+            <span class="message error"><?= $errorMessage; ?></span>
         <?php endif; ?>
         <?php if ($infoMessage): ?>
             <span class="message success"><?= $infoMessage; ?></span>
         <?php endif; ?>
-        <?php if ($turnosResponse === null || count($turnosResponse->getTurnos()) < 1): ?>
+        <?php if (!($errorMessage) && $turnosResponse === null || count($turnosResponse->getTurnos()) < 1): ?>
             <span class="message error">No existe informacion sobre Atenciones para este Recalada</span>
-        <?php else: 
+            <?php endif; ?>
+        <?php  if (!$errorMessage):
             $atencionId = $turnosResponse->getAtencionId();
             $totalTurnos = $turnosResponse->getTotalTurnos();
             $turnosAsignados = $turnosResponse->getTurnosAsignados();
@@ -146,60 +147,60 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
             $turnos = $turnosResponse->getTurnos();
             ?>
             <div class="table-container">
-            <table> 
-            <tr style="text-align: center;"> 
-                    <th style="text-align: center;" rowspan = 2>ATENCION</th> 
-                    <th style="text-align: center;" colspan="6">TURNOS</th> 
-                </tr>
-                <tr style="text-align: center;"> 
-                    <th>ASIGNADOS</th> 
-                    <th>DISPONBLES</th> 
-                    <th>CREADOS</th> 
-                    <th>USADOS</th> 
-                    <th>LIBERADOS</th> 
-                    <th>FINALIZADOS</th> 
-                </tr>
-     
-                    <td style="text-align: center;"><?= $atencionId ?></td> 
-                    <td style="text-align: center;"><?= $turnosAsignados ?></td> 
-                    <td style="text-align: center;"><?= $totalTurnos - $turnosAsignados ?></td> 
-                    <td style="text-align: center;"><?= $turnosCreados ?></td> 
-                    <td style="text-align: center;"><?= $turnosUsados ?></td> 
-                    <td style="text-align: center;"><?= $turnosLiberados ?></td> 
-                    <td style="text-align: center;"><?= $turnosFinalizados ?></td> 
-                 </tr>
-          </table>
-        <table> 
-            <tr> 
-                <th>ID</th> 
-                <th>NUMERO</th> 
-                <th>GUIA</th> 
-                <th>ESTADO</th> 
-                <th>USADO</th> 
-                <th>LIBERADO</th> 
-                <th>FINALIZADO</th> 
-      
-            </tr>
-          <?php
-                foreach ($turnos as $turnoDto):
-                    $fechaUso =  (@$turnoDto->getFechaUso() !== null)? $turnoDto->getFechaUso()->format("Y-m-d H:i:s") : "";
-                    $fechaSalida =   (@$turnoDto->getFechaSalida()!== null)? $turnoDto->getFechaSalida()->format("Y-m-d H:i:s") : "";
-                    $fechaRegreso =  (@$turnoDto->getFechaRegreso()!== null)? $turnoDto->getFechaRegreso()->format("Y-m-d H:i:s") : "";
-            ?>
-            <tr>
-                <td><?= $turnoDto->getId() ?></td> 
-                <td><?= $turnoDto->getNumero() ?></td> 
-                <td><?= $turnoDto->getGuiaNombres() ?></td> 
-                <td><?= $turnoDto->getEstado() ?></td> 
-                <?php $title =  empty($fechaUso)? "Turno sin usar" :  "Uso registrado por Usuario ID: ".$turnoDto->getUsuarioUso(); ?>
-                <td title = "<?= $title ?>" ><?= $fechaUso?></td> 
-                <?php $title =  empty($fechaSalida)? "Turno sin liberar" :  "Liberacion registrada por Usuario ID: ".$turnoDto->getUsuarioSalida(); ?>
-                <td title = "<?= $title ?>" ><?= $fechaSalida ?></td> 
-                <?php $title =  empty($fechaRegreso)? "Turno sin terminar" :  "Terminacion registrada por Usuario ID: ".$turnoDto->getUsuarioRegreso(); ?>
-                <td title = "<?= $title ?>" ><?=  $fechaRegreso ?></td> 
-            </tr>
-        <?php endforeach; ?>
-        </table>
+                <table>
+                    <tr style="text-align: center;">
+                        <th style="text-align: center;" rowspan=2>ATENCION</th>
+                        <th style="text-align: center;" colspan="6">TURNOS</th>
+                    </tr>
+                    <tr style="text-align: center;">
+                        <th>ASIGNADOS</th>
+                        <th>DISPONBLES</th>
+                        <th>CREADOS</th>
+                        <th>USADOS</th>
+                        <th>LIBERADOS</th>
+                        <th>FINALIZADOS</th>
+                    </tr>
+
+                    <td style="text-align: center;"><?= $atencionId ?></td>
+                    <td style="text-align: center;"><?= $turnosAsignados ?></td>
+                    <td style="text-align: center;"><?= $totalTurnos - $turnosAsignados ?></td>
+                    <td style="text-align: center;"><?= $turnosCreados ?></td>
+                    <td style="text-align: center;"><?= $turnosUsados ?></td>
+                    <td style="text-align: center;"><?= $turnosLiberados ?></td>
+                    <td style="text-align: center;"><?= $turnosFinalizados ?></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>NUMERO</th>
+                        <th>GUIA</th>
+                        <th>ESTADO</th>
+                        <th>USADO</th>
+                        <th>LIBERADO</th>
+                        <th>FINALIZADO</th>
+
+                    </tr>
+                    <?php
+                    foreach ($turnos as $turnoDto):
+                        $fechaUso = (@$turnoDto->getFechaUso() !== null) ? $turnoDto->getFechaUso()->format("Y-m-d H:i:s") : "";
+                        $fechaSalida = (@$turnoDto->getFechaSalida() !== null) ? $turnoDto->getFechaSalida()->format("Y-m-d H:i:s") : "";
+                        $fechaRegreso = (@$turnoDto->getFechaRegreso() !== null) ? $turnoDto->getFechaRegreso()->format("Y-m-d H:i:s") : "";
+                        ?>
+                        <tr>
+                            <td><?= $turnoDto->getId() ?></td>
+                            <td><?= $turnoDto->getNumero() ?></td>
+                            <td><?= $turnoDto->getGuiaNombres() ?></td>
+                            <td><?= $turnoDto->getEstado() ?></td>
+                            <?php $title = empty($fechaUso) ? "Turno sin usar" : "Uso registrado por Usuario ID: " . $turnoDto->getUsuarioUso(); ?>
+                            <td title="<?= $title ?>"><?= $fechaUso ?></td>
+                            <?php $title = empty($fechaSalida) ? "Turno sin liberar" : "Liberacion registrada por Usuario ID: " . $turnoDto->getUsuarioSalida(); ?>
+                            <td title="<?= $title ?>"><?= $fechaSalida ?></td>
+                            <?php $title = empty($fechaRegreso) ? "Turno sin terminar" : "Terminacion registrada por Usuario ID: " . $turnoDto->getUsuarioRegreso(); ?>
+                            <td title="<?= $title ?>"><?= $fechaRegreso ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
             </div>
         <?php endif; ?>
     </div>

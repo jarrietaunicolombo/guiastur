@@ -34,13 +34,13 @@ SessionUtility::startSession();
 
     <h2><?= @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?></h2>
 
-    <h3>Menú Recaladas</h3>
+    <h3>Menú Turnos</h3>
     <div class="menu">
-        <a href="index.php?action=create">Crear</a>
-        <a href="index.php">Buscar</a>
-        <a href="index.php?action=listall">Mostrar todas</a>
+        <a href="">Crear</a>
+        <!-- <a href="index.php">Buscar</a> -->
+        <!-- <a href="index.php?action=listall">Mostrar todas</a> -->
         <a href="index.php?action=listnextall">Turnos Siguientes</a>
-        <a href="index.php">Editar</a>
+        <!-- <a href="index.php">Editar</a> -->
         <a href="../index.php">Menu Principal</a>
     </div>
 

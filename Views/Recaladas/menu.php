@@ -34,10 +34,10 @@ SessionUtility::startSession();
 <h3>Menú Recaladas</h3>
 <div class="menu">
     <a href="index.php?action=create">Crear</a>
-    <a href="index.php">Buscar</a>
+    <!-- <a href="index.php">Buscar</a> -->
     <a href="index.php?action=listall">Mostrar todas</a>
     <a href="index.php?action=listinport">Mostrar En el Puerto</a>
-    <a href="index.php">Editar</a>
+    <!-- <a href="index.php">Editar</a> -->
     <a href="../index.php">Menu Principal</a>
 </div>
 

@@ -37,10 +37,10 @@ SessionUtility::startSession();
 <h3>Menú Usuarios</h3>
 <div class="menu">
     <a href="index.php?action=create">Crear</a>
-    <a href="index.php?action=find">Buscar</a>
-    <a href="index.php?action=all">Listar</a>
-    <a href="index.php?action=edit">Editar</a>
-    <a href="index.php?action=desable">Desactivar</a>
+    <!-- <a href="index.php?action=find">Buscar</a> -->
+    <!-- <a href="index.php?action=all">Listar</a> -->
+    <!-- <a href="index.php?action=edit">Editar</a> -->
+    <!-- <a href="index.php?action=desable">Desactivar</a> -->
     <a href="../index.php">Menu Principal</a>
 </div>
 

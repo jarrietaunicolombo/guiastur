@@ -63,22 +63,22 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         }
 
         .message {
-            padding: 10px;
-            margin: 20px 0;
-            border-radius: 5px;
-            font-weight: bold;
+            padding: 8px 12px;
+            margin: 10px 0;
+            border-radius: 3px;
+            font-weight: 500;
         }
 
         .message.error {
-            color: #d8000c;
-            background-color: #ffbaba;
-            border: 1px solid #d8000c;
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
         }
 
         .message.success {
-            color: #4F8A10;
-            background-color: #DFF2BF;
-            border: 1px solid #4F8A10;
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
         }
 
         .table-container {
@@ -128,64 +128,60 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
     </div>
     <div class="container">
         <?php if ($errorMessage): ?>
-            <span class="message error"><?=  $errorMessage; ?></span>
+            <span class="message error"><?= $errorMessage; ?></span>
         <?php endif; ?>
         <?php if ($infoMessage): ?>
             <span class="message success"><?= $infoMessage; ?></span>
         <?php endif; ?>
-        <?php if ($turnosResponse === null || count($turnosResponse->getAtenciones()) < 1): ?>
+        <?php if  (! ($errorMessage) && $turnosResponse === null || count($turnosResponse->getAtenciones()) < 1): ?>
             <span class="message error">No existe informacion sobre Atenciones para este Recalada</span>
-        <?php else: 
+        <?php else:
             $buque = $turnosResponse->getBuque();
             $recalada = $turnosResponse->getRecalada();
             $atenciones = $turnosResponse->getAtenciones();
             ?>
             <div class="table-container">
-            <table> 
-                <tr> 
-                    <th>BUQUE</th> 
-                    <th>RECALADA ID</th> 
-                    <th>PAIS</th> 
-                </tr>
-                <tr>
-                    <td><?= $buque->getNombre() ?></td> 
-                    <td><?= $recalada->getId() ?></td> 
-                    <td><?= $recalada->getPais() ?></td> 
-                 </tr>
-          </table>
-        <table> 
-            <tr> 
-                <th>ID</th> 
-                <th>INICIO</th> 
-                <th>CIERRE</th> 
-                <th>TURNOS</th> 
-                <th>TURNOS CREADOS</th> 
-                <th>TURNOS DISPONIBLES</th> 
-                <th>SUPERVISOR</th> 
-            </tr>
-          <?php
-                foreach ($atenciones as $atencionDto):
-            ?>
-            <tr>
-                <td><?= $atencionDto->getId() ?></td> 
-                <td><?= $atencionDto->getFechaInicio()->format("Y-m-d H:i:s") ?></td> 
-                <td><?= $atencionDto->getFechaCierre()->format("Y-m-d H:i:s") ?></td> 
-                <td><?= $atencionDto->getTotalTurnos() ?></td> 
-                <td>
-                <?php
-                        if ($atencionDto->getTotalTurnosCreados() > 0):
-                    ?>
-                        <a href="../Turnos/index.php?action=listbyatencion&atencion=<?= $atencionDto->getId()?>"><?=  $atencionDto->getTotalTurnosCreados() ?></a>
+                <table>
+                    <tr>
+                        <th>BUQUE</th>
+                        <th>RECALADA ID</th>
+                        <th>PAIS</th>
+                    </tr>
+                    <tr>
+                        <td><?= $buque->getNombre() ?></td>
+                        <td><?= $recalada->getId() ?></td>
+                        <td><?= $recalada->getPais() ?></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>INICIO</th>
+                        <th>CIERRE</th>
+                        <th>TURNOS</th>
+                        <th>TURNOS CREADOS</th>
+                        <th>TURNOS DISPONIBLES</th>
+                        <th>SUPERVISOR</th>
+                    </tr>
                     <?php
-                    else :
-                        echo  $atencionDto->getTotalTurnosCreados();
-                        endif;  ?>
-                    </td>
-                <td><?= $atencionDto->getTurnosDisponibles() ?></td> 
-                <td><?= $atencionDto->getSupervisorNombre() ?></td> 
-            </tr>
-        <?php endforeach; ?>
-        </table>
+                    foreach ($atenciones as $atencionDto):
+                        ?>
+                        <tr>
+                            <td><?= $atencionDto->getId() ?></td>
+                            <td><?= $atencionDto->getFechaInicio()->format("Y-m-d H:i:s") ?></td>
+                            <td><?= $atencionDto->getFechaCierre()->format("Y-m-d H:i:s") ?></td>
+                            <td><?= $atencionDto->getTotalTurnos() ?></td>
+                            <td>
+                                <a
+                                    href="../Turnos/index.php?action=listbyatencion&atencion=<?= $atencionDto->getId() ?>"><?= $atencionDto->getTotalTurnosCreados() ?>
+                                </a>
+
+                            </td>
+                            <td><?= $atencionDto->getTurnosDisponibles() ?></td>
+                            <td><?= $atencionDto->getSupervisorNombre() ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
             </div>
         <?php endif; ?>
     </div>

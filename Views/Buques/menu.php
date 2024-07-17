@@ -37,9 +37,9 @@ SessionUtility::startSession();
 <h3>Menú de Buques</h3>
 <div class="menu">
     <a href="index.php?action=create">Crear</a>
-    <a href="index.php">Buscar</a>
+    <!-- <a href="index.php">Buscar</a> -->
     <a href="index.php?action=listall">Listar</a>
-    <a href="index.php">Editar</a>
+    <!-- <a href="index.php">Editar</a> -->
     <a href="../index.php">Menu Principal</a>
 </div>
 
