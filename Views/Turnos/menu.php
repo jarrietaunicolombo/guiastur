@@ -40,6 +40,9 @@ SessionUtility::startSession();
         <!-- <a href="index.php">Buscar</a> -->
         <!-- <a href="index.php?action=listall">Mostrar todas</a> -->
         <a href="index.php?action=listnextall">Turnos Siguientes</a>
+        <a href="index.php?action=usedtoday">Turnos en uso</a>
+        <a href="index.php?action=releasedtoday">Turnos  Librados</a>
+        <a href="index.php?action=finalizedtoday">Turnos Finalizados</a>
         <!-- <a href="index.php">Editar</a> -->
         <a href="../index.php">Menu Principal</a>
     </div>

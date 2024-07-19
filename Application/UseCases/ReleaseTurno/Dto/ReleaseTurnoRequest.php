@@ -1,13 +1,14 @@
 <?php
 
-class ReleaseTurnoRequest
+class ReleaseTurnoRequest 
 {
     private $turnoId;
     private $usuarioIdUso;
+    private $observaciones;
 
-    public function __construct(int $turnoId, int $usuarioIdUso)
+    public function __construct(int $turnoId, int $usuarioIdUso, string $observaciones = null)
     {
-        if ($turnoId === null || $usuarioIdUso < 1) {
+        if ($turnoId === null || $turnoId < 1) {
             throw new InvalidArgumentException("El Id del turno es requerido para Liberare el Turno");
         }
 
@@ -16,6 +17,7 @@ class ReleaseTurnoRequest
         }
         $this->turnoId = $turnoId;
         $this->usuarioIdUso = $usuarioIdUso;
+        $this->observaciones = $observaciones;
     }
 
     public function getTurnoId(): int{
@@ -24,5 +26,9 @@ class ReleaseTurnoRequest
 
     public function getUsuarioIdUso(): int{
         return $this->usuarioIdUso;
+    }
+
+    public function getObservaciones(){
+        return $this->observaciones;
     }
 }

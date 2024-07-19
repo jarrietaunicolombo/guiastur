@@ -1,5 +1,6 @@
 <?php
-class UseTurnoResponse
+require_once $_SERVER["DOCUMENT_ROOT"]."guiastur/Application/UseCases/GenericDto.php";
+class UseTurnoResponse extends GenericDto
 {
    
     private $id;
@@ -7,57 +8,32 @@ class UseTurnoResponse
     private $estado;
     private $fecha_uso;
     private $usuario_uso;
-    private $fecha_salida;
-    private $usuario_salida;
-    private $fecha_regreso;
-    private $usuario_regreso;
-    private $observaciones;
-    private $guia;
-    private $atencion;
-    private $fecha_registro;
-    private $usuario_registro;
-
+   
     public function __construct(
         int $id,
         int $numero,
         string $estado,
         DateTime $fecha_uso = null,
-        int $usuario_uso = null,
-        DateTime $fecha_salida = null,
-        int $usuario_salida  = null,
-        DateTime $fecha_regreso = null,
-        int $usuario_regreso = null,
-        string $observaciones = null,
-        GuiaUseTurnoDto $guia,
-        AtencionUseTurnoDto $atencion,
-        DateTime $fecha_registro,
-        int $usuario_registro
+        int $usuario_uso = null
     ) {
         if ($id === null || $id < 1) {
             throw new InvalidArgumentException("El ID del Turno es requerido para Usar el Turno");
         }
-        if ($estado === null || empty(trim($estado <= 0))) {
-            throw new InvalidArgumentException("El Estado del Turno es requerido para Usar el Turno");
-        }
-
+      
         if ($numero === null || $numero < 1) {
             throw new InvalidArgumentException("El Numero del Turno es requerido para Usar el Turno");
         }
 
-        if ($guia === null) {
-            throw new InvalidArgumentException("El Guia es requerido para Usar el Turno");
+        if ($estado === null || empty(trim($estado <= 0))) {
+            throw new InvalidArgumentException("El Estado del Turno es requerido para Usar el Turno");
         }
 
-        if ($atencion === null) {
-            throw new InvalidArgumentException("La Atencion es requerida para Usar el Turno");
+        if ($fecha_uso === null) {
+            throw new InvalidArgumentException("La fecha de uso es requerida al Usar el Turno");
         }
 
-        if ($fecha_registro === null) {
-            throw new InvalidArgumentException("La Fecha de Registro es requerida para Usar el Turno");
-        }
-
-        if ($usuario_registro === null) {
-            throw new InvalidArgumentException("El Usuario que Registró es requerido para Usar el Turno");
+        if ($usuario_uso === null || $usuario_uso < 1) {
+            throw new InvalidArgumentException("El Usuario que registra el Turno es requerido al Usar el Turno");
         }
 
         $this->id = $id;
@@ -65,15 +41,6 @@ class UseTurnoResponse
         $this->estado = $estado;
         $this->fecha_uso = $fecha_uso;
         $this->usuario_uso = $usuario_uso;
-        $this->fecha_salida = $fecha_salida;
-        $this->usuario_salida = $usuario_salida;
-        $this->fecha_regreso = $fecha_regreso;
-        $this->usuario_regreso = $usuario_regreso;
-        $this->observaciones = $observaciones;
-        $this->guia = $guia;
-        $this->atencion = $atencion;
-        $this->fecha_registro = $fecha_registro;
-        $this->usuario_registro = $usuario_registro;
     }
 
     public function getId(): int
@@ -91,144 +58,12 @@ class UseTurnoResponse
         return $this->estado;
     }
 
-    public function getFechaUso() 
+    public function getFechaUso() : DateTime
     {
         return $this->fecha_uso;
     }
-
-    public function getFechaSalida() 
+    public function getUsuarioUso() : int 
     {
-        return $this->fecha_salida;
-    }
-
-    public function getFechaRegreso() 
-    {
-        return $this->fecha_regreso;
-    }
-
-    public function getUsuarioUso(){
         return $this->usuario_uso;
-    }
-
-    public function getUsuarioSalida(){
-        return $this->usuario_salida;
-    }
-
-    public function getUsuarioRegreso(){
-        return $this->usuario_regreso;
-    }
-    public function getObservaciones() 
-    {
-        return $this->observaciones;
-    }
-
-    public function getGuia(): GuiaUseTurnoDto
-    {
-        return $this->guia;
-    }
-
-    public function getAtencion() : AtencionUseTurnoDto{
-        return $this->atencion;
-    }
-    public function getFechaRegistro() : DateTime
-    {
-        return $this->fecha_registro;
-    }
-
-    public function getUsuarioRegistro() : int
-    {
-        return $this->usuario_registro;
-    }
-
-}
-
-class GuiaUseTurnoDto{
-    private $cedula;
-    private $rnt;
-    private $nombre;
-    private $telefono;
-    private $foto;
-
-    public function __construct(string $cedula, string $rnt, string $nombre, string $telefono = null, string $foto = null) {
-        if($cedula === null || empty(trim($cedula))) {
-            throw new InvalidArgumentException("La Cedula del Guia es requerida para Usar el Turno");
-        }
-
-        if($rnt === null || empty(trim($rnt))) {
-            throw new InvalidArgumentException("El RNT del Guia es requerido para Usar el Turno");
-        }
-
-        if($nombre === null || empty(trim($nombre))) {
-            throw new InvalidArgumentException("El Nombre del Guia es requerido para Usar el Turno");
-        }
-
-        $this->cedula = $cedula;
-        $this->rnt = $rnt;
-        $this->nombre = $nombre;
-        $this->telefono = $telefono;
-        $this->foto = $foto;
-    }
-
-    public function getCedula(): string{
-        return $this->cedula;
-    }
-
-    public function getRnt(): string {
-        return $this->rnt;
-    }
-
-    public function getNombre(): string {   
-        return $this->nombre;
-    }
-
-    public function getTelefono() {
-        return $this->telefono;
-    }
-    public function getFoto(){
-        return $this->foto;
-    }
-    
-}
-
-class AtencionUseTurnoDto{
-    private $id;
-    private $fecha_inicio;
-    private $fecha_cierre;
-    private $total_turnos;
-
-    public function __construct(int $id, DateTime $fecha_inicio , DateTime $fecha_cierre = null, int $total_turnos) {
-        if($id === null || $id < 1 ) {
-            throw new InvalidArgumentException("El Id de la Atencion es requerido para Usar el Turno");
-        }
-
-        if($fecha_inicio === null) {
-            throw new InvalidArgumentException("La Fecha de Inicio de la Atencion es requerida para Usar el Turno");
-        }
-
-        if($total_turnos === null || $total_turnos < 1) {
-            throw new InvalidArgumentException("El Total Tornos de la Atencion es requerido para Usar el Turno");
-        }
-
-        $this->id = $id;
-        $this->fecha_inicio = $fecha_inicio;
-        $this->fecha_cierre = $fecha_cierre;
-        $this->total_turnos = $total_turnos;
-
-    }
-
-    public function getId(): int {
-        return $this->id;
-    }
-
-    public function getFechaInicio(): DateTime {
-        return $this->fecha_inicio;
-    }
-
-    public function getFechaCierre() {
-        return $this->fecha_cierre;
-    }
-
-    public function getTotalTurnos(): int {
-        return $this->total_turnos;
     }
 }

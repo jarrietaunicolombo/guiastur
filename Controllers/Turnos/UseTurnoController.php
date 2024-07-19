@@ -42,18 +42,15 @@ class UseTurnoController
                 $request["atencionid"],
                 $request["observaciones"]
             );
-      
             $response = $service->useTurno($usetunroRequest);
-            // $_SESSION[ItemsInSessionEnum::FOUND_TURNO] = $response;
-            $responseData = array("estado" => "EN USO");
-            echo json_encode($responseData);
+            echo $response->toJSON();
             exit();
         } catch (InvalidPermissionException $e) {
             $this->showLogin("Acceso denegado");
         } catch (Exception $e) {
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $e->getMessage();
+         $responseData = array("error" => $e->getMessage());
+         echo json_encode($responseData);
         }
-        header("Location: ../../Views/Turnos/list.php");
     }
 
 

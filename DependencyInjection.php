@@ -287,14 +287,14 @@ class DependencyInjection
     }
 
 
-    public static function getGetNextTurnosAllService(): IGetNextTurnosAllService
+    public static function getGetNextAllTurnosByStatusService(): IGetNextAllTurnosByStatusService
     {
         ClassLoader::loadClass("TurnoRepository");  
-        ClassLoader::loadClass("GetNextTurnosAllQueryHandler");
-        ClassLoader::loadClass("GetNextTurnosAllService");
+        ClassLoader::loadClass("GetNextAllTurnosByStatusQueryHandler");
+        ClassLoader::loadClass("GetNextAllTurnosByStatusService");
         $repository = new TurnoRepository();
-        $query = new GetNextTurnosAllQueryHandler($repository);
-        return new GetNextTurnosAllService($query);
+        $query = new GetNextAllTurnosByStatusQueryHandler($repository);
+        return new GetNextAllTurnosByStatusService($query);
     }
 
 }
