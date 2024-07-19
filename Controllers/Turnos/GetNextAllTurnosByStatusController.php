@@ -58,7 +58,7 @@ class GetNextAllTurnosByStatusController
                 $webPage = "listrealeased.php";
                 break;
             case TurnoStatusEnum::FINALIZED:
-                $webPage = "listfinalized.php";
+                $webPage = "listfinished.php";
                 break;
             default:
                 $webPage = "menu.php";

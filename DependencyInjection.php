@@ -181,20 +181,20 @@ class DependencyInjection
         return new CreateUserSupervisorUseCase($createUserSupervisorCommand);
     }
 
-    public static function getEndTurnoServce(): IEndTurnoUseCase
+    public static function getFinishTurnoServce(): IFinishTurnoUseCase
     {
         ClassLoader::loadClass("TurnoRepository");
         ClassLoader::loadClass("UsuarioRepository");
         ClassLoader::loadClass("GetTurnoByIdQueryHandler");
         ClassLoader::loadClass("GetUsuarioByIdQueryHandler");
-        ClassLoader::loadClass("EndTurnoCommandHandler");
-        ClassLoader::loadClass("EndTurnoCommandHandler");
+        ClassLoader::loadClass("FinishTurnoCommandHandler");
+        ClassLoader::loadClass("FinishTurnoUseCase");
         $turnoRepository = new TurnoRepository();
         $usuarioRepository = new UsuarioRepository();
         $getTurnoByIdQuery = new GetTurnoByIdQueryHandler($turnoRepository);
         $getUsuarioByIdQuery = new GetUsuarioByIdQueryHandler($usuarioRepository);
-        $endTurnoCommand = new EndTurnoCommandHandler($turnoRepository);
-        return new EndTurnoUseCase($getTurnoByIdQuery, $getUsuarioByIdQuery, $endTurnoCommand);
+        $endTurnoCommand = new FinishTurnoCommandHandler($turnoRepository);
+        return new FinishTurnoUseCase($getTurnoByIdQuery, $getUsuarioByIdQuery, $endTurnoCommand);
     }
 
     public static function getAtencionesByRecaladaServce(): IGetAtencionesByRecaladaUseCase

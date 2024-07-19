@@ -1,11 +1,13 @@
 <?php
 
-class EndTurnoRequest
+class FinishTurnoRequest
 {
     private $turnoId;
     private $usuarioIdUso;
 
-    public function __construct(int $turnoId, int $usuarioIdUso)
+    private $observaciones;
+
+    public function __construct(int $turnoId, int $usuarioIdUso, string $observaciones = null)
     {
         if ($turnoId === null || $usuarioIdUso < 1) {
             throw new InvalidArgumentException("El Id del turno es requerido para Finalizar el Turno");
@@ -16,6 +18,7 @@ class EndTurnoRequest
         }
         $this->turnoId = $turnoId;
         $this->usuarioIdUso = $usuarioIdUso;
+        $this->observaciones = $observaciones;
     }
 
     public function getTurnoId(): int{
@@ -24,5 +27,9 @@ class EndTurnoRequest
 
     public function getUsuarioIdUso(): int{
         return $this->usuarioIdUso;
+    }
+
+    public function getObservaciones(){
+        return $this->observaciones;
     }
 }

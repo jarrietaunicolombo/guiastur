@@ -1,13 +1,13 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/ReleaseTurno/Dto/ReleaseTurnoResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/ReleaseTurno/Dto/ReleaseTurnoResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/IReleaseTurnoUseCase.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/FinishTurno/Dto/FinishTurnoResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/FinishTurno/Dto/FinishTurnoResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/IFinishTurnoUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/InvalidPermissionException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/DependencyInjection.php";
 
-class ReleaseTurnoController
+class FinishTurnoController
 {
 
     public function handleRequest($request)
@@ -15,11 +15,10 @@ class ReleaseTurnoController
 
         SessionUtility::startSession();
         $accion = @$request["action"];
-        if ($accion === "liberarturno") {
+        if ($accion === "finalizarturno") {
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
-                $this->releaseTurno($request);
-            }
-            else{
+                $this->finishTurno($request);
+            } else {
                 $this->showLogin("Accion invalida");
             }
         } else {
@@ -27,29 +26,33 @@ class ReleaseTurnoController
         }
     }
 
-    private function releaseTurno($request)
+    private function finishTurno($request)
     {
         try {
             $loginUser = $_SESSION[ItemsInSessionEnum::USER_LOGIN] ?? null;
             if ($loginUser === null) {
                 throw new InvalidPermissionException();
             }
-         
-            $releasetunroRequest = new ReleaseTurnoRequest(
+
+
+            $finishTurnoRequest = new FinishTurnoRequest(
                 $request["turnoid"],
                 $loginUser->getId(),
                 $request["observaciones"]
             );
 
-            $service = DependencyInjection::getReleaseTurnoServce();
-            $response = $service->releaseTurno($releasetunroRequest);
+            $service = DependencyInjection::getFinishTurnoServce();
+
+            // Act
+            $response = $service->finishTurno($finishTurnoRequest);
+
             echo $response->toJSON();
             exit();
         } catch (InvalidPermissionException $e) {
             $this->showLogin("Acceso denegado");
         } catch (Exception $e) {
-         $responseData = array("error" => $e->getMessage());
-         echo json_encode($responseData);
+            $responseData = array("error" => $e->getMessage());
+            echo json_encode($responseData);
         }
     }
 

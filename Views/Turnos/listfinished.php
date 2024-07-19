@@ -1,5 +1,6 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/TurnoStatusEnum.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetNextTurno/Dto/GetNextTurnoResponse.php";
 
@@ -13,7 +14,7 @@ if (!isset($usuarioLogin)) {
     header('Location: ../Users/login.php');
     exit;
 }
-$turnosResponse = @$_SESSION[ItemsInSessionEnum::LIST_TURNOS] ?? null;
+$turnosResponse = @$_SESSION[ItemsInSessionEnum::LIST_NEXT_TURNOS_BY_STATUS] ?? null;
 $errorMessage = $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ?? "";
 $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 ?>
@@ -24,7 +25,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Buque</title>
+    <title>Turnos en uso</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -213,7 +214,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 
 <body>
     <div class="molda-header">
-        <h1>Proximos Turnos</h1>
+        <h1>Turnos finalizador hoy</h1>
     </div>
 
     <?php if ($errorMessage): ?>
@@ -222,7 +223,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
     <?php if ($infoMessage): ?>
         <span class="message success"><?= $infoMessage; ?></span>
     <?php endif; ?>
-    <?php if ($turnosResponse === null || count($turnosResponse) < 1): ?>
+    <?php if (!$errorMessage && ($turnosResponse === null || count($turnosResponse) < 1)): ?>
         <span class="message error">No existen turnos finalizados en este momento</span>
     <?php endif; ?>
     <?php if ($turnosResponse !== null && count($turnosResponse) > 0): ?>
@@ -271,97 +272,6 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         </div>
     <?php endif; ?>
     </div>
-    <!-- Modal -->
-    <!-- Modal -->
-    <div id="molda-myModal" class="molda-modal">
-        <div class="molda-modal-content">
-            <div class="molda-modal-header">
-                <span id="molda-modalGuia"></span><br>
-                <span id="molda-modalTurno"></span>
-            </div>
-            <form id="molda-turnoForm" method="post" action="/guiastur/Views/Turnos/index.php">
-                <input type="hidden" name="turnoid" id="molda-id_turno">
-                <input type="hidden" name="atencionid" id="molda-id_atencion">
-                <input type="hidden" name="action" id="molda-action">
-                <div class="molda-form-group">
-                    <label for="observaciones">Observaciones:</label>
-                    <textarea id="molda-observaciones" name="observaciones"
-                        style="width: 100%; height: 60px;"></textarea>
-                </div>
-                <div class="molda-modal-footer">
-                    <button type="button" class="molda-use">Use</button>
-                    <button type="button" class="molda-cancel">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-        $(document).ready(function () {
-            var turnoNumero = 0;
-            $('.molda-row').click(function () {
-                var turnoId = $(this).data('id');
-                 turnoNumero = $(this).data('numero');
-                var guiaNombre = $(this).data('nombre');
-                var atencionId = $(this).data('atencion');
-
-                $('#molda-id_turno').val(turnoId);
-                $('#molda-id_atencion').val(atencionId);
-                $('#molda-modalGuia').text('GUIA: ' + guiaNombre);
-                $('#molda-modalTurno').text('TURNO NUMERO: ' + turnoNumero);
-                $('#molda-myModal').show();
-            });
-
-            $('.molda-use').click(function () {
-                $('#molda-action').val('usarturno');
-                $('#molda-turnoForm').submit();
-            });
-
-            $('.molda-cancel').click(function () {
-                $('#molda-action').val('cancelarturno');
-                $('#molda-turnoForm').submit();
-            });
-
-            $('#molda-turnoForm').submit(function (e) {
-                e.preventDefault();
-                var form = $(this);
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        $('#molda-myModal').hide();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Turno procesado',
-                            text: 'El Guia ahora puede hacer uso del turno #'.turnoNumero,
-                            showCancelButton: false,
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'http://localhost/guiastur/Views/Turnos/index.php?action=listnextall';
-                            }
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error en la petición AJAX:', error);
-                        alert('Error al procesar la solicitud.');
-                    }
-                });
-            });
-
-            // Hide modal when clicking outside of it
-            $(window).click(function (event) {
-                if (event.target.id === 'molda-myModal') {
-                    $('#molda-myModal').hide();
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>
