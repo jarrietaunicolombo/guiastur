@@ -49,7 +49,7 @@ class ClassLoader
         'GetBuquesQueryHandler' => 'Application/Actions/Queries/GetBuquesQueryHandler.php',
         'GetRecaladasQueryHandler' => 'Application/Actions/Queries/GetRecaladasQueryHandler.php',
         'GetRecaladasByBuqueQueryHandler' => 'Application/Actions/Queries/GetRecaladasByBuqueQueryHandler.php',
-        'GetNextTurnosAllQueryHandler' => 'Application/Actions/Queries/GetNextTurnosAllQueryHandler.php',
+        'GetNextAllTurnosByStatusQueryHandler' => 'Application/Actions/Queries/GetNextAllTurnosByStatusQueryHandler.php',
        
         // Application UseCases
         'CreateAtencionUseCase' => 'Application/UseCases/CreateAtencion/CreateAtencionUseCase.php',
@@ -74,7 +74,7 @@ class ClassLoader
         'GetBuquesService' => 'Application/UseCases/GetBuques/GetBuquesService.php',
         'GetRecaladasService' => 'Application/UseCases/GetRecaladas/GetRecaladasService.php',
         'GetRecaladasByBuqueService' => 'Application/UseCases/GetRecaladasByBuque/GetRecaladasByBuqueService.php',
-        'GetNextTurnosAllService' => 'Application/UseCases/GetNextTurno/GetNextTurnosAllService.php',
+        'GetNextAllTurnosByStatusService' => 'Application/UseCases/GetNextTurno/GetNextAllTurnosByStatusService.php',
     ];
 
     public static function loadClass($className)

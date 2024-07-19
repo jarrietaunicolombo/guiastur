@@ -1,7 +1,9 @@
 <?php
 require_once '../../Controllers/Turnos/GetTurnosByAtencionController.php';
-require_once '../../Controllers/Turnos/GetNextTurnosAllController.php';
+require_once '../../Controllers/Turnos/GetNextAllTurnosByStatusController.php';
 require_once '../../Controllers/Turnos/UseTurnoController.php';
+require_once '../../Controllers/Turnos/ReleaseTurnoController.php';
+require_once '../../Domain/Constants/TurnoStatusEnum.php';
 
 
 $actionGet = @$_GET['action'];
@@ -27,12 +29,25 @@ switch ($action) {
         (new GetTurnosByAtencionController())->handleRequest($_GET);
         break;
     case 'listnextall':
-         (new GetNextTurnosAllController())->handleRequest($_GET);
+        $_GET["action"] = TurnoStatusEnum::CREATED;
+        (new GetNextAllTurnosByStatusController())->handleRequest($_GET);
+    case 'usedtoday':
+        $_GET["action"] = TurnoStatusEnum::INUSE;
+        (new GetNextAllTurnosByStatusController())->handleRequest($_GET);
+    case 'releasedtoday':
+        $_GET["action"] = TurnoStatusEnum::RELEASE;
+        (new GetNextAllTurnosByStatusController())->handleRequest($_GET);
+        break;
+    case 'finalizedtoday':
+        $_GET["action"] = TurnoStatusEnum::FINALIZED;
+        (new GetNextAllTurnosByStatusController())->handleRequest($_GET);
         break;
     case 'usarturno':
         echo (new UseTurnoController())->handleRequest($_POST);
         exit();
-
+    case 'liberarturno':
+            echo (new ReleaseTurnoController())->handleRequest($_POST);
+            exit();
     default:
         clear_session();
         break;

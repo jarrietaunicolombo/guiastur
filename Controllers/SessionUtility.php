@@ -54,6 +54,7 @@ abstract class ItemsInSessionEnum
     const ATENCION_REQUEST_CREATING = "Atencion.Request.Creation";
     const FOUND_TURNO = "Turno.Find";
     const LIST_TURNOS = "Turno.List";
+    const LIST_NEXT_TURNOS_BY_STATUS = "Turno.List.Next.By.Status";
     const TURNO_REQUEST_CREATING = "Turno.Request.Creation";
     const ERROR_MESSAGE = "Error.Message";
     const INFO_MESSAGE = "Information.Message";

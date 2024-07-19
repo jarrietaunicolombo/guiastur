@@ -135,7 +135,7 @@ class TurnoRepository implements ITurnoRepository
         }
     }
 
-    public function findNexTurnosAll(): array
+    public function findAllNextTurnosByState(string $turnoStatus): array
     {
         try {
             $fecha = (new DateTime())->format('Y-m-d');
@@ -143,26 +143,33 @@ class TurnoRepository implements ITurnoRepository
             if (!isset($atenciones) ||  count($atenciones) == 0) {
                 throw new NotFoundEntryException("No existen atenciones programadas para hoy");
             }
-            $nextTurnos = array();
-            $estado = TurnoStatusEnum::CREATED;
+            if (!in_array($turnoStatus, TurnoStatusEnum::getConstansValues())) {
+                throw new InvalidArgumentException("No existen Turnos en estado $turnoStatus, el estado incorrecto");
+            }
+            $quantity = "all";
+            if($turnoStatus == TurnoStatusEnum::CREATED){
+                $quantity = "first";
+            }
+            $turnos = null;
+            
             foreach ($atenciones as $atencion) {
-                $turno = Turno::find(
-                    "first",
+                $turnos = Turno::find(
+                    $quantity,
                     array(
                         "conditions" =>
                             array(
-                                "atencion_id = ? AND estado = ? AND fecha_uso is ?",
+                                "atencion_id = ? AND estado = ?",
                                 $atencion->id,
-                                $estado,
-                                null
+                                $turnoStatus
                             )
                     )
                 );
-                if (isset($turno)) {
-                    $nextTurnos[] = $turno;
+                if (isset($turnos) && !is_array($turnos)) {
+                    $turnos  = array($turnos);
+                    break;
                 }
             }
-            return $nextTurnos;
+            return $turnos ?? array();
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {
@@ -173,4 +180,3 @@ class TurnoRepository implements ITurnoRepository
         }
     }
 }
-

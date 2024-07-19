@@ -20,6 +20,7 @@ class UseTurnoCommandHandler implements IUseTurnoCommand{
         $turno->estado = $estado;
         $turno->fecha_uso = new DateTime();
         $turno->usuario_uso = $request->getUsuarioUsoId();
+
         $observaciones =  $request->getObservaciones() ?? null;
         $turno->observaciones = (isset($observaciones) && !empty(trim($observaciones)))? "Usado: ".$observaciones : null;
         $turno = $this->turnoRepository->update($turno);
@@ -27,28 +28,8 @@ class UseTurnoCommandHandler implements IUseTurnoCommand{
             $turno->id,
             $turno->numero,
             $turno->estado,
-            $turno->fecha_uso,
-            $turno->usuario_uso,
-            $turno->fecha_salida,
-            $turno->usuario_salida,
-            $turno->fecha_regreso,
-            $turno->usuario_regreso,
-            $turno->observaciones,
-            new GuiaUseTurnoDto(
-                $turno->guia->cedula,
-                $turno->guia->rnt,
-                $turno->guia->nombres . " " . $turno->guia->apellidos,
-                $turno->guia->telefono,
-                $turno->guia->foto
-            ),
-            new AtencionUseTurnoDto(
-                $turno->atencion->id,
-                $turno->atencion->fecha_inicio,
-                $turno->atencion->fecha_cierre,
-                $turno->atencion->total_turnos
-            ),
-            $turno->fecha_registro,
-            $turno->usuario_registro
+            new DateTime($turno->fecha_uso),
+            $turno->usuario_uso
         );
     }
 

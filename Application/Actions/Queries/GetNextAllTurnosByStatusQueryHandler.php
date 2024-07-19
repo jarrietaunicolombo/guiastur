@@ -1,9 +1,10 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetNextTurno/Dto/GetNextTurnoResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetNextTurnosAllQuery.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetNextTurno/Dto/GetNextAllTurnosByStatusRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetNextAllTurnosByStatusQuery.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/ITurnoRepository.php";
 
-class GetNextTurnosAllQueryHandler implements IGetNextTurnosAllQuery
+class GetNextAllTurnosByStatusQueryHandler implements IGetNextAllTurnosByStatusQuery
 {
 
     private $turnoRepository;
@@ -11,9 +12,9 @@ class GetNextTurnosAllQueryHandler implements IGetNextTurnosAllQuery
     {
         $this->turnoRepository = $turnoRepository;
     }
-    public function handler(): array
+    public function handler(GetNextAllTurnosByStatusRequest $request): array
     {
-        $turnos = $this->turnoRepository->findNexTurnosAll();
+        $turnos = $this->turnoRepository->findAllNextTurnosByState($request->getTurnoStatus());
         $turnosResponse = array();
         foreach ($turnos as $turno) {
             $turnosResponse[] = new GetNextTurnoResponse(

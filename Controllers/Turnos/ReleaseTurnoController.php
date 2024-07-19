@@ -1,22 +1,23 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetTurnosByAtencion/Dto/GetTurnosByAtencionResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetTurnosByAtencion/Dto/GetTurnosByAtencionRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/IGetTurnosByAtencionUseCase.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/ReleaseTurno/Dto/ReleaseTurnoResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/ReleaseTurno/Dto/ReleaseTurnoResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/IReleaseTurnoUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/InvalidPermissionException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/DependencyInjection.php";
 
-class GetNextTurnosAllController
+class ReleaseTurnoController
 {
 
     public function handleRequest($request)
     {
+
         SessionUtility::startSession();
         $accion = @$request["action"];
-        if ($accion === "listnextall") {
-            if ($_SERVER["REQUEST_METHOD"] === "GET") {
-                $this->getNextTurnosAll($request);
+        if ($accion === "liberarturno") {
+            if ($_SERVER["REQUEST_METHOD"] === "POST") {
+                $this->releaseTurno($request);
             }
             else{
                 $this->showLogin("Accion invalida");
@@ -26,22 +27,31 @@ class GetNextTurnosAllController
         }
     }
 
-    private function getNextTurnosAll($request)
+    private function releaseTurno($request)
     {
         try {
             $loginUser = $_SESSION[ItemsInSessionEnum::USER_LOGIN] ?? null;
             if ($loginUser === null) {
                 throw new InvalidPermissionException();
             }
-            $service = DependencyInjection::getGetNextTurnosAllService();
-            $response = $service->getNextTurnos();
-            $_SESSION[ItemsInSessionEnum::LIST_TURNOS] = $response;
+         
+           
+            $releasetunroRequest = new ReleaseTurnoRequest(
+                $request["turnoid"],
+                $loginUser->getId(),
+                $request["observaciones"]
+            );
+
+            $service = DependencyInjection::getReleaseTurnoServce();
+            $response = $service->releaseTurno($releasetunroRequest);
+            echo $response->toJSON();
+            exit();
         } catch (InvalidPermissionException $e) {
             $this->showLogin("Acceso denegado");
         } catch (Exception $e) {
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $e->getMessage();
+         $responseData = array("error" => $e->getMessage());
+         echo json_encode($responseData);
         }
-        header("Location: ../../Views/Turnos/listnextall.php");
     }
 
 

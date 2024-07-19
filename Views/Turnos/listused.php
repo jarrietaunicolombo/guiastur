@@ -25,7 +25,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turnos Siguientes</title>
+    <title>Turnos en uso</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -214,7 +214,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 
 <body>
     <div class="molda-header">
-        <h1>Proximos Turnos</h1>
+        <h1>Turnos en uso hoy</h1>
     </div>
 
     <?php if ($errorMessage): ?>
@@ -224,7 +224,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         <span class="message success"><?= $infoMessage; ?></span>
     <?php endif; ?>
     <?php if (!$errorMessage && ($turnosResponse === null || count($turnosResponse) < 1)): ?>
-        <span class="message error">No existen turnos para usar en este momento</span>
+        <span class="message error">No existen turnos en uso en este momento</span>
     <?php endif; ?>
     <?php if ($turnosResponse !== null && count($turnosResponse) > 0): ?>
         <div class="molda-table-container">
@@ -289,13 +289,13 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                         style="width: 100%; height: 60px;"></textarea>
                 </div>
                 <div class="molda-modal-footer">
-                    <button type="button" class="molda-use">Use</button>
-                    <button type="button" class="molda-cancel">Cancel</button>
+                    <button type="button" class="molda-use">Liberar Turno</button>
+                    <button type="button" class="molda-cancel">Anular Turno</button>
                 </div>
             </form>
         </div>
     </div>
-
+   
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -316,7 +316,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
             });
 
             $('.molda-use').click(function () {
-                $('#molda-action').val('usarturno');
+                $('#molda-action').val('liberarturno');
                 $('#molda-turnoForm').submit();
             });
 
@@ -335,8 +335,8 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                     dataType: 'json',
                     success: function (response) {
                         let message = "Error desconocido";
-                        if (response.estado === "<?= TurnoStatusEnum::INUSE ?>") {
-                            message = 'El Guia ahora puede hacer uso del turno #' + turnoNumero;
+                        if (response.estado === "<?= TurnoStatusEnum::RELEASE ?>") {
+                            message = 'El turno #' + turnoNumero + " ha sido liberado";
                             showAlert('success', 'Éxito', message);
                         }
                         else if (response.error) {
@@ -351,10 +351,12 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                     error: function (xhr, status, error) {
                         $('#molda-myModal').hide();
                         showAlert('error', 'Error', error);
+                      //  window.location.href = 'http://localhost/guiastur/Views/Turnos/index.php?action=usedtoday';
                     }
                 });
             });
 
+            // Hide modal when clicking outside of it
             $(window).click(function (event) {
                 if (event.target.id === 'molda-myModal') {
                     $('#molda-myModal').hide();
@@ -370,11 +372,10 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#molda-myModal').hide();
-                        window.location.href = 'http://localhost/guiastur/Views/Turnos/index.php?action=listnextall';
+                        window.location.href = 'http://localhost/guiastur/Views/Turnos/index.php?action=usedtoday';
                     }
                 });
             }
-
         });
     </script>
 </body>

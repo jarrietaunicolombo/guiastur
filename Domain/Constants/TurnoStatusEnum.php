@@ -6,4 +6,15 @@ abstract class TurnoStatusEnum {
     const RELEASE = "Liberado";
     const FINALIZED = "Finalizado";
     const CANCELLED = "Cancelado";
+
+    public static function getConstansValues(): array
+    {
+        $reflect = new ReflectionClass(__CLASS__);
+        $constProperties = $reflect->getConstants();
+        $values = array();
+        foreach ($constProperties as $constantName => $value) {
+            $values[] = $value;
+        }
+        return $values;
+    }
 }
