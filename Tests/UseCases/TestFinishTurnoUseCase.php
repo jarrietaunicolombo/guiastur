@@ -1,17 +1,17 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/EndTurno/Dto/EndTurnoRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/EndTurno/Dto/EndTurnoResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Commands/EndTurnoCommandHandler.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/FinishTurno/Dto/FinishTurnoRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/FinishTurno/Dto/FinishTurnoResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Commands/FinishTurnoCommandHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/GetTurnoByIdQueryHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/GetUsuarioByIdQueryHandler.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/EndTurno/EndTurnoUseCase.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/FinishTurno/FinishTurnoUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/TurnoRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/UsuarioRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/InvalidEndTurnoException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/InvalidFinishTurnoException.php";
 
-class TestEndTurnoUseCase
+class TestFinishTurnoUseCase
 {
-    public static function testEndTurnoShouldShowData()
+    public static function testFinishTurnoShouldShowData()
     {
         try {
             // Arrange
@@ -22,13 +22,13 @@ class TestEndTurnoUseCase
 
             $getTurnoByIdQuer = new GetTurnoByIdQueryHandler($turnoRepository);
             $getUsuarioByIdQuery = new GetUsuarioByIdQueryHandler($usuarioRepository);
-            $endTurnoCommand = new EndTurnoCommandHandler($turnoRepository);
-            $endTurnoUseCase = new EndTurnoUseCase($getTurnoByIdQuer, $getUsuarioByIdQuery, $endTurnoCommand);
-            $endTurnoRequest = new EndTurnoRequest($turnoId, $usuarioId);
+            $endTurnoCommand = new FinishTurnoCommandHandler($turnoRepository);
+            $endTurnoUseCase = new FinishTurnoUseCase($getTurnoByIdQuer, $getUsuarioByIdQuery, $endTurnoCommand);
+            $endTurnoRequest = new FinishTurnoRequest($turnoId, $usuarioId);
             // Act
-            $releaseTurnoResponse = $endTurnoUseCase->endTurno($endTurnoRequest);
+            $releaseTurnoResponse = $endTurnoUseCase->finishTurno($endTurnoRequest);
             // Assert   
-            self::showEndTurnoResponseData($releaseTurnoResponse, "Turno Finalizado");
+            self::showFinishTurnoResponseData($releaseTurnoResponse, "Turno Finalizado");
             
         } catch (Exception $e) {
             echo '<hr><span style="color: red">Error al Finalizar turno <br></span>';
@@ -37,7 +37,7 @@ class TestEndTurnoUseCase
 
     }
 
-    private static function showEndTurnoResponseData(EndTurnoResponse $turno, string $title)
+    private static function showFinishTurnoResponseData(FinishTurnoResponse $turno, string $title)
     {
 
         $output = "<hr/><h3 style='color: blue;'>$title</h3>
@@ -80,4 +80,4 @@ class TestEndTurnoUseCase
     }
 }
 
-TestEndTurnoUseCase::testEndTurnoShouldShowData();
+TestFinishTurnoUseCase::testFinishTurnoShouldShowData();

@@ -37,6 +37,6 @@ class UseTurnoRequest{
     }
 
     public function getObservaciones(){
-        $this->observaciones;
+       return $this->observaciones;
     }
 }

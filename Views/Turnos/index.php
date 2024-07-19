@@ -3,6 +3,7 @@ require_once '../../Controllers/Turnos/GetTurnosByAtencionController.php';
 require_once '../../Controllers/Turnos/GetNextAllTurnosByStatusController.php';
 require_once '../../Controllers/Turnos/UseTurnoController.php';
 require_once '../../Controllers/Turnos/ReleaseTurnoController.php';
+require_once '../../Controllers/Turnos/FinishTurnoController.php';
 require_once '../../Domain/Constants/TurnoStatusEnum.php';
 
 
@@ -38,7 +39,7 @@ switch ($action) {
         $_GET["action"] = TurnoStatusEnum::RELEASE;
         (new GetNextAllTurnosByStatusController())->handleRequest($_GET);
         break;
-    case 'finalizedtoday':
+    case 'finishedtoday':
         $_GET["action"] = TurnoStatusEnum::FINALIZED;
         (new GetNextAllTurnosByStatusController())->handleRequest($_GET);
         break;
@@ -47,6 +48,9 @@ switch ($action) {
         exit();
     case 'liberarturno':
             echo (new ReleaseTurnoController())->handleRequest($_POST);
+            exit();
+    case 'finalizarturno':
+            echo (new FinishTurnoController())->handleRequest($_POST);
             exit();
     default:
         clear_session();
