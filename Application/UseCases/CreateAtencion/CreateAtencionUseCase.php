@@ -18,16 +18,11 @@ class CreateAtencionUseCase implements ICreateAtencionUseCase {
 
     public function createAtencion(CreateAtencionRequest $createAtencionRequest) : CreateAtencionResponse{
         $validateAtencionRequest = new ValidateAtencionRequest(
-            $createAtencionRequest->getRecaladaId()
-            , $createAtencionRequest->getFechaInicio()
+            $createAtencionRequest->getRecaladaId(),
+            $createAtencionRequest->getFechaInicio(),
+            $createAtencionRequest->getFechaCierre()
         );
-        $isValid = $this->validateAtencionQuery->handler($validateAtencionRequest);
-        if(!$isValid) {
-            $message = "No es posible programar una Atencion para " 
-                        .$validateAtencionRequest->getFecha()->format("Y-m-d H:i-s")
-                        . ", Existe una Atencion abierta para la Recalda: ".$validateAtencionRequest->getRecaladaId() ;
-            throw new InvalidAtencionException($message);
-        }
+        $this->validateAtencionQuery->handler($validateAtencionRequest);
         return $this->createAtencionCommand->handler($createAtencionRequest);
     }
 }

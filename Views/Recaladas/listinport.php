@@ -125,7 +125,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 
 <body>
     <div class="header">
-        <h1>Reporte de Recaladas</h1>
+        <h1>Recaladas en el puerto</h1>
     </div>
     <div class="container">
         <?php if ($errorMessage): ?>
@@ -162,7 +162,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                                 <td><?= $recalada->getPaisNombre(); ?></td>
                                 <td>
                                     <a
-                                        href="../Atenciones/index.php?action=listbyrecalada&recalada=<?= $recalada->getRecaladaId() ?>"><?= $recalada->getNumeroAtenciones() ?></a>
+                                        href="../Atenciones/index.php?action=listbyrecalada&page=listinport&recalada=<?= $recalada->getRecaladaId() ?>"><?= $recalada->getNumeroAtenciones() ?></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

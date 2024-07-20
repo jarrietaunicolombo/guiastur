@@ -14,6 +14,6 @@ class ValidateAtencionQueryHandler implements IValidateAtencionQuery{
     }
 
     public function handler(ValidateAtencionRequest $request) : bool{
-        return $this->atencionRepository->validateAtencion($request->getRecaladaId(), $request->getFecha());
+        return $this->atencionRepository->validateAtencion($request->getRecaladaId(), $request->getFechaInicio(), $request->getFechaCierre());
     }
 }

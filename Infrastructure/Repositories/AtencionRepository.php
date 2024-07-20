@@ -1,8 +1,10 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Atencion.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Recalada.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IAtencionRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/DuplicateEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/NotFoundEntryException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/InvalidRecaladaException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IAtencionRepository.php";
 
@@ -77,20 +79,57 @@ class AtencionRepository implements IAtencionRepository
         }
     }
 
-    public function validateAtencion(int $RecaladaId, DateTime $fecha): bool
+    public function validateAtencion(int $RecaladaId, DateTime $fechaInicio, DateTime $fechaCierre): bool
     {
         try {
-            $atenciones = Atencion::find(
-                "all",
-                array(
+            $now = new DateTime();
+            $recaldad = Recalada::find(
+                "first",
+               [
                     "conditions" =>
-                        array("recalada_id = ? AND fecha_cierre > ?", $RecaladaId, $fecha)
-                )
+                    [
+                        "id = ? AND fecha_zarpe >= ?",
+                        $RecaladaId, 
+                        $now 
+                    ]
+               ]
             );
-            if (count($atenciones) > 0) {
-                return false;
+            if(!$recaldad){
+                $message = "El Buque con recalda ID $RecaladaId ha Zarpado del puerto";
+                throw new InvalidRecaladaException($message);
             }
-            return true;
+
+            $atencion = Atencion::find(
+                "first",
+                [
+                    "conditions" =>
+                    [
+                        "recalada_id = ? AND fecha_inicio >= ? AND fecha_cierre  >= ?", 
+                        $RecaladaId, 
+                        $fechaInicio, 
+                        $fechaInicio]
+                ]
+            );
+            if ($atencion) {
+                $message = "La Fecha de Inicio " . $fechaInicio->format("Y-m-d H:i:s") . " se cruza con otra atencion";
+                throw new InvalidAtencionException($message);
+            }
+
+            $atencion = Atencion::find(
+                "first",
+                [
+                    "conditions" =>
+                    [
+                        "recalada_id = ? AND fecha_inicio >= ? AND fecha_cierre  >= ?", 
+                        $RecaladaId, 
+                        $fechaCierre, 
+                        $fechaCierre]
+                ]
+            );
+            if ($atencion) {
+                $message = "La Fecha de Cierre " . $fechaCierre->format("Y-m-d H:i:s") . " se cruza con otra atencion";
+                throw new InvalidAtencionException($message);
+            }
         } catch (Exception $e) {
             $resul = Utility::getNotFoundRecordInfo($e->getMessage());
             if (count($resul) > 0) {

@@ -16,26 +16,29 @@ if ($action === null) {
 switch ($action) {
     case 'create':
         (new CreateRecaladaController())->handleRequest($_REQUEST);
-        break;
+        exit;
     case 'listall':
         (new GetRecaladasController())->handleRequest($_GET);
-        break;
+        exit;
     case 'listinport':
         (new GetRecaladasInThePortController())->handleRequest($_GET);
-        break;
+        exit;
     case 'listbybuque':
-            (new GetRecaladasByBuqueController())->handleRequest($_GET);
-            break;
-    default:
-        clear_session() ;
+        (new GetRecaladasByBuqueController())->handleRequest($_GET);
         break;
+    case 'menu':
+        header("Location: menu.php");
+        exit;
+    default:
+        clear_session();
+        exit;
 }
 
 
 function clear_session(string $message = "")
 {
     SessionUtility::clearAllSession();
-    SessionUtility::startSession() ;
+    SessionUtility::startSession();
     $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $message;
     header('Location: ../Users/login.php');
     exit;

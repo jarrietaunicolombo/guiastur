@@ -1,5 +1,6 @@
 <?php
 require_once '../../Controllers/Atenciones/GetAtencionesByRecaladaController.php';
+require_once '../../Controllers/Atenciones/CreateAtencionController.php';
 
 
 $actionGet = @$_GET['action'];
@@ -12,9 +13,9 @@ if ($action === null) {
 }
 
 switch ($action) {
-    // case 'create':
-    //     (new CreateRecaladaController())->handleRequest($_REQUEST);
-    //     break;
+    case 'create':
+        (new CreateAtencionController())->handleRequest($_REQUEST);
+        break;
     // case 'listall':
     //     (new GetRecaladasController())->handleRequest($_GET);
     //     break;
@@ -22,18 +23,21 @@ switch ($action) {
     //     (new GetRecaladasInThePortController())->handleRequest($_GET);
     //     break;
     case 'listbyrecalada':
-            (new GetAtencionesByRecaladaController())->handleRequest($_GET);
-            break;
+        (new GetAtencionesByRecaladaController())->handleRequest($_GET);
+        exit;
+    case 'menu':
+        header("Location: menu.php");
+        exit;
     default:
-        clear_session() ;
-        break;
+        clear_session();
+        exit;
 }
 
 
 function clear_session(string $message = "")
 {
     SessionUtility::clearAllSession();
-    SessionUtility::startSession() ;
+    SessionUtility::startSession();
     $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $message;
     header('Location: ../Users/login.php');
     exit;

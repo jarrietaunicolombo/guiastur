@@ -7,19 +7,19 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCase
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/InvalidPermissionException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/DependencyInjection.php";
 
-class GetAtencionesByRecaladaController
+class CreateAtencionController
 {
 
     public function handleRequest($request)
     {
         SessionUtility::startSession();
         $accion = @$request["action"];
-        if ($accion === "listbyrecalada") {
-            if ($_SERVER["REQUEST_METHOD"] === "GET") {
+        if ($accion === "create") {
+            if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $this->getAtencionesByRecalada($request);
             }
-            else{
-                $this->showLogin("Accion invalida");
+            else if ($_SERVER["REQUEST_METHOD"] === "GET"){
+                $this->showFormCreate($request);
             }
         } else {
             $this->showLogin("Accion invalida");
@@ -43,9 +43,12 @@ class GetAtencionesByRecaladaController
         } catch (Exception $e) {
             $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $e->getMessage();
         }
-        header("Location: ../../Views/Atenciones/listbyrecalada.php?buque=".@$request["buque"]."&recalada=".$request["recalada"]);
+        header("Location: ../../Views/Atenciones/listbyrecalada.php");
     }
 
+    public function showFormCreate(array $request){
+        header("Location: ../../Views/Atenciones/create.php?recalada=".@$request["recalada"]);
+    }
 
     private function showLogin(string $message)
     {

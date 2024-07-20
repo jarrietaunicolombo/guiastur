@@ -60,6 +60,7 @@ abstract class ItemsInSessionEnum
     const INFO_MESSAGE = "Information.Message";
     const ERROR_MESSAGES = "Error.Messages";
     const WELCOME_MESSAGE =  "Welcome.Message";
+    const CURRENT_PAGE =  "Current.Page";
 
     public static function getConstansValues(): array
     {
@@ -80,14 +81,19 @@ class UrlHelper
 {
     public static function getUrl($uri)
     {
+        return self::getUrlBase() . $uri;
+    }
+
+    public static function getUrlBase()
+    {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
         $host = $_SERVER['HTTP_HOST'];
         $port = $_SERVER['SERVER_PORT'];
         $baseUrl = $protocol . $host;
-        if (($protocol === 'http://' && $port != 80) || ($protocol === 'https://' && $port != 443)) {
-            $baseUrl .= ":" . $port;
+        if (($protocol === 'http://' && $port != 80) || ($protocol === 'https://' && $port != 443)) 
+        {
+            $baseUrl .= ":$port";
         }
-        $fullUrl = $baseUrl . "/guiastur" . $uri;
-        return $fullUrl;
+        return "$baseUrl/guiastur";
     }
 }
