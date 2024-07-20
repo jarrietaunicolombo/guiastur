@@ -16,6 +16,7 @@ if (!isset($usuarioLogin)) {
 $atencionesResponse = @$_SESSION[ItemsInSessionEnum::LIST_ATENCIONES] ?? null;
 $errorMessage = $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ?? "";
 $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
+$currentPage = $_SESSION[ItemsInSessionEnum::CURRENT_PAGE] ?? "menu";
 ?>
 
 
@@ -140,26 +141,35 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 <body>
     <div class="header">
         Atenciones de la recalada Id:
-        <?= isset($atencionesResponse) && count($atencionesResponse->getAtenciones()) > 0 ? $atencionesResponse->getRecalada()->getId() : "No existe" ?>
+        <?= isset($atencionesResponse) && count($atencionesResponse->getAtenciones()) > 0 ? $atencionesResponse->getRecalada()->getId() : @$_GET["recalada"] ?>
     </div>
     <div class="icon-bar">
-        <img src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home">
-        <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-add-icon.png" alt="Add">
+        <a href = "<?= UrlHelper::getUrlBase() ?>/Views/Atenciones/index.php?action=menu"> <img src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home">
+       <a href = "<?= UrlHelper::getUrlBase() ?>/Views/Atenciones/index.php?action=create&buque=<?= @$_GET["buque"] ?>&recalada=<?= @$_GET["recalada"] ?>"> <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-add-icon.png" alt="Add"></a>
         <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-search-icon.png" alt="Search">
         <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-check-icon.png" alt="Check">
         <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-delete-icon.png" alt="Delete">
     </div>
     <?php if ($errorMessage): ?>
-        <div> <span class="message error"><?= $errorMessage; ?></span></div>
+        <script type="text/javascript">
+            window.onload = function () {
+                showAlert("error", "", "<?= $errorMessage; ?>", false);
+            };
+        </script>
     <?php endif; ?>
     <?php if ($infoMessage): ?>
         <span class="message success"><?= $infoMessage; ?></span>
+        <script type="text/javascript">
+            window.onload = function () {
+                showAlert("info", "", "<?= $infoMessage; ?>", false);
+            };
+        </script>
     <?php endif; ?>
     <?php if (!($errorMessage) && $atencionesResponse === null || count($atencionesResponse->getAtenciones()) < 1): ?>
         <script type="text/javascript">
-        window.onload = function() {
-            showAlert("error", "", "No existen atenciones para esta recalada");
-        };
+            window.onload = function () {
+                showAlert("error", "", "No existen atenciones para esta recalada", true);
+            };
         </script>
     <?php else:
         $buque = $atencionesResponse->getBuque();
@@ -211,23 +221,35 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
-    
-           
-            function showAlert(icon, title, message) {
-                Swal.fire({
-                    icon: icon,
-                    title: title,
-                    text: message,
-                    showCancelButton: false,
-                    confirmButtonText: 'OK'
-                }).then((result) => {
+
+        function showAlert(icon, title, message, confirm = false) {
+            let messageCreate = "Crear atencion";
+            let messageNo = "Regresar";
+            let messageOk = message;
+            Swal.fire({
+                icon: icon,
+                title: title,
+                text: message,
+                showCancelButton: confirm,
+                confirmButtonText: (!confirm) ? messageOk : messageCreate,
+                cancelButtonText: messageNo,
+            }).then((result) => {
+                if (icon === "info") {
+                    $('#molda-myModal').hide();
+                }
+                else
                     if (result.isConfirmed) {
                         $('#molda-myModal').hide();
-                        window.location.href = '<?= UrlHelper::getUrlBase()?>/Views/Atenciones/index.php?action=menu';
+                        if (confirm) {
+                            window.location.href = '<?= UrlHelper::getUrlBase() ?>/Views/Atenciones/index.php?action=create&buque=<?= @$_GET["buque"] ?>&recalada=<?= @$_GET["recalada"] ?>';
+                        }
                     }
-                });
-            }
-    
+                    else {
+                        window.location.href = '<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=<?= @$currentPage ?>&buque=<?= @$_GET["buque"] ?>';
+                    }
+            });
+        }
+
     </script>
 </body>
 

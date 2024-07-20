@@ -223,7 +223,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#molda-myModal').hide();
-                        window.location.href = '<?= UrlHelper::getUrlBase()?>/Views/Atenciones/index.php?action=menu';
+                        window.location.href = '<?= UrlHelper::getUrlBase()?>/Views/Recaladas/index.php?action=listinport';
                     }
                 });
             }

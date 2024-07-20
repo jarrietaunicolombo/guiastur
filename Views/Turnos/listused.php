@@ -351,7 +351,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                     error: function (xhr, status, error) {
                         $('#molda-myModal').hide();
                         showAlert('error', 'Error', error);
-                      //  window.location.href = 'http://localhost/guiastur/Views/Turnos/index.php?action=usedtoday';
+                      //  window.location.href = '<?= UrlHelper::getUrlBase()?>/Views/Turnos/index.php?action=usedtoday';
                     }
                 });
             });
@@ -372,7 +372,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#molda-myModal').hide();
-                        window.location.href = 'http://localhost/guiastur/Views/Turnos/index.php?action=usedtoday';
+                        window.location.href = '<?= UrlHelper::getUrlBase()?>/Views/Turnos/index.php?action=usedtoday';
                     }
                 });
             }

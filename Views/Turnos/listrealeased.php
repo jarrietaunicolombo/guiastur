@@ -371,7 +371,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#molda-myModal').hide();
-                        window.location.href = 'http://localhost/guiastur/Views/Turnos/index.php?action=releasedtoday';
+                        window.location.href = '<?= UrlHelper::getUrlBase()?>/Views/Turnos/index.php?action=releasedtoday';
                     }
                 });
             }

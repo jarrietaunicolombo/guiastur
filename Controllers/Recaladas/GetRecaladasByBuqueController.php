@@ -42,7 +42,7 @@ class GetRecaladasByBuqueController
         } catch (Exception $e) {
             $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $e->getMessage();
         }
-        header("Location: ../../Views/Recaladas/list.php");
+        header("Location: ../../Views/Recaladas/listbybuque.php");
     }
 
 

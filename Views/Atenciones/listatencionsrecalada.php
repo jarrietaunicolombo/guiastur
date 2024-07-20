@@ -13,7 +13,7 @@ if (!isset($usuarioLogin)) {
     header('Location: ../Users/login.php');
     exit;
 }
-$atencionesResponse = @$_SESSION[ItemsInSessionEnum::LIST_ATENCIONES] ?? null;
+$turnosResponse = @$_SESSION[ItemsInSessionEnum::LIST_ATENCIONES] ?? null;
 $errorMessage = $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ?? "";
 $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 ?>
@@ -138,9 +138,8 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 </head>
 
 <body>
-    <div class="header">
-        Atenciones de la recalada Id:
-        <?= isset($atencionesResponse) && count($atencionesResponse->getAtenciones()) > 0 ? $atencionesResponse->getRecalada()->getId() : "No existe" ?>
+<div class="header">
+        <h1>Atenciones Por Recalada </h1>
     </div>
     <div class="icon-bar">
         <img src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home">
@@ -150,85 +149,61 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-delete-icon.png" alt="Delete">
     </div>
     <?php if ($errorMessage): ?>
-        <div> <span class="message error"><?= $errorMessage; ?></span></div>
-    <?php endif; ?>
-    <?php if ($infoMessage): ?>
-        <span class="message success"><?= $infoMessage; ?></span>
-    <?php endif; ?>
-    <?php if (!($errorMessage) && $atencionesResponse === null || count($atencionesResponse->getAtenciones()) < 1): ?>
-        <script type="text/javascript">
-        window.onload = function() {
-            showAlert("error", "", "No existen atenciones para esta recalada");
-        };
-        </script>
-    <?php else:
-        $buque = $atencionesResponse->getBuque();
-        $recalada = $atencionesResponse->getRecalada();
-        $atenciones = $atencionesResponse->getAtenciones();
-        ?>
-        <div class="sub-header">
-            <span>Buque: <?= $buque->getNombre() ?></span>
-            <span>Recalada ID: <?= $recalada->getId() ?></span>
-            <span>País: <?= $recalada->getPais() ?></span>
-        </div>
-        <div class="container">
-            <div class="table-container">
-                <table>
-                    <thead>
+            <span class="message error"><?= $errorMessage; ?></span>
+        <?php endif; ?>
+        <?php if ($infoMessage): ?>
+            <span class="message success"><?= $infoMessage; ?></span>
+        <?php endif; ?>
+        <?php if  (! ($errorMessage) && $turnosResponse === null || count($turnosResponse->getAtenciones()) < 1): ?>
+            <span class="message error">No existe informacion sobre Atenciones para este Recalada</span>
+        <?php else:
+         $buque = $turnosResponse->getBuque();
+         $recalada = $turnosResponse->getRecalada();
+         $atenciones = $turnosResponse->getAtenciones();
+         ?>
+    <div class="sub-header">
+        <span>Buque: <?= $buque->getNombre() ?></span>
+        <span>Recalada ID: <?= $recalada->getId() ?></span>
+        <span>País: <?= $recalada->getPais() ?></span>
+    </div>
+    <div class="container">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Inicio</th>
+                        <th>Cierre</th>
+                        <th>Turnos</th>
+                        <th>Turnos Creados</th>
+                        <th>Turnos Disponibles</th>
+                        <th>Supervisor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                    foreach ($atenciones as $atencionDto):
+                        ?>
                         <tr>
-                            <th>ID</th>
-                            <th>Inicio</th>
-                            <th>Cierre</th>
-                            <th>Turnos</th>
-                            <th>Turnos Creados</th>
-                            <th>Turnos Disponibles</th>
-                            <th>Supervisor</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        foreach ($atenciones as $atencionDto):
-                            ?>
-                            <tr>
-                                <td><?= $atencionDto->getId() ?></td>
-                                <td><?= $atencionDto->getFechaInicio()->format("Y-m-d H:i:s") ?></td>
-                                <td><?= $atencionDto->getFechaCierre()->format("Y-m-d H:i:s") ?></td>
-                                <td><?= $atencionDto->getTotalTurnos() ?></td>
-                                <td>
-                                    <a href="../Turnos/index.php?action=listbyatencion&atencion=<?= $atencionDto->getId() ?>"><?= $atencionDto->getTotalTurnosCreados() ?>
-                                    </a>
+                            <td><?= $atencionDto->getId() ?></td>
+                            <td><?= $atencionDto->getFechaInicio()->format("Y-m-d H:i:s") ?></td>
+                            <td><?= $atencionDto->getFechaCierre()->format("Y-m-d H:i:s") ?></td>
+                            <td><?= $atencionDto->getTotalTurnos() ?></td>
+                            <td>
+                                <a
+                                    href="../Turnos/index.php?action=listbyatencion&atencion=<?= $atencionDto->getId() ?>"><?= $atencionDto->getTotalTurnosCreados() ?>
+                                </a>
 
-                                </td>
-                                <td><?= $atencionDto->getTurnosDisponibles() ?></td>
-                                <td><?= $atencionDto->getSupervisorNombre() ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                            </td>
+                            <td><?= $atencionDto->getTurnosDisponibles() ?></td>
+                            <td><?= $atencionDto->getSupervisorNombre() ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
         <?php endif; ?>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-    
-           
-            function showAlert(icon, title, message) {
-                Swal.fire({
-                    icon: icon,
-                    title: title,
-                    text: message,
-                    showCancelButton: false,
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#molda-myModal').hide();
-                        window.location.href = '<?= UrlHelper::getUrlBase()?>/Views/Atenciones/index.php?action=menu';
-                    }
-                });
-            }
-    
-    </script>
 </body>
 
 </html>

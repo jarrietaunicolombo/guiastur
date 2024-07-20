@@ -1,7 +1,8 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetRecaladas/Dto/GetRecaladasResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetRecaladasInThePort/Dto/GetRecaladasInThePortResponse.php";
 
 SessionUtility::startSession();
 $usuarioLogin = $_SESSION[ItemsInSessionEnum::USER_LOGIN];
@@ -13,11 +14,10 @@ if (!isset($usuarioLogin)) {
     header('Location: ../Users/login.php');
     exit;
 }
-$atencionesResponse = @$_SESSION[ItemsInSessionEnum::LIST_ATENCIONES] ?? null;
+$recaladasResponse = @$_SESSION[ItemsInSessionEnum::LIST_RECALADAS] ?? null;
 $errorMessage = $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ?? "";
 $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -25,7 +25,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atenciones de la recalada</title>
+    <title>Reporte de Recaladas</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -139,37 +139,40 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 
 <body>
     <div class="header">
-        Atenciones de la recalada Id:
-        <?= isset($atencionesResponse) && count($atencionesResponse->getAtenciones()) > 0 ? $atencionesResponse->getRecalada()->getId() : "No existe" ?>
-    </div>
+        Recladas por Buque 
+        </div>
     <div class="icon-bar">
-        <img src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home">
-        <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-add-icon.png" alt="Add">
+    <a href = "<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=menu"> <img src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home"></a>
+    <a href = "<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=create"> <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-add-icon.png" alt="Add"></a>
         <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-search-icon.png" alt="Search">
         <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-check-icon.png" alt="Check">
         <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-delete-icon.png" alt="Delete">
     </div>
     <?php if ($errorMessage): ?>
-        <div> <span class="message error"><?= $errorMessage; ?></span></div>
-    <?php endif; ?>
-    <?php if ($infoMessage): ?>
-        <span class="message success"><?= $infoMessage; ?></span>
-    <?php endif; ?>
-    <?php if (!($errorMessage) && $atencionesResponse === null || count($atencionesResponse->getAtenciones()) < 1): ?>
         <script type="text/javascript">
         window.onload = function() {
-            showAlert("error", "", "No existen atenciones para esta recalada");
+            showAlert("error", "", "<?= $errorMessage ?>");
+        };
+        </script>
+    <?php endif; ?>
+    <?php if ($infoMessage): ?>
+        <script type="text/javascript">
+        window.onload = function() {
+            showAlert("info", "", "<?= $infoMessage ?>");
+        };
+        </script>
+    <?php endif; ?>
+    <?php if (!($errorMessage) && $recaladasResponse === null || count($recaladasResponse->getRecaladas()) < 1): ?>
+        <script type="text/javascript">
+        window.onload = function() {
+            showAlert("warning", "", "Este Buque no tiene Recaladas");
         };
         </script>
     <?php else:
-        $buque = $atencionesResponse->getBuque();
-        $recalada = $atencionesResponse->getRecalada();
-        $atenciones = $atencionesResponse->getAtenciones();
+        $recaladas = $recaladasResponse->getRecaladas();
         ?>
         <div class="sub-header">
-            <span>Buque: <?= $buque->getNombre() ?></span>
-            <span>Recalada ID: <?= $recalada->getId() ?></span>
-            <span>País: <?= $recalada->getPais() ?></span>
+            <span>Buque: <?= $recaladas[0]->getBuqueNombre() ?></span>
         </div>
         <div class="container">
             <div class="table-container">
@@ -177,30 +180,25 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Inicio</th>
-                            <th>Cierre</th>
-                            <th>Turnos</th>
-                            <th>Turnos Creados</th>
-                            <th>Turnos Disponibles</th>
-                            <th>Supervisor</th>
+                            <th>ARRIBO</th>
+                            <th>ZARPE</th>
+                            <th>TURISTAS</th>
+                            <th>PAIS</th>
+                            <th>ATENCIONES</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        foreach ($atenciones as $atencionDto):
-                            ?>
+                    <?php foreach ($recaladas as $recalada): ?>
                             <tr>
-                                <td><?= $atencionDto->getId() ?></td>
-                                <td><?= $atencionDto->getFechaInicio()->format("Y-m-d H:i:s") ?></td>
-                                <td><?= $atencionDto->getFechaCierre()->format("Y-m-d H:i:s") ?></td>
-                                <td><?= $atencionDto->getTotalTurnos() ?></td>
+                                <td><?= $recalada->getRecaladaId(); ?></td>
+                                <td><?= $recalada->getFechaArribo()->format("Y-m-d H:i:s"); ?></td>
+                                <td><?= $recalada->getFechaZarpe()->format("Y-m-d H:i:s"); ?></td>
+                                <td><?= $recalada->getTotalTuristas(); ?></td>
+                                <td><?= $recalada->getPaisNombre(); ?></td>
                                 <td>
-                                    <a href="../Turnos/index.php?action=listbyatencion&atencion=<?= $atencionDto->getId() ?>"><?= $atencionDto->getTotalTurnosCreados() ?>
-                                    </a>
-
+                                    <a
+                                        href="../Atenciones/index.php?action=listbyrecalada&page=listbybuque&buque=<?= $recalada->getBuqueId() ?>&recalada=<?= $recalada->getRecaladaId() ?>"><?= $recalada->getNumeroAtenciones() ?></a>
                                 </td>
-                                <td><?= $atencionDto->getTurnosDisponibles() ?></td>
-                                <td><?= $atencionDto->getSupervisorNombre() ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -212,7 +210,6 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
     
-           
             function showAlert(icon, title, message) {
                 Swal.fire({
                     icon: icon,
@@ -223,7 +220,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#molda-myModal').hide();
-                        window.location.href = '<?= UrlHelper::getUrlBase()?>/Views/Atenciones/index.php?action=menu';
+                        window.location.href = '<?= UrlHelper::getUrlBase()?>/Views/Recaladas/index.php?action=<?= $currentPage ?>';
                     }
                 });
             }
