@@ -15,7 +15,7 @@ if ($action === null) {
 
 switch ($action) {
     case 'create':
-        (new CreateRecaladaController())->handleRequest($_REQUEST);
+        echo (new CreateRecaladaController())->handleRequest($_REQUEST);
         exit;
     case 'listall':
         (new GetRecaladasController())->handleRequest($_GET);

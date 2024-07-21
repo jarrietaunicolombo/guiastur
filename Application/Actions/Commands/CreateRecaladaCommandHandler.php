@@ -25,7 +25,6 @@ class CreateRecaladaCommandHandler implements ICreateRecaladaCommand {
         $recalada = $this->recaladaRepository->create($recalada);
         return new CreateRecaladaResponse(
             $recalada->id
-            , $request   
         );
     }
 

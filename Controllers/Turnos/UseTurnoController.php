@@ -18,12 +18,15 @@ class UseTurnoController
         if ($accion === "usarturno") {
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $this->useTurno($request);
-            }
-            else{
-                $this->showLogin("Accion invalida");
+            } else {
+                $errorResponse = ["error" => "Accion invalida"];
+                echo json_encode($errorResponse);
+                exit;
             }
         } else {
-            $this->showLogin("Accion invalida");
+            $errorResponse = ["error" => "Accion invalida"];
+            echo json_encode($errorResponse);
+            exit;
         }
     }
 
@@ -32,9 +35,9 @@ class UseTurnoController
         try {
             $loginUser = $_SESSION[ItemsInSessionEnum::USER_LOGIN] ?? null;
             if ($loginUser === null) {
-                throw new InvalidPermissionException();
+                throw new InvalidPermissionException("Carece de los permisos necesarios");
             }
-         
+
             $service = DependencyInjection::getUseTurnoServce();
             $usetunroRequest = new UseTurnoRequest(
                 $request["turnoid"],
@@ -45,21 +48,11 @@ class UseTurnoController
             $response = $service->useTurno($usetunroRequest);
             echo $response->toJSON();
             exit();
-        } catch (InvalidPermissionException $e) {
-            $this->showLogin("Acceso denegado");
         } catch (Exception $e) {
-         $responseData = array("error" => $e->getMessage());
-         echo json_encode($responseData);
+            $responseData = array("error" => $e->getMessage());
+            echo json_encode($responseData);
+            exit;
         }
     }
 
-
-    private function showLogin(string $message)
-    {
-        SessionUtility::clearAllSession();
-        SessionUtility::startSession();
-        $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $message;
-        header("Location: ../../Views/Users/login.php");
-        exit;
-    }
 }
