@@ -19,8 +19,6 @@ class CreateBuqueCommandHandler implements ICreateBuqueCommand {
         $buque->fecha_registro = $request->getFechaRegistro();
         $buque->usuario_registro = $request->getUsuarioRegistro();
         $buque = $this->buqueRepository->create($buque);
-        return  new CreateBuqueResponse(
-                                    $buque->id
-                                    , $request);
+        return  new CreateBuqueResponse($buque->id);
     }
 }

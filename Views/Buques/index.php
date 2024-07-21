@@ -23,14 +23,17 @@ if ($action === 'listall' && isset($_POST["action"])) {
 
 switch ($action) {
     case 'create':
-        (new CreateBuqueController())->handleRequest($_POST);
-        break;
+        echo (new CreateBuqueController())->handleRequest($_POST);
+        exit;
     case 'listall':
         (new GetBuquesController())->handleRequest($_GET);
-        break;
+        exit;
+     case 'menu':
+            header("Location: menu.php");
+            exit;
     default:
         clear_session() ;
-        break;
+        exit;
 }
 
 

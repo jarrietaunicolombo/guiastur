@@ -56,6 +56,7 @@ else if($infoMessage){
             z-index: 1000;
             margin-bottom: 20px;
         }
+        
 
         .form-wrapper {
             display: flex;

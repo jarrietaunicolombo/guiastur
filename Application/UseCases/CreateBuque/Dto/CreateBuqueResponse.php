@@ -1,21 +1,17 @@
 <?php
 require_once __DIR__ . "/CreateBuqueRequest.php";
-class CreateBuqueResponse
+require_once $_SERVER["DOCUMENT_ROOT"]."guiastur/Application/UseCases/GenericDto.php";
+class CreateBuqueResponse extends GenericDto
 {
     private $id;
-    private $buque;
+   
 
-    public function __construct(int $id, CreateBuqueRequest $buque)
+    public function __construct(int $id)
     {
-        if (!isset($id) || $id <= 0) {
+        if (!isset($id) || $id < 1) {
             throw new \InvalidArgumentException("El Id del nuevo Buque es requerido");
         }
 
-        if (!isset($buque)) {
-            throw new \InvalidArgumentException("El nuevo Buque es requerido");
-        }
-
-        $this->buque = $buque;
         $this->id = $id;
     }
 
@@ -23,9 +19,5 @@ class CreateBuqueResponse
         return $this->id;
     }
 
-    public function getBuque(): CreateBuqueRequest
-    {
-        return $this->buque;
-    }
 }
 
