@@ -27,69 +27,76 @@ class CreateRecaladaController
             } else if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 $this->showFormCreateRecalada();
             } else {
-                $this->showLogin("Accion invalida");
+                $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = "Accion Invalida";
+                $errorResponse = ["error" => "Accion invalida"];
+                echo json_encode($errorResponse);
+                exit;
             }
         } else {
-            $this->showLogin("Accion invalida");
+            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = "Accion Invalida";
+            $errorResponse = ["error" => "Accion invalida"];
+            echo json_encode($errorResponse);
+            exit;
         }
     }
 
     private function createRecalada(array $request)
     {
         try {
-
             $loginUser = $_SESSION[ItemsInSessionEnum::USER_LOGIN] ?? null;
             if ($loginUser === null) {
-                throw new InvalidPermissionException();
+                throw new InvalidPermissionException("No tiene permisos para crear Buques");
             }
 
             $errorMessages = array();
             if (!isset($request["buque_id"]) || $request["buque_id"] < 1) {
-                $errorMessages["buque_id"] = "Es requerido";
+                $errorMessages["buque"] = "Es requerido";
             }
 
             if (!isset($request["pais_id"]) || $request["pais_id"] < 1) {
-                $errorMessages["pais_id"] = "Es requerido";
+                $errorMessages["pais"] = "Es requerido";
             }
 
             if (!isset($request["fecha_arribo"])) {
-                $errorMessages["fecha_arribo"] = "Es requerida";
+                $errorMessages["arribo"] = "Es requerida";
             }
 
             if (!isset($request["fecha_zarpe"])) {
-                $errorMessages["fecha_zarpe"] = "Es requerida";
+                $errorMessages["zarpe"] = "Es requerida";
             }
 
             $fecha_arribo = DateTime::createFromFormat("Y-m-d\TH:i", $request["fecha_arribo"]);
             if ($fecha_arribo === false) {
-                $errorMessages["fecha_arribo"] = "Formato: AAAA-MM-DDD";
+                $errorMessages["arribo"] = "Formato: AAAA-MM-DDD";
             }
 
             $fecha_zarpe = DateTime::createFromFormat("Y-m-d\TH:i", $request["fecha_zarpe"]);
             if ($fecha_zarpe === false) {
-                $errorMessages["fecha_zarpe"] = "Formato: AAAA-MM-DDD";
+                $errorMessages["zarpe"] = "Formato: AAAA-MM-DDD";
             }
 
             if ($fecha_zarpe < new DateTime()) {
-                $errorMessages["fecha_zarpe"] = "Incorrecta";
+                $errorMessages["zarpe"] = "Incorrecta";
             }
 
 
             if ($fecha_zarpe < new DateTime()) {
-                $errorMessages["fecha_zarpe"] = "Incorrecta";
+                $errorMessages["zarpe"] = "Incorrecta";
             }
 
             if ($fecha_arribo > $fecha_zarpe) {
-                $errorMessages["fecha_arribo"] = "Mayor que la fecha de zarpe";
-                $errorMessages["fecha_zarpe"] = "Menor que la fecha de arribo";
+                $errorMessages["arribo"] = "Mayor que la fecha de zarpe";
+                $errorMessages["zarpe"] = "Menor que la fecha de arribo";
             }
 
             if (!isset($request["total_turistas"]) || $request["total_turistas"] < 1) {
-                $errorMessages["total_turistas"] = "Es requerido";
+                $errorMessages["turistas"] = "Es requerido";
             }
 
             if (count($errorMessages) > 0) {
-                throw new InvalidRequestParameterException();
+                $errorMessages["error"] = "Datos mal diligenciados";
+                echo json_encode($errorMessages);
+                exit;
             }
 
             $total_turistas = $request["total_turistas"];
@@ -108,36 +115,12 @@ class CreateRecaladaController
             );
             $service = DependencyInjection::getCreateRecaladaServce();
             $createRecaladaResponse = $service->createRecalada($createRecaladaRequest);
-            $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] = "Recalada Creada Id: " . $createRecaladaResponse->getId();
-            SessionUtility::deleteItemInSession(ItemsInSessionEnum::ERROR_MESSAGE);
-            SessionUtility::deleteItemInSession(ItemsInSessionEnum::ERROR_MESSAGES);
-            SessionUtility::deleteItemInSession(ItemsInSessionEnum::RECALADA_REQUEST_CREATING);
-            header("Location: ../../Views/Recaladas/create.php");
-        } catch (InvalidRequestParameterException $e) {
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGES] = $errorMessages;
-            $_SESSION[ItemsInSessionEnum::RECALADA_REQUEST_CREATING] = $request;
-            header("Location: ../../Views/Recaladas/create.php");
-        } catch (InvalidArgumentException $e) {
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGES] = $errorMessages;
-            $_SESSION[ItemsInSessionEnum::RECALADA_REQUEST_CREATING] = $request;
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $e->getMessage();
-            header("Location: ../../Views/Recaladas/create.php");
-        } catch (InvalidRecaladaException $e) {
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGES] = $errorMessages;
-            $_SESSION[ItemsInSessionEnum::RECALADA_REQUEST_CREATING] = $request;
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $e->getMessage();
-            header("Location: ../../Views/Recaladas/create.php");
-        } catch (DuplicateEntryException $e) {
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGES] = $errorMessages;
-            $_SESSION[ItemsInSessionEnum::RECALADA_REQUEST_CREATING] = $request;
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $e->getMessage();
-            header("Location: ../../Views/Recaladas/create.php");
-        } catch (InvalidPermissionException $e) {
-            $this->showLogin("Acceso denegado");
+            echo $createRecaladaResponse->toJson();
+            exit;
         } catch (Exception $e) {
-            $errorMessage = $e->getMessage();
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $errorMessage;
-            $this->showFormCreateRecalada();
+            $error = ["error" => $e->getMessage()];
+            echo json_encode($error);
+            exit;
         }
     }
 

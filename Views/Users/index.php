@@ -15,7 +15,7 @@ if ($action === null) {
     exit;
 }
 
-if ($action === 'login' && isset($_GET["action"])){
+if ($action === 'login' && isset($_GET["action"])) {
     clear_session();
     exit;
 }
@@ -25,58 +25,54 @@ if (($action === 'logout' && isset($_POST["action"]))) {
     exit;
 }
 
-if (($action === 'create' && isset($_GET["action"])) ) {
-    header('Location: create.php');
+if (($action === 'activate' && isset($_POST["action"]))) {
+    clear_session("Accion invalida");
     exit;
 }
 
-if (($action === 'activate' && isset($_POST["action"])) ) {
-   clear_session("Accion invalida");
-   exit;
-}
-
-if (($action === 'activating' && isset($_GET["action"])) ) {
+if (($action === 'activating' && isset($_GET["action"]))) {
     clear_session("Accion invalida");
     exit;
 }
 
 switch ($action) {
+    case 'menu':
+        header("Location: menu.php");
+        exit;
     case 'login':
         $controller = new LoginController();
         $controller->handleRequest($_POST);
-        break;
+        exit;
     case 'logout':
-            $controller = new LoginController();
-            $controller->handleRequest($_GET);
-            break;
+        $controller = new LoginController();
+        $controller->handleRequest($_GET);
+        exit;
     case 'create':
-        $controller = new CreateUserController();
-        $controller->handleRequest($_POST);
-        break;
+       echo (new CreateUserController())->handleRequest($_REQUEST);
+        exit;
     case 'activate':
-            $controller = new ActivateUserAccountController();
-            $controller->handleRequest($_GET);
-            break;
+        $controller = new ActivateUserAccountController();
+        $controller->handleRequest($_GET);
+        exit;
     case 'activating':
-            $controller = new ActivateUserAccountController();
-            $controller->handleRequest($_POST);
-            break;
-    
+        $controller = new ActivateUserAccountController();
+        $controller->handleRequest($_POST);
+        exit;
+
     // case 'create_user_guia':
     //     $controller = new CreateUserGuiaController();
     //     $controller->createUserGuia();
-    //     break;
-    case 'show_user':
-        require_once 'show.php';
-        break;
-    case 'show_user_guia':
-        require_once 'ShowGuia.php';
-        break;
+    //     exit;
+    // case 'show_user':
+    //     require_once 'show.php';
+    //     exit;
+    // case 'show_user_guia':
+    //     require_once 'ShowGuia.php';
+    //     exit;
     default:
-        clear_session() ;
-        
+        clear_session();
         header('Location: login.php?');
-        break;
+        exit;
 }
 
 
@@ -84,7 +80,7 @@ function clear_session(string $message = "")
 {
     session_destroy();
     session_start();
-    SessionUtility::startSession() ;
+    SessionUtility::startSession();
     $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $message;
     header('Location: login.php');
     exit;

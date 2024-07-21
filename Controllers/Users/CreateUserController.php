@@ -14,7 +14,30 @@ require_once '../../DependencyInjection.php';
 
 class CreateUserController
 {
-    public function handleRequest(array $request)
+    public function handleRequest($request)
+    {
+        SessionUtility::startSession();
+        $accion = @$request["action"];
+        if ($accion === "create") {
+            if ($_SERVER["REQUEST_METHOD"] === "POST") {
+                $this->createUser($request);
+            } else if ($_SERVER["REQUEST_METHOD"] === "GET") {
+                $this->showFormCreateUser();
+            } else {
+                $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = "Accion Invalida";
+                $errorResponse = ["error" => "Accion invalida"];
+                echo json_encode($errorResponse);
+                exit;
+            }
+        } else {
+            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = "Accion Invalida";
+            $errorResponse = ["error" => "Accion invalida"];
+            echo json_encode($errorResponse);
+            exit;
+        }
+    }
+
+    private function createUser(array $request)
     {
         SessionUtility::startSession();
         $transacctionDb = DependencyInjection::getTransactionManager();
@@ -22,45 +45,72 @@ class CreateUserController
             $transacctionDb->begin();
             $userLogin = @$_SESSION[ItemsInSessionEnum::USER_LOGIN];
             if (!isset($userLogin)) {
-                throw new InvalidPermissionException();
+                throw new InvalidPermissionException("No tiene permisos para crear Usuario");
             }
             if ($userLogin->getRol() == RolTypeEnum::GUIA || $userLogin->getRol() == RolTypeEnum::USUARIO) {
                 throw new InvalidRequestParameterException("Usted no tiene permisos para crear Usuarios");
             }
 
-            $rolesResponse = @$_SESSION[ItemsInSessionEnum::LIST_ROLES];
-            if (!isset($rolesResponse)) {
-                $rolesResponse = DependencyInjection::getRolesServce()->getRoles();
+            $rolesResponse = (DependencyInjection::getRolesServce())->getRoles();
+            if (!isset($rolesResponse) || count(@$rolesResponse) == 0) {
+                new Exception("No existen Roles disponibles");
+            } else {
                 $_SESSION[ItemsInSessionEnum::LIST_ROLES] = $rolesResponse;
             }
 
             $roles = $rolesResponse->getRoles();
+            $rol_id = (int) @$_POST['rol_id'];
 
-            $email = $_POST['email'];
-            $password = Utility::generateGUID(2);
-            $nombre = $_POST['nombre'];
-            $rol_id = (int) $_POST['rol_id'];
+            $errorMenssages = [];
+
+            if ($rol_id === null || $rol_id < 1) {
+                $errorMenssages["rol"] = "Es requerido";
+                new Exception("El Rol es requerido");
+            }
 
             $rolSelected = array_filter($roles, function ($rol) use ($rol_id) {
-                return $rol->getId() == $rol_id;
+                return $rol->getId() === $rol_id; // Filtrar por ID
             });
-
+            
+            // Comprobar si se encontró algún rol
+            if (empty($rolSelected)) {
+                throw new Exception("No tiene permisos suficientes");
+            }
+  
             $rolSelected = reset($rolSelected);
 
             if (
                 $userLogin->getRol() === RolTypeEnum::SUPERVISOR
                 && $rolSelected->getNombre() === RolTypeEnum::SUPER_USUARIO
             ) {
-                throw new InvalidRequestParameterException("Usted no tiene permisos para crear Super usuarios");
+                throw new InvalidPermissionException("No tiene permisos para crear Super Usuarios");
             }
 
             if (
                 $userLogin->getRol() === RolTypeEnum::SUPERVISOR
                 && $rolSelected->getNombre() === RolTypeEnum::SUPERVISOR
             ) {
-                throw new InvalidRequestParameterException("Usted no tiene permisos para crear Supervisores");
+                throw new InvalidPermissionException("No tiene permisos para crear Usuarios Supervisores");
             }
 
+            $email = isset($_POST['email']) && !empty(trim($_POST['email'])) ? $_POST['email'] : null;
+            $nombre = isset($_POST['nombre']) && !empty(trim($_POST['nombre'])) ? $_POST['nombre'] : null;
+            $password = Utility::generateGUID(2);
+
+            $errorMenssages = [];
+            if ($email === null) {
+                $errorMenssages["email"] = "Es requerido";
+            }
+
+            if ($nombre === null) {
+                $errorMenssages["nombre"] = "Es requerido";
+            }
+
+            if (count($errorMenssages) > 0) {
+                $errorMenssages["error"] = "Formulario mal diligenciado";
+                echo json_encode($errorMenssages);
+                exit;
+            }
             $usuario_registro = $userLogin->getId();
             $createUserRequest = new CreateUserRequest(
                 $email,
@@ -86,34 +136,28 @@ class CreateUserController
             if (strstr($emailResponse, "No pudo ser enviada")) {
                 throw new EmailSenderException($emailResponse);
             }
-            $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] = $emailResponse;
             $transacctionDb->commit();
-            header("Location: ../../Views/Users/index.php?action=create");
+            $response = array(
+                "id" => $createUserResponse->getId(),
+                "message" => $emailResponse
+            );
+            echo json_encode($response);
             exit();
-        } 
-        catch (InvalidRequestParameterException $e) {
+        } catch (Exception $e) {
             $transacctionDb->rollback();
-            $errorMessage =  $e->getMessage();
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $errorMessage;
-            header("Location: ../../Views/Users/create.php");
-            exit();
+            $error = ["error"=> $e->getMessage()];
+            echo json_encode($error);
+            exit;
         }
-        catch (DuplicateEntryException $e) {
-            $transacctionDb->rollback();
-            $errorMessage =  $e->getMessage();
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $errorMessage;
-            header("Location: ../../Views/Users/create.php");
-            exit();
-        }
-        catch (Exception $e) {
-            $transacctionDb->rollback();
-            session_destroy();
-            SessionUtility::startSession();
-            $errorMessage =  $e->getMessage();
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $errorMessage;
-            header("Location: ../../Views/Users/index.php?action=create");
-            exit();
-        }
+    }
+
+    private function showFormCreateUser()
+    {
+        $rolesResponse = DependencyInjection::getRolesServce()->getRoles();
+        $_SESSION[ItemsInSessionEnum::LIST_ROLES] = $rolesResponse;
+        header("Location: ../../Views/Users/create.php");
+        exit;
+
     }
 
     private function generateBodyMessage(CreateUserResponse $response)
