@@ -17,7 +17,8 @@ class CreateBuqueController
             SessionUtility::clearAllSession();
             SessionUtility::startSession();
             $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = "Accion Invalida";
-            header("Location: ../../Views/Users/login.php");
+            $errorResponse = ["error" => "Accion invalida"];
+            echo json_encode($errorResponse);
             exit;
         }
         $this->createBuque($request);
@@ -25,24 +26,23 @@ class CreateBuqueController
 
     public function createBuque($request)
     {
-        $loginUser = $_SESSION[ItemsInSessionEnum::USER_LOGIN] ?? null;
-        if ($loginUser === null) {
-            throw new InvalidPermissionException();
-        }
         try {
-
+            $loginUser = $_SESSION[ItemsInSessionEnum::USER_LOGIN] ?? null;
+            if ($loginUser === null) {
+                throw new InvalidPermissionException("No tiene permisos para crear Buques");
+            }
             $codigo = $request["codigo"] ?? null;
             $nombre = @$request["nombre"];
             $userId = $loginUser->getId();
             $createRequest = new CreateBuqueRequest($codigo, $nombre, null, $userId);
             $service = DependencyInjection::getCreateBuqueServce();
             $response = $service->CreateBuque($createRequest);
-            $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] = "Buque creado Id: ".$response->getId();
+            echo $response->toJSON();
+            exit;
         } catch (Exception $e) {
-            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $e->getMessage();
+            $errorResponse = ["error" => $e->getMessage()];
+            echo json_encode($errorResponse);
         }
-        header("Location: ../../Views/Buques/create.php");
     }
-
 }
 
