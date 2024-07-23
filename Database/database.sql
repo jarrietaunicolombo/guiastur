@@ -76,7 +76,7 @@ CREATE TABLE Buques (
 CREATE TABLE Recaladas (
 	id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     fecha_arribo DATETIME NOT NULL,
-    fecha_zarpe DATE,
+    fecha_zarpe DATETIME ,
     total_turistas INTEGER(5) NOT NULL,
     observaciones TEXT,
     buque_id INT NOT NULL,

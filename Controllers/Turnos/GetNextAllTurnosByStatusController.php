@@ -32,7 +32,7 @@ class GetNextAllTurnosByStatusController
             }
             $turnoStatus = $request["action"];
             $getNextAllTurnosByStatusRequest = new GetNextAllTurnosByStatusRequest($turnoStatus);
-            $service = DependencyInjection::getGetNextAllTurnosByStatusService();
+            $service = DependencyInjection::getNextAllTurnosByStatusService();
             $response = $service->getNextAllTurnosByStatus($getNextAllTurnosByStatusRequest);
             $_SESSION[ItemsInSessionEnum::LIST_NEXT_TURNOS_BY_STATUS] = $response;
         } catch (InvalidPermissionException $e) {

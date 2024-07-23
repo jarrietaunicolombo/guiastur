@@ -79,7 +79,7 @@ class AtencionRepository implements IAtencionRepository
         }
     }
 
-    public function validateAtencion(int $RecaladaId, DateTime $fechaInicio, DateTime $fechaCierre): bool
+    public function validateAtencion(int $RecaladaId, DateTime $fechaInicio, DateTime $fechaCierre)
     {
         try {
             $now = new DateTime();
@@ -104,9 +104,8 @@ class AtencionRepository implements IAtencionRepository
                 [
                     "conditions" =>
                     [
-                        "recalada_id = ? AND fecha_inicio >= ? AND fecha_cierre  >= ?", 
+                        "recalada_id = ? AND ? between fecha_inicio AND fecha_cierre", 
                         $RecaladaId, 
-                        $fechaInicio, 
                         $fechaInicio]
                 ]
             );
@@ -120,9 +119,8 @@ class AtencionRepository implements IAtencionRepository
                 [
                     "conditions" =>
                     [
-                        "recalada_id = ? AND fecha_inicio >= ? AND fecha_cierre  >= ?", 
+                        "recalada_id = ? AND  ? between fecha_inicio AND fecha_cierre", 
                         $RecaladaId, 
-                        $fechaCierre, 
                         $fechaCierre]
                 ]
             );

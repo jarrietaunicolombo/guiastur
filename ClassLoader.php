@@ -50,6 +50,8 @@ class ClassLoader
         'GetRecaladasQueryHandler' => 'Application/Actions/Queries/GetRecaladasQueryHandler.php',
         'GetRecaladasByBuqueQueryHandler' => 'Application/Actions/Queries/GetRecaladasByBuqueQueryHandler.php',
         'GetNextAllTurnosByStatusQueryHandler' => 'Application/Actions/Queries/GetNextAllTurnosByStatusQueryHandler.php',
+        'GetRecaladaByIdQueryHandler' => 'Application/Actions/Queries/GetRecaladaByIdQueryHandler.php',
+        'GetSupervisoresQueryHandler' => 'Application/Actions/Queries/GetSupervisoresQueryHandler.php',
        
         // Application UseCases
         'CreateAtencionUseCase' => 'Application/UseCases/CreateAtencion/CreateAtencionUseCase.php',

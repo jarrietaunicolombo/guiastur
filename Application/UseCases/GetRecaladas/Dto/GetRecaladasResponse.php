@@ -97,11 +97,11 @@ class RecaladaResponseDto
         return $this->buque_nombre;
     }   
 
-    public function getFechaArribo()  {
+    public function getFechaArribo() : DateTime {
         return $this->fecha_arribo;
     }
 
-    public function getFechaZarpe() {  
+    public function getFechaZarpe() : DateTime{  
         return $this->fecha_zarpe;
     }
 

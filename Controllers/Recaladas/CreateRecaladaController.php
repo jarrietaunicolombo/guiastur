@@ -45,7 +45,7 @@ class CreateRecaladaController
         try {
             $loginUser = $_SESSION[ItemsInSessionEnum::USER_LOGIN] ?? null;
             if ($loginUser === null) {
-                throw new InvalidPermissionException("No tiene permisos para crear Buques");
+                throw new InvalidPermissionException("No tiene permisos para crear Recaladas");
             }
 
             $errorMessages = array();

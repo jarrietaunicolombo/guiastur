@@ -25,7 +25,6 @@ class CreateAtencionCommandHandler implements ICreateAtencionCommand {
         $atencion = $this->atencionRepository->create($atencion);
         return new CreateAtencionResponse(
             $atencion->id
-            , $request   
         );
     }
 
