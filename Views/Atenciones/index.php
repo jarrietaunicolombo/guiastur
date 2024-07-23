@@ -14,8 +14,8 @@ if ($action === null) {
 
 switch ($action) {
     case 'create':
-        (new CreateAtencionController())->handleRequest($_REQUEST);
-        break;
+        echo (new CreateAtencionController())->handleRequest($_REQUEST);
+        exit;
     // case 'listall':
     //     (new GetRecaladasController())->handleRequest($_GET);
     //     break;

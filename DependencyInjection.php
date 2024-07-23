@@ -127,7 +127,7 @@ class DependencyInjection
         return new CreateUserUseCase($createUserCommand);
     }
 
-    public static function getCreateAtencionServce(): ICreateAtencionUseCase
+    public static function getCreateAtencionService(): ICreateAtencionUseCase
     {
         ClassLoader::loadClass("AtencionRepository");
         ClassLoader::loadClass("ValidateAtencionQueryHandler");
@@ -287,7 +287,7 @@ class DependencyInjection
     }
 
 
-    public static function getGetNextAllTurnosByStatusService(): IGetNextAllTurnosByStatusService
+    public static function getNextAllTurnosByStatusService(): IGetNextAllTurnosByStatusService
     {
         ClassLoader::loadClass("TurnoRepository");  
         ClassLoader::loadClass("GetNextAllTurnosByStatusQueryHandler");
@@ -295,6 +295,22 @@ class DependencyInjection
         $repository = new TurnoRepository();
         $query = new GetNextAllTurnosByStatusQueryHandler($repository);
         return new GetNextAllTurnosByStatusService($query);
+    }
+
+    public static function getRecaladaByIdQuery(): IGetRecaladaByIdQuery
+    {
+        ClassLoader::loadClass("RecaladaRepository");  
+        ClassLoader::loadClass("GetRecaladaByIdQueryHandler");
+        $repository = new RecaladaRepository();
+        return new GetRecaladaByIdQueryHandler($repository);
+    }
+
+    public static function getSupervisoresQuery(): IGetSupervisoresQuery
+    {
+        ClassLoader::loadClass("SupervisorRepository");  
+        ClassLoader::loadClass("GetSupervisoresQueryHandler");
+        $repository = new SupervisorRepository();
+        return new GetSupervisoresQueryHandler($repository);
     }
 
 }
