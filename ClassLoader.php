@@ -52,6 +52,7 @@ class ClassLoader
         'GetNextAllTurnosByStatusQueryHandler' => 'Application/Actions/Queries/GetNextAllTurnosByStatusQueryHandler.php',
         'GetRecaladaByIdQueryHandler' => 'Application/Actions/Queries/GetRecaladaByIdQueryHandler.php',
         'GetSupervisoresQueryHandler' => 'Application/Actions/Queries/GetSupervisoresQueryHandler.php',
+        'GetAtencionByIdQueryHandler' => 'Application/Actions/Queries/GetAtencionByIdQueryHandler.php',
        
         // Application UseCases
         'CreateAtencionUseCase' => 'Application/UseCases/CreateAtencion/CreateAtencionUseCase.php',
