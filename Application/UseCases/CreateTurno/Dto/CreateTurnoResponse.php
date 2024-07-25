@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . "/CreateTurnoRequest.php";
-class CreateTurnoResponse
+require_once $_SERVER["DOCUMENT_ROOT"]."guiastur/Application/UseCases/GenericDto.php";
+
+class CreateTurnoResponse extends GenericDto
 {
     private $id;
     private $turno;
@@ -26,6 +28,11 @@ class CreateTurnoResponse
     public function getTurno(): CreateTurnoRequest
     {
         return $this->turno;
+    }
+
+    public function toJSON(): string{
+        $tunoData = ["id"=>$this->id, "turno"=>$this->turno->toJSON()];
+        return json_encode($tunoData);
     }
 
 }

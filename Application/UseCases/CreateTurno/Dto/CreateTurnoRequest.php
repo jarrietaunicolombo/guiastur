@@ -1,5 +1,7 @@
 <?php
-class CreateTurnoRequest
+require_once $_SERVER["DOCUMENT_ROOT"]."guiastur/Application/UseCases/GenericDto.php";
+
+class CreateTurnoRequest extends GenericDto
 {
     private $numero;
     private $estado;

@@ -312,6 +312,13 @@ class DependencyInjection
         $repository = new SupervisorRepository();
         return new GetSupervisoresQueryHandler($repository);
     }
+    public static function getAtencionByIdQuery(): IGetAtencionByIdQuery
+    {
+        ClassLoader::loadClass("AtencionRepository");  
+        ClassLoader::loadClass("GetAtencionByIdQueryHandler");
+        $repository = new AtencionRepository();
+        return new GetAtencionByIdQueryHandler($repository);
+    }
 
 }
 
