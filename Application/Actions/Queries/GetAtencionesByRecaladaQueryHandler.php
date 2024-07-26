@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetAtencionesByRecaladaQuery.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IAtencionRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Actions/Queries/IGetAtencionesByRecaladaQuery.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Repositories/IAtencionRepository.php";
 
 class GetAtencionesByRecaladaQueryHandler implements IGetAtencionesByRecaladaQuery
 {
@@ -34,8 +34,8 @@ class GetAtencionesByRecaladaQueryHandler implements IGetAtencionesByRecaladaQue
                 new \DateTime($atencionEntity->fecha_inicio),
                 new \DateTime($atencionEntity->fecha_cierre),
                 $atencionEntity->total_turnos,
-                count($atencionEntity->turnos),
-                ($atencionEntity->total_turnos - count($atencionEntity->turnos)),
+                @count($atencionEntity->turnos),
+                ($atencionEntity->total_turnos - @count($atencionEntity->turnos)),
                 $atencionEntity->observaciones,
                 ($atencionEntity->supervisor_id !== null) ? $atencionEntity->supervisor_id : null,
                 ($atencionEntity->supervisor_id !== null) ? $atencionEntity->supervisor->nombres ." ".  $atencionEntity->supervisor->apellidos  : null

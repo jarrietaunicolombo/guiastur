@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaResponse.php";
 
 SessionUtility::startSession();
 $usuarioLogin = $_SESSION[ItemsInSessionEnum::USER_LOGIN];
@@ -140,7 +140,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 <body>
     <div class="header">
         Atenciones de la recalada Id:
-        <?= isset($atencionesResponse) && count($atencionesResponse->getAtenciones()) > 0 ? $atencionesResponse->getRecalada()->getId() : "No existe" ?>
+        <?= isset($atencionesResponse) && @count($atencionesResponse->getAtenciones()) > 0 ? $atencionesResponse->getRecalada()->getId() : "No existe" ?>
     </div>
     <div class="icon-bar">
         <img src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home">
@@ -155,7 +155,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
     <?php if ($infoMessage): ?>
         <span class="message success"><?= $infoMessage; ?></span>
     <?php endif; ?>
-    <?php if (!($errorMessage) && $atencionesResponse === null || count($atencionesResponse->getAtenciones()) < 1): ?>
+    <?php if (!($errorMessage) && $atencionesResponse === null || @count($atencionesResponse->getAtenciones()) < 1): ?>
         <script type="text/javascript">
         window.onload = function() {
             showAlert("error", "", "No existen atenciones para esta recalada");

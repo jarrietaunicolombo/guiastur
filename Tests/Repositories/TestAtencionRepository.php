@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Atencion.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/AtencionRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Atencion.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/AtencionRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 class TestAtencionRepository
 {
@@ -89,7 +89,7 @@ class TestAtencionRepository
             $repository = new AtencionRepository();
             $AtencionList = $repository->findAll();
 
-            if (!isset($AtencionList) || count($AtencionList) == 0) {
+            if (!isset($AtencionList) || @count($AtencionList) == 0) {
                 echo '<hr><span style="color: red"> No existen atenciones para mostrar<br></span>';
                 return;
             }
@@ -159,8 +159,8 @@ class TestAtencionRepository
                         <td>" . $atencion->fecha_inicio . "</td> 
                         <td>" . $atencion->fecha_cierre . "</td> 
                         <td>" . $atencion->total_turnos . "</td> 
-                        <td>" . count($atencion->turnos) . "</td> 
-                        <td>" . ($atencion->total_turnos - count($atencion->turnos)) . "</td>
+                        <td>" . @count($atencion->turnos) . "</td> 
+                        <td>" . ($atencion->total_turnos - @count($atencion->turnos)) . "</td>
                         <td>" . $atencion->supervisor_id . "</td> </tr>";
 
         }

@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Rol.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/RolRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Rol.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/RolRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/Utility.php";
 
 class TestRolRepository
 {
@@ -80,7 +80,7 @@ class TestRolRepository
             $repository = new RolRepository();
             $roleList = $repository->findAll();
 
-            if (!isset($roleList) || count($roleList) == 0) {
+            if (!isset($roleList) || @count($roleList) == 0) {
                 echo "No existen roles para mostrar";
                 return;
             }

@@ -1,48 +1,8 @@
-<?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
-// require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-// require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/Users/LoginController.php";
-// LoginController::validateAccess();
-SessionUtility::startSession();
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Bienvenido</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú</title>
-    <style>
-        .menu {
-            margin: 20px 0;
-        }
-        .menu a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #000;
-            background-color: #f2f2f2;
-            margin: 2px 0;
-        }
-        .menu a:hover {
-            background-color: #ddd;
-        }
-    </style>
-</head>
-<body>
-
-<h2><?= @$_SESSION[ItemsInSessionEnum::WELCOME_MESSAGE]?></h2>
-
-<h3>Menú Principal</h3>
-<div class="menu">
-    <a href="Users/menu.php">Usuario</a>
-    <a href="Buques/menu.php">Buques</a>
-    <a href="Paises/menu.php">Paises</a>
-    <a href="Recaladas/menu.php">Recaladas</a>
-    <a href="Atenciones/menu.php">Atenciones</a>
-    <a href="Turnos/menu.php">Turnos</a>
-    <a href="Users/index.php?action=logout">Salir</a>
+<div class="hamburger" id="hamburger"></div>
+<div class="menu" id="menu">
+    <a href="#">Buques</a>
+    <a href="#">Recaladas</a>
+    <a href="#">Atenciones</a>
+    <a href="#">Turnos</a>
+    <a href="#">Usuarios</a>
 </div>
-
-</body>
-</html>

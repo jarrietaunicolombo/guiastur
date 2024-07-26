@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetBuqueById/Dto/GetBuqueByIdRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetBuqueById/Dto/GetBuqueByIdResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetBuqueByIdQuery.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IBuqueRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetBuqueById/Dto/GetBuqueByIdRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetBuqueById/Dto/GetBuqueByIdResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Actions/Queries/IGetBuqueByIdQuery.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Repositories/IBuqueRepository.php";
 class GetBuqueByIdQueryHandler implements IGetBuqueByIdQuery
 {
 
@@ -20,7 +20,7 @@ class GetBuqueByIdQueryHandler implements IGetBuqueByIdQuery
         $atenciones = 0;
         foreach ($recaladaList as $recalada){
             $atencionList = $recalada->atencions;
-            $atenciones += count($atencionList);
+            $atenciones += @count($atencionList);
         }
         
         $getBuqueByIdResponse = new GetBuqueByIdResponse(
@@ -28,7 +28,7 @@ class GetBuqueByIdQueryHandler implements IGetBuqueByIdQuery
             $buque->codigo,
             $buque->nombre,
             $buque->foto,
-            count($recaladaList),
+            @count($recaladaList),
             $atenciones
         );
 

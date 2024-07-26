@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetAtenciones/Dto/GetAtencionResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetTurnosByAtencion/Dto/GetTurnosByAtencionResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetAtenciones/Dto/GetAtencionResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetTurnosByAtencion/Dto/GetTurnosByAtencionResponse.php";
 
 SessionUtility::startSession();
 $usuarioLogin = $_SESSION[ItemsInSessionEnum::USER_LOGIN];
@@ -169,7 +169,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? null;
         </script>
     <?php endif; ?>
 
-    <?php if ($turnosResponse === null || count($turnosResponse->getTurnos()) < 1): ?>
+    <?php if ($turnosResponse === null || @count($turnosResponse->getTurnos()) < 1): ?>
         <script type="text/javascript">
             window.onload = function () {
                 showAlert("error", "", "No existen turnos para esta atencion", true);

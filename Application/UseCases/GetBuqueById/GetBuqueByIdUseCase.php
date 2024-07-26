@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/IGetBuqueByIdUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetBuqueByIdQuery.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/UseCases/IGetBuqueByIdUseCase.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Actions/Queries/IGetBuqueByIdQuery.php";
 require_once __DIR__."/Dto/GetBuqueByIdRequest.php";
 require_once __DIR__."/Dto/GetBuqueByIdResponse.php";
 

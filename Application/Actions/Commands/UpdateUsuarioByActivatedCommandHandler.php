@@ -1,10 +1,10 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Commands/IUpdateUsuarioByActivatedCommand.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetUsusarioByToken/Dto/UpdateUsuarioByActivatedRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetUsusarioByToken/Dto/UpdateUsuarioByActivatedResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IUsuarioRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/UsuarioStatus.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Usuario.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Actions/Commands/IUpdateUsuarioByActivatedCommand.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetUsusarioByToken/Dto/UpdateUsuarioByActivatedRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetUsusarioByToken/Dto/UpdateUsuarioByActivatedResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Repositories/IUsuarioRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/UsuarioStatus.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Usuario.php";
 
 class UpdateUsuarioByActivatedCommandHandler implements IUpdateUsuarioByActivatedCommand{
     private $usuarioRepository;

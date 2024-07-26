@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetUsusarioByToken/Dto/GetUsuarioByTokenResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"]."guiastur/Controllers/SessionUtility.php";
-require_once $_SERVER["DOCUMENT_ROOT"]."guiastur/Domain/Constants/RolTypeEnum.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetUsusarioByToken/Dto/GetUsuarioByTokenResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/RolTypeEnum.php";
 
 SessionUtility::startSession(); 
 $erroMessage = @$_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ;

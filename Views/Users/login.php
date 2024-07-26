@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
 SessionUtility::startSession();
 $errorMessage = @$_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ;
 $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ;

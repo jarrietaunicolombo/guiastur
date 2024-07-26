@@ -1,11 +1,11 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/TurnoStatusEnum.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateTurno/Dto/CreateTurnoRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateTurno/Dto/CreateTurnoResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Queries/GetTurnosByAtencionQueryHandler.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Actions/Commands/CreateTurnoCommandHandler.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/CreateTurno/CreateTurnoUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/TurnoRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/TurnoStatusEnum.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateTurno/Dto/CreateTurnoRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateTurno/Dto/CreateTurnoResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Actions/Queries/GetTurnosByAtencionQueryHandler.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Actions/Commands/CreateTurnoCommandHandler.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateTurno/CreateTurnoUseCase.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/TurnoRepository.php";
 
 
 class TestCreateTurnoUseCase

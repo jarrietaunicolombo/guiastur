@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Guia.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/GuiaRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Guia.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/GuiaRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 class TestGuiaRepository
 {
@@ -84,7 +84,7 @@ class TestGuiaRepository
             $repository = new GuiaRepository();
             $guiaList = $repository->findAll();
 
-            if (!isset($guiaList) || count($guiaList) == 0) {
+            if (!isset($guiaList) || @count($guiaList) == 0) {
                 echo '<hr><span style="color: red"> No existen Guias para mostrar<br></span>';
                 return;
             }
@@ -120,7 +120,7 @@ class TestGuiaRepository
                         <td>" . $guia->fecha_nacimiento . "</td> 
                         <td>" . $guia->foto . "</td> 
                         <td>" . $guia->observaciones . "</td> 
-                        <td>" . count($guia->turnos) . "</td> 
+                        <td>" . @count($guia->turnos) . "</td> 
                         </tr>";
         }
         $output .= "</table>";

@@ -1,6 +1,6 @@
 
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
 SessionUtility::startSession();
 ?>
 <!DOCTYPE html>

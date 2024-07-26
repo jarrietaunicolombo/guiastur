@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Buque.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/BuqueRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Buque.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/BuqueRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 class TestBuqueRepository
 {
@@ -81,7 +81,7 @@ class TestBuqueRepository
             $repository = new BuqueRepository();
             $BuqueeList = $repository->findAll();
 
-            if (!isset($BuqueeList) || count($BuqueeList) == 0) {
+            if (!isset($BuqueeList) || @count($BuqueeList) == 0) {
                 echo '<hr><span style="color: red"> NO EXISTEN BUQUES PARA MOSTRAR <br></span>';
                 return;
             }
@@ -107,7 +107,7 @@ class TestBuqueRepository
                         <td>" . $buque->codigo . "</td> 
                         <td>" . $buque->nombre . "</td> 
                         <td>" . $buque->foto . "</td> 
-                        <td>" . count($buque->recaladas) . "</td> 
+                        <td>" . @count($buque->recaladas) . "</td> 
                         </tr>";
         }
         $output .= "</table>";

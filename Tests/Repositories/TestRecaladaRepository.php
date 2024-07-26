@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Recalada.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/RecaladaRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Recalada.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/RecaladaRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 class TestRecaladaRepository
 {
@@ -79,7 +79,7 @@ class TestRecaladaRepository
             $repository = new RecaladaRepository();
             $RecaladaList = $repository->findAll();
 
-            if (!isset($RecaladaList) || count($RecaladaList) == 0) {
+            if (!isset($RecaladaList) || @count($RecaladaList) == 0) {
                 echo '<hr><span style="color: red"> No existen Recaladas para mostrar<br></span>';
                 return;
             }
@@ -147,7 +147,7 @@ class TestRecaladaRepository
                         <td>" . $Recalada->fecha_zarpe . "</td> 
                         <td>" . $Recalada->total_turistas . "</td> 
                         <td>" . $Recalada->pais->nombre . "</td> 
-                        <td>" . count($Recalada->atencions) . "</td> </tr>";
+                        <td>" . @count($Recalada->atencions) . "</td> </tr>";
 
         }
         $output .= "</table>";

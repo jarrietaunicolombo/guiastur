@@ -1308,7 +1308,7 @@ class PHPMailer
                 $params[1] = $this->punyencodeAddress($params[1]);
                 call_user_func_array([$this, 'addAnAddress'], $params);
             }
-            if (count($this->to) + count($this->cc) + count($this->bcc) < 1) {
+            if (count($this->to) + @count($this->cc) + @count($this->bcc) < 1) {
                 throw new Exception($this->lang('provide_address'), self::STOP_CRITICAL);
             }
 
@@ -1574,7 +1574,7 @@ class PHPMailer
             ini_set('sendmail_from', $this->Sender);
         }
         $result = false;
-        if ($this->SingleTo and count($toArr) > 1) {
+        if ($this->SingleTo and @count($toArr) > 1) {
             foreach ($toArr as $toAddr) {
                 $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
                 $this->doCallback($result, [$toAddr], $this->cc, $this->bcc, $this->Subject, $body, $this->From);
@@ -1664,7 +1664,7 @@ class PHPMailer
         }
 
         // Only send the DATA command if we have viable recipients
-        if ((count($this->all_recipients) > count($bad_rcpt)) and !$this->smtp->data($header . $body)) {
+        if ((count($this->all_recipients) > @count($bad_rcpt)) and !$this->smtp->data($header . $body)) {
             throw new Exception($this->lang('data_not_accepted'), self::STOP_CRITICAL);
         }
         if ($this->SMTPKeepAlive) {
@@ -2164,7 +2164,7 @@ class PHPMailer
         if ((
             'sendmail' == $this->Mailer or 'qmail' == $this->Mailer or 'mail' == $this->Mailer
             )
-            and count($this->bcc) > 0
+            and @count($this->bcc) > 0
         ) {
             $result .= $this->addrAppend('Bcc', $this->bcc);
         }
@@ -3453,7 +3453,7 @@ class PHPMailer
             //Is it a valid IPv4 address?
             return (boolean)filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
         }
-        if (filter_var('http://' . $host, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+        if (@filter_var('http://' . $host, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
             //Is it a syntactically valid hostname?
             return true;
         }

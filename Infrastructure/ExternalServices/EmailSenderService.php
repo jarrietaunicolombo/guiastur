@@ -1,9 +1,9 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/ExternalServices/IEmailSenderService.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Libs/PHPMailer-6.0.0/src/PHPMailer.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Libs/PHPMailer-6.0.0/src/Exception.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Libs/PHPMailer-6.0.0/src/SMTP.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Model/EmailDestinationModel.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/ExternalServices/IEmailSenderService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Libs/PHPMailer-6.0.0/src/PHPMailer.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Libs/PHPMailer-6.0.0/src/Exception.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Libs/PHPMailer-6.0.0/src/SMTP.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Model/EmailDestinationModel.php";
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

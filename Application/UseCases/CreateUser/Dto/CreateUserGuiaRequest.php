@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/UsuarioStatus.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/UsuarioStatus.php";
 require_once __DIR__ ."/CreateUserResponse.php";
 class CreateUserGuiaRequest extends CreateUserResponse
 {

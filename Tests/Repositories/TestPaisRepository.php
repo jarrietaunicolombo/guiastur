@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Pais.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/PaisRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Pais.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/PaisRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 class TestPaisRepository
 {
@@ -76,7 +76,7 @@ class TestPaisRepository
             $repository = new PaisRepository();
             $PaiseList = $repository->findAll();
 
-            if (!isset($PaiseList) || count($PaiseList) == 0) {
+            if (!isset($PaiseList) || @count($PaiseList) == 0) {
                 echo '<hr><span style="color: red"> No existen Paises para mostrar<br></span>';
                 return;
             }
@@ -100,7 +100,7 @@ class TestPaisRepository
             $output .= "<td>" . $pais->id . "</td> 
                         <td>" . $pais->nombre . "</td> 
                         <td>" . $pais->bandera . "</td> 
-                        <td>" . count($pais->recaladas) . "</td> 
+                        <td>" . @count($pais->recaladas) . "</td> 
                         </tr>";
         }
         $output .= "</table>";

@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . "/CreateTurnoRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"]."guiastur/Application/UseCases/GenericDto.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GenericDto.php";
 
 class CreateTurnoResponse extends GenericDto
 {

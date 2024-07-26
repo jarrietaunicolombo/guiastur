@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Entities/Supervisor.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/SupervisorRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/Repositories/Utility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Supervisor.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/SupervisorRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/Utility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/EntityReferenceNotFoundException.php";
 
 class TestSupervisorRepository
 {
@@ -83,7 +83,7 @@ class TestSupervisorRepository
             $repository = new SupervisorRepository();
             $supervisorList = $repository->findAll();
 
-            if (!isset($supervisorList) || count($supervisorList) == 0) {
+            if (!isset($supervisorList) || @count($supervisorList) == 0) {
                 echo '<hr><span style="color: red"> No existen Guias para mostrar<br></span>';
                 return;
             }
@@ -119,7 +119,7 @@ class TestSupervisorRepository
                         <td>" . $supervisor->fecha_nacimiento . "</td> 
                         <td>" . $supervisor->foto . "</td> 
                         <td>" . $supervisor->observaciones . "</td> 
-                        <td>" . count($supervisor->atencions) . "</td> 
+                        <td>" . @count($supervisor->atencions) . "</td> 
                         </tr>";
         }
         $output .= "</table>";

@@ -95,7 +95,7 @@ class Expressions
 
 		$ret = "";
 		$replace = array();
-		$num_values = count($values);
+		$num_values = @count($values);
 		$len = strlen($this->expressions);
 		$quotes = 0;
 
@@ -148,7 +148,7 @@ class Expressions
 
 		if (is_array($value))
 		{
-			$value_count = count($value);
+			$value_count = @count($value);
 
 			if ($value_count === 0)
 				if ($substitute)

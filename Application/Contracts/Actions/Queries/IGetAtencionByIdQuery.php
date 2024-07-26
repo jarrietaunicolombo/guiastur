@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetAtenciones/Dto/GetAtencionByIdRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetAtenciones/Dto/GetAtencionResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetAtenciones/Dto/GetAtencionByIdRequest.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetAtenciones/Dto/GetAtencionResponse.php";
 
 interface IGetAtencionByIdQuery  {
     

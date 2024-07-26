@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetBuques/Dto/GetBuquesResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetBuques/Dto/GetBuquesResponse.php";
 SessionUtility::startSession();
 $usuarioLogin = $_SESSION[ItemsInSessionEnum::USER_LOGIN];
 if (!isset($usuarioLogin)) {
@@ -186,7 +186,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
             };
         </script>
     <?php endif; ?>
-    <?php if ($buquesResponse === null || count($buquesResponse->getBuques()) < 1): ?>
+    <?php if ($buquesResponse === null || @count($buquesResponse->getBuques()) < 1): ?>
         <script type="text/javascript">
             window.onload = function () {
                 showAlert("error", "", "No hay informacion sobre Buques", true);

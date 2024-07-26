@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . "/CreateBuqueRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"]."guiastur/Application/UseCases/GenericDto.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GenericDto.php";
 class CreateBuqueResponse extends GenericDto
 {
     private $id;
