@@ -757,7 +757,7 @@ class Errors implements IteratorAggregate
 	{
 		$errors = $this->$attribute;
 
-		return $errors && count($errors) == 1 ? $errors[0] : $errors;
+		return $errors && @count($errors) == 1 ? $errors[0] : $errors;
 	}
 
 	/**
@@ -887,7 +887,7 @@ class Errors implements IteratorAggregate
 		$count = 0;
 
 		foreach ($this->errors as $attribute => $error)
-			$count += count($error);
+			$count += @count($error);
 
 		return $count;
 	}

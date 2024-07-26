@@ -217,7 +217,7 @@ class SQLBuilder
 			return null;
 
 		$parts = preg_split('/(_and_|_or_)/i',$name,-1,PREG_SPLIT_DELIM_CAPTURE);
-		$num_values = count($values);
+		$num_values = @count($values);
 		$conditions = array('');
 
 		for ($i=0,$j=0,$n=count($parts); $i<$n; $i+=2,++$j)
@@ -292,7 +292,7 @@ class SQLBuilder
 	private function apply_where_conditions($args)
 	{
 		require_once 'Expressions.php';
-		$num_args = count($args);
+		$num_args = @count($args);
 
 		if ($num_args == 1 && is_hash($args[0]))
 		{

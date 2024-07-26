@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/UseCases/IGetAtencionesByRecaladaUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetAtencionesByRecaladaQuery.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/UseCases/IGetAtencionesByRecaladaUseCase.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Actions/Queries/IGetAtencionesByRecaladaQuery.php";
 require_once __DIR__."/Dto/GetAtencionesByRecaladaRequest.php";
 require_once __DIR__."/Dto/GetAtencionesByRecaladaResponse.php";
 

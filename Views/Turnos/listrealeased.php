@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Domain/Constants/TurnoStatusEnum.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetNextTurno/Dto/GetNextTurnoResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/TurnoStatusEnum.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetNextTurno/Dto/GetNextTurnoResponse.php";
 
 SessionUtility::startSession();
 $usuarioLogin = $_SESSION[ItemsInSessionEnum::USER_LOGIN];
@@ -223,10 +223,10 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
     <?php if ($infoMessage): ?>
         <span class="message success"><?= $infoMessage; ?></span>
     <?php endif; ?>
-    <?php if (!$errorMessage && ($turnosResponse === null || count($turnosResponse) < 1)): ?>
+    <?php if (!$errorMessage && ($turnosResponse === null || @count($turnosResponse) < 1)): ?>
         <span class="message error">No existen turnos liberados en este momento</span>
     <?php endif; ?>
-    <?php if ($turnosResponse !== null && count($turnosResponse) > 0): ?>
+    <?php if ($turnosResponse !== null && @count($turnosResponse) > 0): ?>
         <div class="molda-table-container">
             <table class="molda-table">
                 <thead>

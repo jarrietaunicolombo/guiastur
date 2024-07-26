@@ -25,12 +25,43 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Crear Recalada</title>
+    <link rel="stylesheet" href="../Css/menu.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+        }
+
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            overflow: auto;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar .menu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .navbar .menu li {
+            display: inline;
+        }
+
+        .navbar .menu li a {
+            text-decoration: none;
+            color: white;
+            padding: 14px 20px;
+            display: block;
         }
 
         .header {
@@ -40,7 +71,8 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
             text-align: center;
             padding: 10px 0;
             position: fixed;
-            top: 0;
+            top: 60px;
+            /* Debajo del menú */
             left: 0;
             z-index: 1000;
             font-size: 24px;
@@ -51,10 +83,9 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
             background-color: #e2e2e2;
             text-align: center;
             padding: 5px 0;
-            /* Reducir padding para acercar al formulario */
             position: fixed;
-            top: 50px;
-            /* Justo debajo de la cabecera */
+            top: 110px;
+            /* Debajo de la cabecera */
             left: 0;
             z-index: 999;
             display: flex;
@@ -71,10 +102,9 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
         }
 
         .content-zone {
-            margin-top: 100px;
-            /* Espacio para la cabecera y la barra de íconos */
+            margin-top: 160px;
+            /* Espacio para el menú, la cabecera y la barra de íconos */
             padding: 20px;
-            /* Padding alrededor de la zona de contenido */
         }
 
         .form-wrapper {
@@ -93,16 +123,12 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
             width: 100%;
             margin: auto;
             overflow-y: scroll;
-            /* Habilitar scroll si es necesario */
             max-height: 80vh;
-            /* Altura máxima para el contenedor del formulario */
             scrollbar-width: none;
-            /* Firefox */
         }
 
         .form-container::-webkit-scrollbar {
             display: none;
-            /* Chrome, Safari y Opera */
         }
 
         .form-container h2 {
@@ -137,7 +163,6 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
 
         .form-group textarea {
             min-height: 80px;
-            /* Ajusta este valor según sea necesario */
         }
 
         .form-group input[type="submit"],
@@ -170,10 +195,11 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
 </head>
 
 <body>
-
+    <?php require_once "../index.php" ?>
     <div class="header">
         Crear Buque
     </div>
+
     <div class="icon-bar">
         <a href="<?= UrlHelper::getUrlBase() ?>/Views/Users/index.php?action=menu">
             <img src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home">
@@ -195,7 +221,7 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
     <div class="content-zone">
         <div class="form-wrapper">
             <div class="form-container">
-                <?php if ($rolesResponse == null || count($rolesResponse) < 1): ?>
+                <?php if ($rolesResponse == null || @count($rolesResponse) < 1): ?>
                     <script type="text/javascript">
                         window.onload = function () {
                             $("#button-create").prop("disabled", true);
@@ -244,23 +270,22 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
         </div>
     </div>
 
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="../Js/menu.js"></script>
     <script>
         $(document).ready(function () {
             $('#user-form').submit(function (e) {
                 e.preventDefault();
                 let form = $(this);
+                let message = "Error desconocido";
                 $.ajax({
                     type: "POST",
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'json',
                     success: function (response) {
-
-                        console.log(response);
-                        let message = "Error desconocido";
+                 
                         if (response.id >= 1) {
                             message = 'Usuario creado. ' + response.message;
                             showAlert('success', 'Éxito', message, false);
@@ -281,12 +306,9 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
                 });
             });
 
-
-
         });
 
         function showAlert(icon, title, message, confirm = false) {
-
             Swal.fire({
                 icon: icon,
                 title: title,
@@ -311,7 +333,6 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
             $("#error-email").text(errorMessages.pais ?? '');
             $("#error-nombre").text(errorMessages.arribo ?? '');
         }
-
     </script>
 </body>
 

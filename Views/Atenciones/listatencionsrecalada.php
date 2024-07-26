@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaResponse.php";
 
 SessionUtility::startSession();
 $usuarioLogin = $_SESSION[ItemsInSessionEnum::USER_LOGIN];
@@ -154,7 +154,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         <?php if ($infoMessage): ?>
             <span class="message success"><?= $infoMessage; ?></span>
         <?php endif; ?>
-        <?php if  (! ($errorMessage) && $turnosResponse === null || count($turnosResponse->getAtenciones()) < 1): ?>
+        <?php if  (! ($errorMessage) && $turnosResponse === null || @count($turnosResponse->getAtenciones()) < 1): ?>
             <span class="message error">No existe informacion sobre Atenciones para este Recalada</span>
         <?php else:
          $buque = $turnosResponse->getBuque();

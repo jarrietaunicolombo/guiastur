@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Controllers/SessionUtility.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaResponse.php";
 
 SessionUtility::startSession();
 $usuarioLogin = $_SESSION[ItemsInSessionEnum::USER_LOGIN];
@@ -141,7 +141,7 @@ $currentPage = $_SESSION[ItemsInSessionEnum::CURRENT_PAGE] ?? "menu";
 <body>
     <div class="header">
         Atenciones de la recalada Id:
-        <?= isset($atencionesResponse) && count($atencionesResponse->getAtenciones()) > 0 ? $atencionesResponse->getRecalada()->getId() : @$_GET["recalada"] ?>
+        <?= isset($atencionesResponse) && @count($atencionesResponse->getAtenciones()) > 0 ? $atencionesResponse->getRecalada()->getId() : @$_GET["recalada"] ?>
     </div>
     <div class="icon-bar">
         <a href = "<?= UrlHelper::getUrlBase() ?>/Views/Atenciones/index.php?action=menu"> <img src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home">
@@ -165,7 +165,7 @@ $currentPage = $_SESSION[ItemsInSessionEnum::CURRENT_PAGE] ?? "menu";
             };
         </script>
     <?php endif; ?>
-    <?php if (!($errorMessage) && $atencionesResponse === null || count($atencionesResponse->getAtenciones()) < 1): ?>
+    <?php if (!($errorMessage) && $atencionesResponse === null || @count($atencionesResponse->getAtenciones()) < 1): ?>
         <script type="text/javascript">
             window.onload = function () {
                 showAlert("error", "", "No existen atenciones para esta recalada", true);

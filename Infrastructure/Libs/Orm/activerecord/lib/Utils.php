@@ -50,7 +50,7 @@ function array_flatten(array $array)
 {
 	$i = 0;
 
-	while ($i < count($array))
+	while ($i < @count($array))
 	{
 		if (is_array($array[$i]))
 			array_splice($array,$i,1,$array[$i]);

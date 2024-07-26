@@ -1568,7 +1568,7 @@ class Model
 
 		$args = func_get_args();
 		$options = static::extract_and_validate_options($args);
-		$num_args = count($args);
+		$num_args = @count($args);
 		$single = true;
 
 		if ($num_args > 0 && ($args[0] === 'all' || $args[0] === 'first' || $args[0] === 'last'))
@@ -1597,7 +1597,7 @@ class Model
 			$num_args--;
 		}
 		//find by pk
-		elseif (1 === count($args) && 1 == $num_args)
+		elseif (1 === @count($args) && 1 == $num_args)
 			$args = $args[0];
 
 		// anything left in $args is a find by pk
@@ -1665,9 +1665,9 @@ class Model
 			$options['conditions'] = static::pk_conditions($values);
 			$list = $table->find($options);
 		}
-		$results = count($list);
+		$results = @count($list);
 
-		if ($results != ($expected = count($values)))
+		if ($results != ($expected = @count($values)))
 		{
 			$class = get_called_class();
 			if (is_array($values))

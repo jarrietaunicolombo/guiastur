@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Infrastructure/ExternalServices/EmailSenderService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/ExternalServices/EmailSenderService.php";
 
 class TestEmailSender{
     public static function testSendEmailShouldShowResponseMessage(){

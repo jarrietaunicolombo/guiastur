@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/UseCases/GetRecaladas/Dto/GetRecaladasResponse.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Actions/Queries/IGetRecaladasInThePortQuery.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "guiastur/Application/Contracts/Repositories/IRecaladaRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetRecaladas/Dto/GetRecaladasResponse.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Actions/Queries/IGetRecaladasInThePortQuery.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Repositories/IRecaladaRepository.php";
 
 class GetRecaladasInThePortQueryHandler implements IGetRecaladasInThePortQuery
 {
@@ -28,7 +28,7 @@ class GetRecaladasInThePortQueryHandler implements IGetRecaladasInThePortQuery
                 $recalada->pais->id,
                 $recalada->pais->nombre,
                 $recalada->observaciones,
-                count($recalada->atencions)
+                @count($recalada->atencions)
             );
         }
         return new GetRecaladasResponse($getRecaladasInThePort);
