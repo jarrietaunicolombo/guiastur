@@ -25,148 +25,68 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Recaladas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        .header {
-            width: 100%;
-            background-color: #007bff;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            font-size: 24px;
-        }
-
-        .icon-bar {
-            width: 100%;
-            background-color: #e2e2e2;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            top: 50px;
-            /* Adjusted to be below the header */
-            left: 0;
-            z-index: 999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 2px -2px gray;
-            /* Add shadow for elegance */
-        }
-
-        .icon-bar img {
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-        }
-
-        .sub-header {
-            width: 100%;
-            background-color: #e2e2e2;
-            color: #333;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            top: 100px;
-            /* Adjusted to be below the icon-bar */
-            left: 0;
-            z-index: 998;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            font-size: 18px;
-            box-shadow: 0 4px 2px -2px gray;
-            /* Add shadow for elegance */
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 140px 20px 20px;
-            /* Adjusted padding for spacing below headers */
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        table-container {
-            position: relative;
-            margin-top: 10px;
-        }
-
-        .table-container table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table-container th,
-        .table-container td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        .table-container th {
-            background-color: #f4f4f4;
-            position: sticky;
-            top: 130px;
-            /* Se ajusta para estar justo debajo del sub-header */
-            z-index: 997;
-        }
-
-        .table-container td {
-            background-color: #fff;
-        }
-
-        .table-container::-webkit-scrollbar {
-            width: 0;
-            height: 0;
-        }
-    </style>
+    <title>Control de Turnos para Guias de Turismo</title>
+    <link rel="stylesheet" href="../Css/listrecaladas.css">
+    <link rel="stylesheet" href="../Css/index.css">
 </head>
 
 <body>
     <div class="header">
-        Recladas por Buque 
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
+        Reporte de Recaladas
+    </div>
+    <?php
+    $baseUrl = UrlHelper::getUrlBase();
+    ?>
+    <div class="menu" id="menu">
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="<?= $baseUrl ?>/Views/Users/index.php?action=menu">Usuarios</a>
+        <a href="<?= $baseUrl ?>/Views/Buques/index.php?action=menu">Buques</a>
+        <a href="<?= $baseUrl ?>/Views/Recaladas/index.php?action=menu">Recaladas</a>
+        <a href="<?= $baseUrl ?>/Views/Atenciones/index.php?action=menu">Atenciones</a>
+        <a href="<?= $baseUrl ?>/Views/Turnos/index.php?action=menu">Turnos</a>
+        <a href="<?= $baseUrl ?>/Views/Paises/index.php?action=menu">Paises</a>
+        <a href="<?= $baseUrl ?>/Views/Users/index.php?action=logout">Login</a>
+    </div>
     <div class="icon-bar">
-    <a href = "<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=menu"> <img src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home"></a>
-    <a href = "<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=create"> <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-add-icon.png" alt="Add"></a>
-        <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-search-icon.png" alt="Search">
-        <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-check-icon.png" alt="Check">
-        <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-delete-icon.png" alt="Delete">
+        <a href="<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=menu"> <img
+                src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home"></a>
+        <a href="<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=create"> <img
+                src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-add-icon.png" alt="Add"></a>
+        <a href="#"> <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-search-icon.png"
+                alt="Search"></a>
+        <a href="#"><img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-check-icon.png"
+                alt="Check"></a>
+        <a href="#"> <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-delete-icon.png"
+                alt="Delete"></a>
     </div>
     <?php if ($errorMessage): ?>
         <script type="text/javascript">
-        window.onload = function() {
-            showAlert("error", "", "<?= $errorMessage ?>");
-        };
+            window.onload = function () {
+                showAlert("error", "", "<?= $errorMessage ?>");
+            };
         </script>
     <?php endif; ?>
     <?php if ($infoMessage): ?>
         <script type="text/javascript">
-        window.onload = function() {
-            showAlert("info", "", "<?= $infoMessage ?>");
-        };
+            window.onload = function () {
+                showAlert("info", "", "<?= $infoMessage ?>");
+            };
         </script>
     <?php endif; ?>
     <?php if (!($errorMessage) && $recaladasResponse === null || @count($recaladasResponse->getRecaladas()) < 1): ?>
         <script type="text/javascript">
-        window.onload = function() {
-            showAlert("warning", "", "Este Buque no tiene Recaladas");
-        };
+            window.onload = function () {
+                showAlert("warning", "", "Este Buque no tiene Recaladas");
+            };
         </script>
     <?php else:
         $recaladas = $recaladasResponse->getRecaladas();
@@ -188,7 +108,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                         </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($recaladas as $recalada): ?>
+                        <?php foreach ($recaladas as $recalada): ?>
                             <tr>
                                 <td><?= $recalada->getRecaladaId(); ?></td>
                                 <td><?= $recalada->getFechaArribo()->format("Y-m-d H:i:s"); ?></td>
@@ -208,30 +128,13 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-    
-            function showAlert(icon, title, message) {
-                Swal.fire({
-                    icon: icon,
-                    title: title,
-                    text: message,
-                    showCancelButton: false,
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#molda-myModal').hide();
-                        window.location.href = '<?= UrlHelper::getUrlBase()?>/Views/Recaladas/index.php?action=<?= $currentPage ?>';
-                    }
-                });
-            }
-    
-    </script>
+    <script src="../Js/index.js"></script>
+    <script src="../Js/listbuque.js"></script>
+    <script src="../Js/alert.js"></script>
 </body>
 
 </html>
 <?php
-// SessionUtility::deleteItemInSession(ItemsInSessionEnum::LIST_ATENCIONES);
-;
 SessionUtility::deleteItemInSession(ItemsInSessionEnum::ERROR_MESSAGE);
 SessionUtility::deleteItemInSession(ItemsInSessionEnum::INFO_MESSAGE);
 ?>

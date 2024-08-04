@@ -14,6 +14,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/Inval
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/ConnectionDbException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/InternalErrorException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/InvalidRequestParameterException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/InvalidActivationException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/RolTypeEnum.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/DependencyInjection.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
@@ -231,18 +232,35 @@ class ActivateUserAccountController
     {
         SessionUtility::startSession();
         try {
+            $id = @$request["id"];
+            if (!isset($id)) {
+                throw new InvalidPermissionException("Acceso denegado");
+            }
+
             $token = @$request["token"];
             if (!isset($token)) {
-                throw new InvalidPermissionException();
+                throw new InvalidPermissionException("Acceso denegado");
             }
-            $getUserByTokenRequest = new GetUsuarioByTokenRequest($token);
+
+            $getUserByTokenRequest = new GetUsuarioByTokenRequest($id, $token);
             $getUsuarioByTokenQuery = DependencyInjection::getUsuarioByTokenQuery();
             $userResponse = $getUsuarioByTokenQuery->handler($getUserByTokenRequest);
             $_SESSION[ItemsInSessionEnum::USER_ACTIVATING] = $userResponse;
             header("Location: ../../Views/Users/activate.php");
-        } catch (Exception $e) {
+            exit;
+        } 
+        catch (InvalidActivationException $e) {
+            $errorMessage = $e->getMessage();
+            SessionUtility::clearAllSession();
+            SessionUtility::startSession();
+            $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $errorMessage;
+            header("Location: ../../Views/Users/activate.php");
+            exit;
+        }
+        catch (Exception $e) {
             $errorMessage = $e->getMessage();
             $this->showLoginForInvidateOperation($errorMessage);
+            exit;
         }
     }
 

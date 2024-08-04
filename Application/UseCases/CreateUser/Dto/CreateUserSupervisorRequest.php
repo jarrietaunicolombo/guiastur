@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/UsuarioStatus.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/UsuarioStatusEnum.php";
 require_once __DIR__ ."/CreateUserResponse.php";
 class CreateUserSupervisorRequest extends CreateUserResponse
 {
@@ -108,7 +108,7 @@ class CreateUserSupervisorRequest extends CreateUserResponse
         $this->apellidos = $apellidos;
         $this->genero = $genero;
         $this->fecha_nacimiento = $fecha_nacimiento;
-        $this->estado = UsuarioStatus::ACTIVATED;
+        $this->estado = UsuarioStatusEnum::ACTIVATED;
         $this->telefono = $telefono;
         $this->observaciones = $observaciones;
         $this->foto = $foto;
