@@ -3,7 +3,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/Login/D
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Actions/Queries/ILoginQuery.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Repositories/IUsuarioRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/UsuarioStatus.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/UsuarioStatusEnum.php";
 
 class LoginQueryHandler implements ILoginQuery{
 
@@ -18,11 +18,11 @@ class LoginQueryHandler implements ILoginQuery{
     
         $usuario = $this->repository->findByEmail($request->getEmail());
 
-        if($usuario->estado == UsuarioStatus::CREATED){
+        if($usuario->estado == UsuarioStatusEnum::CREATED){
             throw new Exception("Aun no ha activado su cuenta, revise su email");
         }
 
-        if($usuario->estado != UsuarioStatus::ACTIVATED){
+        if($usuario->estado != UsuarioStatusEnum::ACTIVATED){
             throw new Exception("Acceso denegado");
         }
 

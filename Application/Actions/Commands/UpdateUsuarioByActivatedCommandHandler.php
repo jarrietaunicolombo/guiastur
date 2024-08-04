@@ -3,7 +3,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Action
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetUsusarioByToken/Dto/UpdateUsuarioByActivatedRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetUsusarioByToken/Dto/UpdateUsuarioByActivatedResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Repositories/IUsuarioRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/UsuarioStatus.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/UsuarioStatusEnum.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Usuario.php";
 
 class UpdateUsuarioByActivatedCommandHandler implements IUpdateUsuarioByActivatedCommand{
@@ -14,7 +14,7 @@ class UpdateUsuarioByActivatedCommandHandler implements IUpdateUsuarioByActivate
     }
 
     public function handler(UpdateUsuarioByActivatedRequest $request) {
-        $estado = UsuarioStatus::ACTIVATED;
+        $estado = UsuarioStatusEnum::ACTIVATED;
         $usuario = $this->usuarioRepository->find($request->getUsuarioId());
         $usuario->estado = $estado;
         $usuario->guia_o_supervisor_id = $request->getGuiaOSupervisorId();

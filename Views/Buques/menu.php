@@ -1,47 +1,40 @@
-
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
-// require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/Login/Dto/LoginResponse.php";
-// require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/Users/LoginController.php";
-// LoginController::validateAccess();
 SessionUtility::startSession();
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
 <head>
-    <title>Bienvenido</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú</title>
-    <style>
-        .menu {
-            margin: 20px 0;
-        }
-        .menu a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #000;
-            background-color: #f2f2f2;
-            margin: 2px 0;
-        }
-        .menu a:hover {
-            background-color: #ddd;
-        }
-    </style>
+    <title>Control de Turnos Para Guias de Turismo</title>
+    <link rel="stylesheet" href="../Css/index.css">
 </head>
+
 <body>
-
-<h2><?= @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE]?></h2>
-
-<h3>Menú de Buques</h3>
-<div class="menu">
-    <a href="index.php?action=create">Crear</a>
-    <!-- <a href="index.php">Buscar</a> -->
-    <a href="index.php?action=listall">Listar</a>
-    <!-- <a href="index.php">Editar</a> -->
-    <a href="../index.php">Menu Principal</a>
-</div>
-
+    <div class="header">
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        Menú para Buques
+    </div>
+    <?php
+    require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Controllers/SessionUtility.php";
+    $baseUrl = UrlHelper::getUrlBase();
+    ?>
+    <div class="hamburger" id="hamburger"></div>
+    <div class="menu" id="menu">
+        <a href="<?= $baseUrl ?>/Views/Buques/index.php?action=create">Crear</a>
+        <a href="#">Buscar</a>
+        <a href="#">Editar</a>
+        <a href="#">Eliminar</a>
+        <a href="<?= $baseUrl ?>/Views/Buques/index.php?action=listall">Ver todos</a>
+        <a href="<?= $baseUrl ?>/Views/index.php">Menu principal</a>
+    </div>
+    <script src="../Js/index.js"></script>
 </body>
+
 </html>

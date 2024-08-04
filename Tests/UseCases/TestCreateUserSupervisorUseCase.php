@@ -10,7 +10,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateU
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateUser/Dto/CreateUserSupervisorResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateUser/CreateUserSupervisorUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/RolTypeEnum.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/UsuarioStatus.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/UsuarioStatusEnum.php";
 
 
 

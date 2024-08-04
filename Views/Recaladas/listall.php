@@ -26,106 +26,30 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Buque</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-
-        .header {
-            width: 100%;
-            background-color: #007bff;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 80px 20px 20px;
-            /* Adjusted padding for spacing below header */
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 10px;
-            /* Adjusted margin for closer spacing */
-        }
-
-        .message {
-            padding: 8px 12px;
-            margin: 10px 0;
-            border-radius: 3px;
-            font-weight: 500;
-        }
-
-        .message.error {
-            color: #721c24;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-        }
-
-        .message.success {
-            color: #155724;
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-        }
-
-        .table-container {
-            position: relative;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .table-container table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .table-container th,
-        .table-container td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        .table-container th {
-            background-color: #f4f4f4;
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
-
-        .table-container td {
-            background-color: #fff;
-        }
-
-        .table-container::-webkit-scrollbar {
-            width: 0;
-            height: 0;
-        }
-
-        .photo {
-            max-width: 200px;
-        }
-    </style>
+    <title>Control de Turnos para Guias de Turismo</title>
+    <link rel="stylesheet" href="../Css/listbuque.css">
+    <link rel="stylesheet" href="../Css/index.css">
 </head>
 
 <body>
-    <div class="header">
-        <h1>Reporte de Recaladas</h1>
+<div class="header">
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        Reporte de Recaladas
+    </div>
+    <?php require_once "../menu.php" ?>
+    <div class="icon-bar">
+        <a href="<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=menu"> <img
+                src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home"></a>
+        <a href="<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=create"> <img
+                src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-add-icon.png" alt="Add"></a>
+        <a href="#"> <img
+                src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-search-icon.png" alt="Search"></a>
+                <a href="#"><img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-check-icon.png" alt="Check"></a>
+                <a href="#"> <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-delete-icon.png" alt="Delete"></a>
     </div>
     <div class="container">
         <?php if ($errorMessage): ?>
@@ -171,6 +95,8 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
             </div>
         <?php endif; ?>
     </div>
+    <script src="../Js/index.js"></script>
+    <script src="../Js/listbuque.js"></script>
 </body>
 
 </html>

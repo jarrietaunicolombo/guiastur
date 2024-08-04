@@ -5,6 +5,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetReca
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateAtencion/Dto/CreateAtencionRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetAtencionesByRecalada/Dto/GetAtencionesByRecaladaRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/UseCases/IGetAtencionesByRecaladaUseCase.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/UseCases/IGetRecaladasInThePortUseCase.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/InvalidPermissionException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/DependencyInjection.php";
 
@@ -124,12 +125,18 @@ class CreateAtencionController
         }
     }
 
-    public function showFormCreate(array $request)
+    private function showFormCreate(array $request)
     {
         $recalada_id = @$request["recalada"] ?? null;
         if ($recalada_id !== null && $recalada_id > 0) {
             $recalada = (DependencyInjection::getRecaladaByIdQuery())->handler(new GetRecaladaByIdRequest($recalada_id));
             $_SESSION[ItemsInSessionEnum::FOUND_RECALADA] = $recalada;
+            $_SESSION[ItemsInSessionEnum::LIST_RECALADAS] = null;
+        }
+        else{
+            $recaladas = (DependencyInjection::getRecaladasInThePortServce())->getRecaladasInThePort();
+            $_SESSION[ItemsInSessionEnum::LIST_RECALADAS] = $recaladas;
+            $_SESSION[ItemsInSessionEnum::FOUND_RECALADA] = null;
         }
         $supervisores = (DependencyInjection::getSupervisoresQuery())->handler();
         $_SESSION[ItemsInSessionEnum::LIST_SUPERVISORES] = $supervisores;

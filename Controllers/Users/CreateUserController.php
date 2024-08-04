@@ -169,7 +169,7 @@ class CreateUserController
         $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'];
         $uri = "/Views/Users/index.php";
-        $parameters = "?action=activate&token=" . $response->getValidationToken();
+        $parameters = "?action=activate&token=" . $response->getValidationToken()."&id=".$response->getId();
         $url = UrlHelper::getUrl($uri);
         $url .= $parameters;
         $template = "../../Views/Users/TemplateNotificacionNewUser.html";
