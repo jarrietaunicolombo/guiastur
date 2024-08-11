@@ -52,6 +52,11 @@ function showAlert(icon, title, message, confirm = false) {
 
 function cleanForm(){
     $('#recalada-form')[0].reset();
+    $('#error-buque').text("");
+    $('#error-pais').text("");
+    $('#error-arribo').text("");
+    $('#error-zarpe').text("");
+    $('#error-turistas').text("");
 }
 
 function showFormError(errorMessages){

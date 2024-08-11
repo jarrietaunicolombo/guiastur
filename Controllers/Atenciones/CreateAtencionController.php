@@ -44,30 +44,38 @@ class CreateAtencionController
             }
 
             $recalada = @$_SESSION[ItemsInSessionEnum::FOUND_RECALADA] ?? null;
-            if ($recalada) {
-                new InvalidArgumentException("La Recalada es requida");
+            $recalada_id = $request["recalada_id"] ?? null;
+            if ($recalada === null && $recalada_id  === null) {
+              throw  new InvalidArgumentException("La Recalada es requida");
             }
-
+            if($recalada_id){
+                $recalada = (DependencyInjection::getRecaladaByIdQuery())->handler(new GetRecaladaByIdRequest($recalada_id));
+            }
             $errorMessages = [];
 
             if (!isset($request["supervisor_id"]) || $request["supervisor_id"] < 1) {
                 $errorMessages["supervisor"] = "Es requerido";
             }
-
+            
             $fecha_inicio = DateTime::createFromFormat("Y-m-d\TH:i", @$request["fecha_inicio"]);
             if ($fecha_inicio === false) {
                 $errorMessages["inicio"] = "Formato: YYYY-MM-DD HH:MM:SS";
             }
 
+            if ($fecha_inicio < new DateTime()) {
+                $errorMessages["inicio"] = "No puede ser menor que la fecha actual";
+            }
+
             if ($fecha_inicio < $recalada->getFechaArribo()) {
                 $errorMessages["inicio"] = "Menor que la fecha de arribo";
             }
-
+        
             if ($fecha_inicio > $recalada->getFechaZarpe()) {
                 $errorMessages["inicio"] = "Mayor que la fecha de zarpe";
             }
 
             $fecha_cierre = DateTime::createFromFormat("Y-m-d\TH:i", @$request["fecha_cierre"]);
+         
             if ($fecha_cierre === false) {
                 $errorMessages["cierre"] = "Formato: YYYY-MM-DD HH:MM:SS";
             }
@@ -75,17 +83,16 @@ class CreateAtencionController
             if ($fecha_cierre < $recalada->getFechaArribo()) {
                 $errorMessages["cierre"] = "Menor que la fecha de arribo";
             }
-            $cierre = $fecha_cierre->format("Y-m-d H:i:s");
-            $zarpe = $recalada->getFechaZarpe()->format("Y-m-d H:i:s");
+     
             if ($fecha_cierre > $recalada->getFechaZarpe()) {
                 $errorMessages["cierre"] = "Mayor que la fecha de zarpe";
             }
-        
+
             if ($fecha_inicio > $fecha_cierre) {
-                $errorMessages["inicio"] = "Mayor que la fecha de cierre".
+                $errorMessages["inicio"] = "Mayor que la fecha de cierre" .
                 $errorMessages["cierre"] = "Menor que la fecha de inicio";
             }
-
+            
             if ($fecha_cierre < new DateTime()) {
                 $errorMessages["cierre"] = "no puede ser menor que la fecha actual";
             }
@@ -99,7 +106,6 @@ class CreateAtencionController
                 echo json_encode($errorMessages);
                 exit;
             }
-
             $observaciones = $request["observaciones"] ?? null;
             $recalada_id = $recalada->getRecaladaId();
             $usurio_id = $loginUser->getId();
@@ -132,11 +138,12 @@ class CreateAtencionController
             $recalada = (DependencyInjection::getRecaladaByIdQuery())->handler(new GetRecaladaByIdRequest($recalada_id));
             $_SESSION[ItemsInSessionEnum::FOUND_RECALADA] = $recalada;
             $_SESSION[ItemsInSessionEnum::LIST_RECALADAS] = null;
-        }
-        else{
+            SessionUtility::deleteItemInSession(ItemsInSessionEnum::LIST_RECALADAS);
+        } else {
             $recaladas = (DependencyInjection::getRecaladasInThePortServce())->getRecaladasInThePort();
             $_SESSION[ItemsInSessionEnum::LIST_RECALADAS] = $recaladas;
             $_SESSION[ItemsInSessionEnum::FOUND_RECALADA] = null;
+            SessionUtility::deleteItemInSession(ItemsInSessionEnum::FOUND_RECALADA);
         }
         $supervisores = (DependencyInjection::getSupervisoresQuery())->handler();
         $_SESSION[ItemsInSessionEnum::LIST_SUPERVISORES] = $supervisores;

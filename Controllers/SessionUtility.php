@@ -6,6 +6,7 @@ class SessionUtility
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
+        date_default_timezone_set('America/Bogota');
     }
 
     public static function clearAllSession()

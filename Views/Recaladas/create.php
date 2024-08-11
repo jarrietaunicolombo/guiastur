@@ -71,11 +71,21 @@ if ($errorMessage) {
     <div class="content-zone">
         <div class="form-wrapper">
             <div class="form-container">
-                <?php if (@$paisesResponse === null || count(@$paisesResponse->getPaises()) < 1): ?>
+                <?php if (@$buquesResponse === null || count(@$buquesResponse->getBuques()) < 1): ?>
                     <script type="text/javascript">
                         window.onload = function () {
                             $("#button-create").prop("disabled", true);
                             let error = "No existen Paises disponibles. Menú Paises/Crear";
+                            showSimpleAlert("error", "", "No hay buques disponibles. Menu/Buques/Crear Buque", url = null);
+                        };
+                    </script>
+                <?php endif; ?>
+
+                <?php if (@$paisesResponse === null || count(@$paisesResponse->getPaises()) < 1): ?>
+                    <script type="text/javascript">
+                        window.onload = function () {
+                            $("#button-create").prop("disabled", true);
+                            let error = "No existen Paises disponibles.";
                             showAlert("error", "", error, false);
                         };
                     </script>
@@ -155,6 +165,7 @@ if ($errorMessage) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="../Js/createrecalada.js"></script>
     <script src="../Js/index.js"></script>
+    <script src="../Js/alert.js"></script>
     <script>
      
 
