@@ -11,6 +11,5 @@ $baseUrl = UrlHelper::getUrlBase();
     <a href="<?= $baseUrl ?>/Views/Recaladas/index.php?action=menu">Recaladas</a>
     <a href="<?= $baseUrl ?>/Views/Atenciones/index.php?action=menu">Atenciones</a>
     <a href="<?= $baseUrl ?>/Views/Turnos/index.php?action=menu">Turnos</a>
-    <a href="<?= $baseUrl ?>/Views/Paises/index.php?action=menu">Paises</a>
-    <a href="<?= $baseUrl ?>/Views/Users/index.php?action=logout">Login</a>
+    <a href="<?= $baseUrl ?>/Views/Users/index.php?action=logout">Salir</a>
 </div>

@@ -54,6 +54,10 @@ function showAlert(icon, title, message, confirm = false) {
 
 function cleanForm() {
     $('#atencion-form')[0].reset();
+    $('#error-supervisor').text("");
+    $('#error-inicio').text("");
+    $('#error-cierre').text("");
+    $('#error-turnos').text("");
 }
 
 function showFormError(errorMessages) {

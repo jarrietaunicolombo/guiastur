@@ -37,7 +37,7 @@ function loadData(jsonData) {
         recaladasJSon = JSON.parse(recaladasJSon); // Parsear si es una cadena
     }
     let buquesId = new Set();
-    
+
     recaladasJSon.forEach(json => {  // corregido el nombre de la propiedad
         recaladaJson = "";
         if (typeof json === 'string') {
@@ -65,27 +65,30 @@ function loadData(jsonData) {
     loadBuqueOptions();
 }
 
-function loadBuqueOptions(){
+function loadBuqueOptions() {
     let buqueSelect = document.getElementById('buque_id');
     for (let id in buques) {
-            let option = document.createElement('option');
-            option.value = id;
-            option.text = buques[id].nombre;
-            buqueSelect.add(option);
+        let option = document.createElement('option');
+        option.value = id;
+        option.text = buques[id].nombre;
+        buqueSelect.add(option);
     }
 }
 
-document.getElementById('buque_id').addEventListener('change', function(event) {
-    const buqueId = event.target.value;
-    showInfoBuque(buques[buqueId]);
-    loadRecaladaOptions(buqueId);
-});
+const buqueElement = document.getElementById('buque_id');
+if (buqueElement) {
+    buqueElement.addEventListener('change', function (event) {
+        const buqueId = event.target.value;
+        showInfoBuque(buques[buqueId]);
+        loadRecaladaOptions(buqueId);
+    });
+}
 
 
 function loadRecaladaOptions(buqueId) {
     let recaladaSelect = document.getElementById('recalada_id');
     recaladaSelect.innerHTML = '<option value="" disabled selected>Seleccione una...</option>'; // Limpiar opciones anteriores
-    
+
     // Verificar si hay recaladas para el buque seleccionado
     if (buquesWhitRecaladas[buqueId]) {
         buquesWhitRecaladas[buqueId].forEach(recalada => {
@@ -97,12 +100,15 @@ function loadRecaladaOptions(buqueId) {
     }
 }
 
-document.getElementById('recalada_id').addEventListener('change', function(event) {
-    const recalda_id = event.target.value;
-    showInfoRecalada(recaladas[recalda_id]);
-});
+const recaladaElement = document.getElementById('recalada_id');
+if (recaladaElement) {
+    document.getElementById('recalada_id').addEventListener('change', function (event) {
+        const recalda_id = event.target.value;
+        showInfoRecalada(recaladas[recalda_id]);
+    });
+}
 
-function showInfoBuque(buque){
+function showInfoBuque(buque) {
     let buqueName = document.getElementById('buque');
     buqueName.innerHTML = buque.nombre;
     let id = document.getElementById('recalada');
@@ -114,7 +120,7 @@ function showInfoBuque(buque){
 }
 
 
-function showInfoRecalada(recalada){
+function showInfoRecalada(recalada) {
     let id = document.getElementById('recalada');
     let arribo = document.getElementById('arribo');
     let zarpe = document.getElementById('zarpe');
