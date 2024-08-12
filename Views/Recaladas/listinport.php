@@ -68,15 +68,27 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
                 alt="Delete"></a>
     </div>
     <div class="container">
-        <?php if ($errorMessage): ?>
-            <span class="message error"><?php echo $errorMessage; ?></span>
+    <?php if ($errorMessage): ?>
+            <script type="text/javascript">
+                window.onload = function () {
+                    showSimpleAlert("error", "", "<?= $errorMessage?>");
+                };
+            </script>
         <?php endif; ?>
         <?php if ($infoMessage): ?>
-            <span class="message success"><?php echo $infoMessage; ?></span>
+            <script type="text/javascript">
+                window.onload = function () {
+                    showSimpleAlert("info", "", "<?= $infoMessage?>");
+                };
+            </script>
         <?php endif; ?>
         <?php if ($recaladasResponse === null || @count($recaladasResponse->getRecaladas()) < 1): ?>
-            <span class="message error">No existe informacion sobre Recaladas</span>
-
+            <script type="text/javascript">
+                window.onload = function () {
+                    let message = "No hay recaldas programas en el puerto en este momento"
+                    showSimpleAlert("info", "", message);
+                };
+            </script>
         <?php else: ?>
             <div class="table-container">
                 <table>
@@ -112,6 +124,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         <?php endif; ?>
     </div>
     <script src="../Js/index.js"></script>
+    <script src="../Js/alert.js"></script>
     <script src="../Js/listbuque.js"></script>
 </body>
 
