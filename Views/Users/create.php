@@ -63,8 +63,8 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
                     <script type="text/javascript">
                         window.onload = function () {
                             $("#button-create").prop("disabled", true);
-                            let error = "No existen Roles. Menú Roles/Crear";
-                            showAlert("error", "", error, false);
+                            let error = "No existen Roles";
+                            showSimpleAlert("error", "", error);
                         };
                     </script>
                 <?php endif; ?>
@@ -73,7 +73,7 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
                         window.onload = function () {
                             $("#button-create").prop("disabled", true);
                             let error = "No tiene permisos suficientes. Menú/login";
-                            showAlert("error", "", error, false);
+                            showSimpleAlert("error", "", error);
                         };
                     </script>
                 <?php endif; ?>
@@ -110,6 +110,7 @@ $infoMessage = @$_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? @$_GET["message"]
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="../Js/index.js"></script>
+    <script src="../Js/alert.js"></script>
     <script src="../Js/createusuario.js"></script>
 </body>
 

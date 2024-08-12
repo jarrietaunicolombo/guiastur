@@ -19,7 +19,6 @@ $errorMessage = $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] ?? "";
 $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,7 +31,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
 </head>
 
 <body>
-<div class="header">
+    <div class="header">
         <div class="hamburger" id="hamburger">
             <span></span>
             <span></span>
@@ -40,27 +39,43 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         </div>
         Reporte de Recaladas
     </div>
+
     <?php require_once "../menu.php" ?>
     <div class="icon-bar">
         <a href="<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=menu"> <img
                 src="https://icons.iconarchive.com/icons/alecive/flatwoken/48/Apps-Home-icon.png" alt="Home"></a>
         <a href="<?= UrlHelper::getUrlBase() ?>/Views/Recaladas/index.php?action=create"> <img
                 src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-add-icon.png" alt="Add"></a>
-        <a href="#"> <img
-                src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-search-icon.png" alt="Search"></a>
-                <a href="#"><img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-check-icon.png" alt="Check"></a>
-                <a href="#"> <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-delete-icon.png" alt="Delete"></a>
+        <a href="#"> <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-search-icon.png"
+                alt="Search"></a>
+        <a href="#"><img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-check-icon.png"
+                alt="Check"></a>
+        <a href="#"> <img src="https://icons.iconarchive.com/icons/icojam/blue-bits/48/document-delete-icon.png"
+                alt="Delete"></a>
     </div>
+
     <div class="container">
         <?php if ($errorMessage): ?>
-            <span class="message error"><?php echo $errorMessage; ?></span>
+            <script type="text/javascript">
+                window.onload = function () {
+                    showSimpleAlert("error", "", "<?= $errorMessage?>");
+                };
+            </script>
         <?php endif; ?>
         <?php if ($infoMessage): ?>
-            <span class="message success"><?php echo $infoMessage; ?></span>
+            <script type="text/javascript">
+                window.onload = function () {
+                    showSimpleAlert("info", "", "<?= $infoMessage?>");
+                };
+            </script>
         <?php endif; ?>
         <?php if ($recaladasResponse === null || @count($recaladasResponse->getRecaladas()) < 1): ?>
-            <span class="message error">No existe informacion sobre Recaladas</span>
-
+            <script type="text/javascript">
+                window.onload = function () {
+                    let message = "No hay recaladas disponibles. Menu/Recaladas/Crear Recalada"
+                    showSimpleAlert("info", "", message);
+                };
+            </script>
         <?php else: ?>
             <div class="table-container">
                 <table>
@@ -96,6 +111,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         <?php endif; ?>
     </div>
     <script src="../Js/index.js"></script>
+    <script src="../Js/alert.js"></script>
     <script src="../Js/listbuque.js"></script>
 </body>
 

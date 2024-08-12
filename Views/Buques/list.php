@@ -52,7 +52,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
     <?php if ($errorMessage): ?>
         <script type="text/javascript">
             window.onload = function () {
-                showAlert("error", "", "<?= $errorMessage; ?>", false);
+                showSimpleAlert("error", "", "<?= $errorMessage; ?>");
             };
         </script>
     <?php endif; ?>
@@ -60,14 +60,16 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
         <span class="message success"><?= $infoMessage; ?></span>
         <script type="text/javascript">
             window.onload = function () {
-                showAlert("info", "", "<?= $infoMessage; ?>", false);
+                showSimpleAlert("info", "", "<?= $infoMessage; ?>");
             };
         </script>
     <?php endif; ?>
     <?php if ($buquesResponse === null || @count($buquesResponse->getBuques()) < 1): ?>
         <script type="text/javascript">
             window.onload = function () {
-                showAlert("error", "", "No hay informacion sobre Buques", true);
+                let message = "No hay buques disponibles. Menu/Buques/Crear Buque"
+                let urlOk = <?= UrlHelper::getUrlBase()."/Views/Buques/index.php?action=create"; ?>
+                showConfirmAlert("", message, 'Crear Buque', "Cancelar", urlOk, null);
             };
         </script>
     <?php else: ?>
@@ -113,7 +115,7 @@ $infoMessage = $_SESSION[ItemsInSessionEnum::INFO_MESSAGE] ?? "";
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="../Js/index.js"></script>
-    <script src="../Js/listbuque.js"></script>
+    <script src="../Js/alert.js"></script>
    
 </body>
 
