@@ -257,7 +257,7 @@ class DependencyInjection
 
     public static function getBuquesService(): IGetBuquesService
     {
-        ClassLoader::loadClass("BuqueRepository");  
+        ClassLoader::loadClass("BuqueRepository");
         ClassLoader::loadClass("GetBuquesQueryHandler");
         ClassLoader::loadClass("GetBuquesService");
         $repository = new BuqueRepository();
@@ -267,7 +267,7 @@ class DependencyInjection
 
     public static function getRecaladasService(): IGetRecaladasService
     {
-        ClassLoader::loadClass("RecaladaRepository");  
+        ClassLoader::loadClass("RecaladaRepository");
         ClassLoader::loadClass("GetRecaladasQueryHandler");
         ClassLoader::loadClass("GetRecaladasService");
         $repository = new RecaladaRepository();
@@ -278,7 +278,7 @@ class DependencyInjection
 
     public static function getRecaladasByBuqueService(): IGetRecaladasByBuqueService
     {
-        ClassLoader::loadClass("RecaladaRepository");  
+        ClassLoader::loadClass("RecaladaRepository");
         ClassLoader::loadClass("GetRecaladasByBuqueQueryHandler");
         ClassLoader::loadClass("GetRecaladasByBuqueService");
         $repository = new RecaladaRepository();
@@ -289,7 +289,7 @@ class DependencyInjection
 
     public static function getNextAllTurnosByStatusService(): IGetNextAllTurnosByStatusService
     {
-        ClassLoader::loadClass("TurnoRepository");  
+        ClassLoader::loadClass("TurnoRepository");
         ClassLoader::loadClass("GetNextAllTurnosByStatusQueryHandler");
         ClassLoader::loadClass("GetNextAllTurnosByStatusService");
         $repository = new TurnoRepository();
@@ -299,7 +299,7 @@ class DependencyInjection
 
     public static function getRecaladaByIdQuery(): IGetRecaladaByIdQuery
     {
-        ClassLoader::loadClass("RecaladaRepository");  
+        ClassLoader::loadClass("RecaladaRepository");
         ClassLoader::loadClass("GetRecaladaByIdQueryHandler");
         $repository = new RecaladaRepository();
         return new GetRecaladaByIdQueryHandler($repository);
@@ -307,23 +307,16 @@ class DependencyInjection
 
     public static function getSupervisoresQuery(): IGetSupervisoresQuery
     {
-        ClassLoader::loadClass("SupervisorRepository");  
+        ClassLoader::loadClass("SupervisorRepository");
         ClassLoader::loadClass("GetSupervisoresQueryHandler");
         $repository = new SupervisorRepository();
         return new GetSupervisoresQueryHandler($repository);
     }
     public static function getAtencionByIdQuery(): IGetAtencionByIdQuery
     {
-        ClassLoader::loadClass("AtencionRepository");  
+        ClassLoader::loadClass("AtencionRepository");
         ClassLoader::loadClass("GetAtencionByIdQueryHandler");
         $repository = new AtencionRepository();
         return new GetAtencionByIdQueryHandler($repository);
     }
-
 }
-
-
-
-
-
-
