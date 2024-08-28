@@ -4,9 +4,10 @@ namespace Api\Helpers;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Api\Models\UserToken;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/vendor/autoload.php";
-
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/UserToken.php";
 
 class JWTHandler
 {
@@ -17,7 +18,7 @@ class JWTHandler
     public static function createToken($data)
     {
         $issuedAt = time();
-        $expirationTime = $issuedAt + 3600; // 1 hora
+        $expirationTime = $issuedAt + 3600;
 
         $payload = [
             'iat' => $issuedAt,
@@ -26,7 +27,16 @@ class JWTHandler
             'data' => $data
         ];
 
-        return JWT::encode($payload, self::$secret_key, self::$encrypt[0]);
+        $token = JWT::encode($payload, self::$secret_key, self::$encrypt[0]);
+
+        $userToken = new UserToken([
+            'usuario_id' => $data['userId'],
+            'token' => $token,
+            'expira_el' => date('Y-m-d H:i:s', $expirationTime)
+        ]);
+        $userToken->save();
+
+        return $token;
     }
 
     public static function validateToken($token)
@@ -39,6 +49,11 @@ class JWTHandler
             $decoded = JWT::decode($token, new Key(self::$secret_key, self::$encrypt[0]));
             if ($decoded->aud !== self::aud()) {
                 throw new \Exception("Audiencia inválida.");
+            }
+
+            $userToken = UserToken::find('first', ['conditions' => ['token = ? AND expires_at > NOW()', $token]]);
+            if (!$userToken) {
+                throw new \Exception("Token no válido o expirado.");
             }
         } catch (\Exception $e) {
             return false;

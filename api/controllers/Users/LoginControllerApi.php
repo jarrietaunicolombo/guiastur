@@ -51,7 +51,8 @@ class LoginController
             ob_end_clean();
 
             $this->sendSuccessResponse([
-                "message" => "Login exitoso."
+                "message" => "Login exitoso.",
+                "token" => $token  // Asegúrate de devolver el token
             ]);
         } catch (UnauthorizedException $e) {
             ob_end_clean();

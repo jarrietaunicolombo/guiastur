@@ -13,16 +13,21 @@ class LogoutController
 
     private function logout()
     {
-        $cookies = new CookiesSetup();
-        $cookies->clearAuthTokenCookie();
+        ob_start();
 
-        $this->sendSuccessResponse([
-            "message" => "Logout exitoso."
-        ]);
+        $cookies = new CookiesSetup();
+
+        $cookies->clearAuthTokenCookie();
+        $cookies->clearRefreshTokenCookie();
+
+        ob_end_clean();
+
+        $this->sendSuccessResponse(["message" => "Logout exitoso."]);
     }
 
     private function sendSuccessResponse($data)
     {
+        header('Content-Type: application/json');
         echo json_encode($data);
         http_response_code(200);
         exit();
