@@ -14,12 +14,13 @@ class CookiesSetup
     public function setAuthTokenCookie($token, $expirationTime = 3600)
     {
         error_log("Valor del token antes de configurar la cookie: " . $token);
+
         $cookieSet = setcookie(
             $this->authCookieName,
             $token,
             [
                 'expires' => time() + $expirationTime,
-                'path' => $this->path,
+                'path' => '/',
                 'domain' => 'guiastur-mobile-app.test',
                 'secure' => $this->secure,
                 'httponly' => $this->httpOnly,
@@ -32,7 +33,12 @@ class CookiesSetup
         } else {
             error_log("Error al configurar la cookie auth_token.");
         }
-        error_log("Cookie auth_token configurada: " . print_r($_COOKIE, true));
+
+        if (isset($_COOKIE[$this->authCookieName])) {
+            error_log("Cookie auth_token está presente en \$_COOKIE justo después de la configuración.");
+        } else {
+            error_log("Cookie auth_token no está presente en \$_COOKIE después de la configuración.");
+        }
     }
 
     public function setRefreshTokenCookie($token, $expirationTime = 604800)
@@ -51,10 +57,19 @@ class CookiesSetup
         );
     }
 
-
     public function getAuthTokenFromCookie()
     {
-        return $_COOKIE[$this->authCookieName] ?? null;
+        error_log("Contenido de \$_COOKIE al intentar obtener el token: " . print_r($_COOKIE, true));
+
+        $token = $_COOKIE[$this->authCookieName] ?? null;
+
+        if ($token === null) {
+            error_log("Token no encontrado en las cookies.");
+        } else {
+            error_log("Token encontrado en las cookies: " . $token);
+        }
+
+        return $token;
     }
 
     public function getRefreshTokenFromCookie()

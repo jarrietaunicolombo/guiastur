@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Users/LoginControllerApi.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Users/LoginMobileController.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
