@@ -126,7 +126,14 @@ CREATE TABLE turnos (
     usuario_registro int DEFAULT NULL
 ) ENGINE=InnoDB;
 
-
+CREATE TABLE user_tokens (
+    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT(11) UNSIGNED NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    creado_el TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expira_el TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
 
 ALTER TABLE Usuarios
 ADD CONSTRAINT Fk_Rols_usuarios

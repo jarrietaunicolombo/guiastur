@@ -23,7 +23,6 @@ class LoginController
     private function login(array $request)
     {
         try {
-            // Captura cualquier salida accidental
             ob_start();
 
             $email = $request['email'];
@@ -42,7 +41,6 @@ class LoginController
                 'role' => $loginResponse->getRol()
             ];
 
-            // Generar el token JWT
             $token = JWTHandler::createToken($tokenData);
 
             $cookies = new CookiesSetup();
@@ -52,7 +50,7 @@ class LoginController
 
             $this->sendSuccessResponse([
                 "message" => "Login exitoso.",
-                "token" => $token  // Asegúrate de devolver el token
+                "token" => $token
             ]);
         } catch (UnauthorizedException $e) {
             ob_end_clean();

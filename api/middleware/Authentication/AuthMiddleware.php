@@ -1,32 +1,32 @@
 <?php
 
-namespace App\api\Middleware\Authentication;
+namespace Api\Middleware;
 
-use App\Helpers\JWTHandler;
-use Exception;
+use Api\Helpers\JWTHandler;
 
 class AuthMiddleware
 {
-    public function handle($request, $next)
+    public function handle($next)
     {
-        try {
-            if (!isset($request->headers['Authorization'])) {
-                throw new Exception('Token no proporcionado.');
-            }
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        $token = str_replace('Bearer ', '', $authHeader);
 
-            $token = str_replace('Bearer ', '', $request->headers['Authorization']);
-
-            $decoded = JWTHandler::decode($token);
-
-            if ($decoded->role !== 'admin') {
-                throw new Exception('Permisos insuficientes.');
-            }
-
-            return $next($request);
-        } catch (Exception $e) {
-            http_response_code(403);
-            echo json_encode(['error' => $e->getMessage()]);
-            exit;
+        if (empty($token)) {
+            $this->sendErrorResponse("Token no proporcionado.", 401);
         }
+
+        if (!JWTHandler::validateToken($token)) {
+            $this->sendErrorResponse("Token no válido o expirado.", 401);
+        }
+
+        return $next();
+    }
+
+    private function sendErrorResponse($message, $code = 400)
+    {
+        header('Content-Type: application/json');
+        http_response_code($code);
+        echo json_encode(["error" => $message]);
+        exit();
     }
 }
