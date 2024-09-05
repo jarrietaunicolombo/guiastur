@@ -19,9 +19,7 @@ class JWTHandler
     public static function createToken($data)
     {
         $issuedAt = time();
-        $expirationTime = time() + 60;
-
-        error_log("Creando token JWT con tiempo de expiración: " . $expirationTime);
+        $expirationTime = $issuedAt + 86400; // 1 día de expiración
 
         $payload = [
             'iat' => $issuedAt,
@@ -33,6 +31,7 @@ class JWTHandler
         $token = JWT::encode($payload, self::$secret_key, self::$encrypt[0]);
         error_log("Token JWT creado: " . $token);
 
+        // Guardar el token en la base de datos
         $userToken = new UserToken([
             'usuario_id' => $data['userId'],
             'token' => $token,
@@ -52,6 +51,10 @@ class JWTHandler
         }
 
         try {
+            if (!\ActiveRecord\Config::instance()->get_default_connection()) {
+                throw new \Exception("Empty connection string");
+            }
+
             $decoded = JWT::decode($token, new Key(self::$secret_key, self::$encrypt[0]));
             error_log("Token decodificado: " . print_r($decoded, true));
 

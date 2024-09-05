@@ -29,18 +29,6 @@ class CookiesSetup
         );
 
         error_log("Cookie auth_token seteada correctamente: " . ($cookieSet ? 'Sí' : 'No'));
-
-        /*if ($cookieSet) {
-            error_log("Cookie auth_token configurada correctamente.");
-        } else {
-            error_log("Error al configurar la cookie auth_token.");
-        }
-
-        if (isset($_COOKIE[$this->authCookieName])) {
-            error_log("Cookie auth_token está presente en \$_COOKIE justo después de la configuración.");
-        } else {
-            error_log("Cookie auth_token no está presente en \$_COOKIE después de la configuración.");
-        }*/
     }
 
     public function setRefreshTokenCookie($token, $expirationTime = 604800)
@@ -88,19 +76,6 @@ class CookiesSetup
             ]
         );
 
-        setcookie(
-            $this->authCookieName,
-            "",
-            [
-                'expires' => time() - 7200,
-                'path' => $this->path,
-                'domain' => 'guiastur-mobile-app.test',
-                'secure' => $this->secure,
-                'httponly' => $this->httpOnly,
-                'samesite' => $this->sameSite,
-            ]
-        );
-
         error_log("Cookie auth_token eliminada.");
     }
 
@@ -119,6 +94,6 @@ class CookiesSetup
             ]
         );
 
-        error_log("Cookie refresh_token eliminada: " . print_r($_COOKIE, true));
+        error_log("Cookie refresh_token eliminada.");
     }
 }

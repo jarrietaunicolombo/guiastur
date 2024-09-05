@@ -44,15 +44,18 @@ class LoginController
                 'role' => $loginResponse->getRol()
             ];
 
+            // Crear tokens
             $authToken = JWTHandler::createToken($tokenData);
             $refreshToken = JWTHandler::createToken(['userId' => $loginResponse->getId()]);
 
+            // Configurar las cookies
             $cookies = new CookiesSetup();
             $cookies->setAuthTokenCookie($authToken);
             $cookies->setRefreshTokenCookie($refreshToken);
 
             ob_end_clean();
 
+            // Enviar respuesta de éxito
             $this->sendSuccessResponse([
                 "message" => "Login exitoso.",
                 "token" => $authToken,
