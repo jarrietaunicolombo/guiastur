@@ -19,7 +19,9 @@ class JWTHandler
     public static function createToken($data)
     {
         $issuedAt = time();
-        $expirationTime = $issuedAt + 86400;
+        $expirationTime = time() + 60;
+
+        error_log("Creando token JWT con tiempo de expiración: " . $expirationTime);
 
         $payload = [
             'iat' => $issuedAt,
@@ -29,6 +31,7 @@ class JWTHandler
         ];
 
         $token = JWT::encode($payload, self::$secret_key, self::$encrypt[0]);
+        error_log("Token JWT creado: " . $token);
 
         $userToken = new UserToken([
             'usuario_id' => $data['userId'],
@@ -42,17 +45,15 @@ class JWTHandler
 
     public static function validateToken($token)
     {
+        error_log("Validando token JWT: " . $token);
+
         if (empty($token)) {
             throw new \Exception("Token no proporcionado.");
         }
 
         try {
-            if (!\ActiveRecord\Config::instance()->get_default_connection()) {
-                throw new \Exception("Empty connection string");
-            }
-
             $decoded = JWT::decode($token, new Key(self::$secret_key, self::$encrypt[0]));
-            error_log("Decoded token: " . print_r($decoded, true));
+            error_log("Token decodificado: " . print_r($decoded, true));
 
             if ($decoded->aud !== self::aud()) {
                 throw new \Exception("Audiencia inválida.");
@@ -73,8 +74,6 @@ class JWTHandler
 
         return true;
     }
-
-
 
     public static function decodeJWT($token)
     {

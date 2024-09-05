@@ -8,12 +8,12 @@ class CookiesSetup
     private $refreshCookieName = "refresh_token";
     private $secure = true;
     private $httpOnly = true;
-    private $path = "";
+    private $path = "/";
     private $sameSite = "None";
 
-    public function setAuthTokenCookie($token, $expirationTime = 3600)
+    public function setAuthTokenCookie($token, $expirationTime = 60)
     {
-        error_log("Valor del token antes de configurar la cookie: " . $token);
+        error_log("Seteando cookie auth_token con token: " . $token);
 
         $cookieSet = setcookie(
             $this->authCookieName,
@@ -28,7 +28,9 @@ class CookiesSetup
             ]
         );
 
-        if ($cookieSet) {
+        error_log("Cookie auth_token seteada correctamente: " . ($cookieSet ? 'Sí' : 'No'));
+
+        /*if ($cookieSet) {
             error_log("Cookie auth_token configurada correctamente.");
         } else {
             error_log("Error al configurar la cookie auth_token.");
@@ -38,17 +40,18 @@ class CookiesSetup
             error_log("Cookie auth_token está presente en \$_COOKIE justo después de la configuración.");
         } else {
             error_log("Cookie auth_token no está presente en \$_COOKIE después de la configuración.");
-        }
+        }*/
     }
 
     public function setRefreshTokenCookie($token, $expirationTime = 604800)
     {
+        error_log("Seteando cookie refresh_token con token: " . $token);
         setcookie(
             $this->refreshCookieName,
             $token,
             [
                 'expires' => time() + $expirationTime,
-                'path' => $this->path,
+                'path' => '/',
                 'domain' => 'guiastur-mobile-app.test',
                 'secure' => $this->secure,
                 'httponly' => $this->httpOnly,
@@ -59,16 +62,9 @@ class CookiesSetup
 
     public function getAuthTokenFromCookie()
     {
-        error_log("Contenido de \$_COOKIE al intentar obtener el token: " . print_r($_COOKIE, true));
-
+        error_log("Obteniendo cookie auth_token: " . print_r($_COOKIE, true));
         $token = $_COOKIE[$this->authCookieName] ?? null;
-
-        if ($token === null) {
-            error_log("Token no encontrado en las cookies.");
-        } else {
-            error_log("Token encontrado en las cookies: " . $token);
-        }
-
+        error_log("Token auth_token obtenido: " . ($token ?? 'Nulo'));
         return $token;
     }
 
