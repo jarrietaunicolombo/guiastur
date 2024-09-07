@@ -19,7 +19,7 @@ class JWTHandler
     public static function createToken($data)
     {
         $issuedAt = time();
-        $expirationTime = $issuedAt + 86400; // 1 día de expiración
+        $expirationTime = $issuedAt + 3600;
 
         $payload = [
             'iat' => $issuedAt,
@@ -31,7 +31,6 @@ class JWTHandler
         $token = JWT::encode($payload, self::$secret_key, self::$encrypt[0]);
         error_log("Token JWT creado: " . $token);
 
-        // Guardar el token en la base de datos
         $userToken = new UserToken([
             'usuario_id' => $data['userId'],
             'token' => $token,

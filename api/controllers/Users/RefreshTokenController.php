@@ -1,25 +1,37 @@
 <?php
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Helpers/JWTHandler.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Helpers/CookiesSetup.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/UserToken.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Exceptions/UnauthorizedException.php";
-
-use Api\Helpers\JWTHandler;
+use Api\Services\UserService;
+use Api\Services\ResponseService;
+use Api\Services\Auth\TokenService;
 use Api\Helpers\CookiesSetup;
 use Api\Exceptions\UnauthorizedException;
-use Api\Models\UserToken;
+
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Auth/TokenService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Users/UserService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/HTTP/ResponseService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Helpers/CookiesSetup.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Exceptions/UnauthorizedException.php";
 
 class RefreshTokenController
 {
+    private $tokenService;
+    private $userService;
+    private $responseService;
+
+    public function __construct()
+    {
+        $this->tokenService = new TokenService();
+        $this->userService = new UserService();
+        $this->responseService = new ResponseService();
+    }
+
     public function handleRequest()
     {
         $data = json_decode(file_get_contents("php://input"), true);
         $refreshToken = $data['refresh_token'] ?? $_COOKIE['refresh_token'] ?? null;
 
         if (!$refreshToken) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Falta el token de refresco']);
+            $this->responseService->sendErrorResponse('Falta el token de refresco', 400);
             return;
         }
 
@@ -31,73 +43,35 @@ class RefreshTokenController
         try {
             ob_start();
 
-            $userToken = UserToken::find('first', ['conditions' => ['token = ? AND expira_el > NOW()', $refreshToken]]);
+            $userToken = $this->tokenService->refreshToken($refreshToken);
             if (!$userToken) {
-                error_log("Refresh token no válido o expirado.");
                 throw new UnauthorizedException("Refresh token no válido o expirado.");
             }
 
-            $usuario = $this->getUsuario($userToken->usuario_id);
-            $rol = $this->getUsuarioRol($usuario->rol_id);
+            $usuario = $this->userService->getUsuario($userToken->usuario_id);
+            $rol = $this->userService->getUsuarioRol($usuario->rol_id);
+
             if (!$usuario || !$rol) {
                 throw new UnauthorizedException("Usuario o rol no encontrado.");
             }
 
-            $tokenData = [
-                'userId' => $usuario->id,
-                'role' => $rol->nombre
-            ];
-
-            $newAuthToken = JWTHandler::createToken($tokenData);
-            error_log("Nuevo auth token generado: " . $newAuthToken);
+            $newAuthToken = $this->tokenService->createAuthToken($usuario, $rol);
 
             $cookies = new CookiesSetup();
             $cookies->setAuthTokenCookie($newAuthToken);
 
             ob_end_clean();
 
-            $this->sendSuccessResponse([
+            $this->responseService->sendSuccessResponse([
                 "message" => "Token refrescado exitosamente.",
                 "token" => $newAuthToken
             ]);
         } catch (UnauthorizedException $e) {
             ob_end_clean();
-            error_log("Error en el refresco del token: " . $e->getMessage());
-            $this->sendErrorResponse($e->getMessage(), 401);
+            $this->responseService->sendErrorResponse($e->getMessage(), 401);
         } catch (\Exception $e) {
             ob_end_clean();
-            error_log("Error general en el refresco del token: " . $e->getMessage());
-            $this->sendErrorResponse("Error al refrescar el token: " . $e->getMessage(), 400); // Respuesta de error genérico 400
+            $this->responseService->sendErrorResponse("Error al refrescar el token: " . $e->getMessage(), 400);
         }
-    }
-
-    private function getUsuario($usuario_id)
-    {
-        $sql = "SELECT * FROM usuarios WHERE id = ?";
-        $usuarios = UserToken::find_by_sql($sql, [$usuario_id]);
-        return $usuarios ? $usuarios[0] : null;
-    }
-
-    private function getUsuarioRol($rol_id)
-    {
-        $sql = "SELECT * FROM Rols WHERE id = ?";
-        $roles = UserToken::find_by_sql($sql, [$rol_id]);
-        return $roles ? $roles[0] : null;
-    }
-
-    private function sendSuccessResponse($data)
-    {
-        error_log("Enviando respuesta de éxito: " . print_r($data, true));
-        http_response_code(200);
-        echo json_encode($data);
-        exit();
-    }
-
-    private function sendErrorResponse($message, $code = 400)
-    {
-        error_log("Enviando respuesta de error: " . $message);
-        http_response_code($code);
-        echo json_encode(["error" => $message]);
-        exit();
     }
 }

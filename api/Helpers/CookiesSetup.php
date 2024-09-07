@@ -11,7 +11,7 @@ class CookiesSetup
     private $path = "/";
     private $sameSite = "None";
 
-    public function setAuthTokenCookie($token, $expirationTime = 60)
+    public function setAuthTokenCookie($token, $expirationTime = 3600)
     {
         error_log("Seteando cookie auth_token con token: " . $token);
 
