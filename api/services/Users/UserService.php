@@ -36,7 +36,6 @@ class UserService
             $creatorId
         );
 
-        // Llamar al servicio de creación de usuarios
         $createUserUseCase = \DependencyInjection::getCreateUserServce();
         return $createUserUseCase->createUser($createUserRequest);
     }

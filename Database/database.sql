@@ -107,8 +107,6 @@ CREATE TABLE Atencions (
 ) engine = innodb;
 
 
-
-
 CREATE TABLE turnos (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     numero int(4) NOT NULL,
@@ -127,13 +125,13 @@ CREATE TABLE turnos (
 ) ENGINE=InnoDB;
 
 CREATE TABLE user_tokens (
-    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT(11) UNSIGNED NOT NULL,
+    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    usuario_id INT NOT NULL,
     token VARCHAR(255) NOT NULL,
     creado_el TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expira_el TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+    expira_el TIMESTAMP DEFAULT NULL,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
-);
+) ENGINE=InnoDB;
 
 ALTER TABLE Usuarios
 ADD CONSTRAINT Fk_Rols_usuarios

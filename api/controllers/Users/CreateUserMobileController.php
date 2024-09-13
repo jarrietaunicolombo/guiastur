@@ -4,6 +4,9 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Auth/AuthServic
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Users/UserService.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Emails/EmailService.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Utilities/UtilityService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Request/RequestMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Authorization/AuthorizationMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Response/ResponseMiddleware.php";
 
 use Api\Services\AuthService;
 use Api\Services\UserService;
@@ -27,16 +30,13 @@ class CreateUserMobileController
 
     public function handleRequest($request)
     {
-        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-            return $this->sendErrorResponse("Método no permitido", 405);
-        }
-
-        $this->createUser($request);
-    }
-
-    private function createUser(array $request)
-    {
         try {
+            if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+                throw new \InvalidArgumentException("Método no permitido.");
+            }
+
+            RequestMiddleware::validateCreateUserRequest($request);
+
             $headers = apache_request_headers();
             $authHeader = $headers['Authorization'] ?? '';
             if (!$authHeader) {
@@ -49,45 +49,27 @@ class CreateUserMobileController
             }
 
             $userRole = $decodedToken->data->role;
-            $this->authService->checkRolePermission($userRole, [RolTypeEnum::SUPERVISOR, RolTypeEnum::SUPER_USUARIO]);
+            AuthorizationMiddleware::checkRolePermission($userRole, [RolTypeEnum::SUPERVISOR, RolTypeEnum::SUPER_USUARIO]);
 
-            $email = trim($request['email'] ?? '');
-            $nombre = trim($request['nombre'] ?? '');
-            $rol_id = $request['rol_id'] ?? null;
-
-            if (empty($email) || empty($nombre) || !$rol_id) {
-                throw new \InvalidArgumentException("El Email, Nombre y Rol son requeridos.");
-            }
+            $email = trim($request['email']);
+            $nombre = trim($request['nombre']);
+            $rol_id = $request['rol_id'];
 
             $password = $this->utilityService->generatePassword();
             $createUserResponse = $this->userService->createUser($email, $password, $nombre, $rol_id, $decodedToken->data->userId);
 
             $this->emailService->sendUserCreatedEmail($createUserResponse);
 
-            $this->sendSuccessResponse([
+            ResponseMiddleware::success([
                 "id" => $createUserResponse->getId(),
                 "message" => "Usuario creado exitosamente.",
                 "email" => $createUserResponse->getEmail(),
                 "rol" => $createUserResponse->getRolNombre()
             ]);
         } catch (\InvalidArgumentException $e) {
-            $this->sendErrorResponse($e->getMessage(), 400);
+            ResponseMiddleware::error($e->getMessage(), 400);
         } catch (\Exception $e) {
-            $this->sendErrorResponse("Error interno en el servidor.", 500);
+            ResponseMiddleware::error("Error interno en el servidor.", 500);
         }
-    }
-
-    private function sendSuccessResponse($data)
-    {
-        http_response_code(200);
-        echo json_encode($data);
-        exit();
-    }
-
-    private function sendErrorResponse($message, $code = 400)
-    {
-        http_response_code($code);
-        echo json_encode(["error" => $message]);
-        exit();
     }
 }
