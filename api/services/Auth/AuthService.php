@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Services;
+namespace Api\Services\Auth;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Helpers/JWTHandler.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/RolTypeEnum.php";

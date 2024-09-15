@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Middleware;
+namespace Api\Middleware\Authentication;
 
 use Api\Helpers\JWTHandler;
 

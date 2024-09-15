@@ -1,4 +1,7 @@
 <?php
+
+namespace Api\Middleware\Authorization;
+
 class AuthorizationMiddleware
 {
     public static function checkRolePermission($userRole, $requiredRoles)

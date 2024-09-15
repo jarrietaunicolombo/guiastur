@@ -1,15 +1,22 @@
 <?php
+
+namespace Api\Routes\Endopoint\Buques;
+
+use Api\Controllers\Buques\CreateBuqueMobileController;
+
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Buques/CreateBuqueMobileController.php";
+
 header("Access-Control-Allow-Origin: https://guiastur-mobile-app.test:4200");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");
+
+header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
-
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Buques/CreateBuqueMobileController.php";
 
 $createBuqueController = new CreateBuqueMobileController();
 

@@ -1,4 +1,7 @@
 <?php
+
+namespace Api\Middleware\Response;
+
 class ResponseMiddleware
 {
     public static function success($data, $code = 200)

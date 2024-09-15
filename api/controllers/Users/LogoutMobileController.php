@@ -1,5 +1,7 @@
 <?php
 
+namespace Api\Controllers\Users;
+
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Helpers/CookiesSetup.php";
 
 use Api\Helpers\CookiesSetup;

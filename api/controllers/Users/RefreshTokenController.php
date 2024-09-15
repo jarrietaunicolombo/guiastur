@@ -1,5 +1,7 @@
 <?php
 
+namespace Api\Controllers\Users;
+
 use Api\Services\UserService;
 use Api\Services\ResponseService;
 use Api\Services\Auth\TokenService;

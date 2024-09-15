@@ -1,5 +1,7 @@
 <?php
 
+namespace Api\Controllers\Users;
+
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Auth/AuthService.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Users/UserService.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Emails/EmailService.php";
@@ -8,10 +10,13 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Request/Reque
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Authorization/AuthorizationMiddleware.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Response/ResponseMiddleware.php";
 
-use Api\Services\AuthService;
+use Api\Services\Auth\AuthService;
 use Api\Services\UserService;
 use Api\Services\Emails\EmailService;
 use Api\Services\Utilities\UtilityService;
+use Api\Middleware\Request\RequestMiddleware;
+use Api\Middleware\Authorization\AuthorizationMiddleware;
+use Api\Middleware\Response\ResponseMiddleware;
 
 class CreateUserMobileController
 {
@@ -49,7 +54,7 @@ class CreateUserMobileController
             }
 
             $userRole = $decodedToken->data->role;
-            AuthorizationMiddleware::checkRolePermission($userRole, [RolTypeEnum::SUPERVISOR, RolTypeEnum::SUPER_USUARIO]);
+            AuthorizationMiddleware::checkRolePermission($userRole, [\RolTypeEnum::SUPERVISOR, \RolTypeEnum::SUPER_USUARIO]);
 
             $email = trim($request['email']);
             $nombre = trim($request['nombre']);
