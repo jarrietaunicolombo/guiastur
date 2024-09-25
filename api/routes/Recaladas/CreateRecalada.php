@@ -1,10 +1,10 @@
 <?php
 
-namespace Api\Routes\Endopoint\Buques;
+namespace Api\Routes\Endopoint\Recaladas;
 
-use Api\Controllers\Buques\CreateBuqueMobileController;
+use Api\Controllers\Recaladas\CreateRecaladaMobileController;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Buques/CreateBuqueMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/CreateRecaladaMobileController.php";
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
@@ -18,11 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-$createBuqueController = new CreateBuqueMobileController();
+$createRecaladaController = new CreateRecaladaMobileController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $request = json_decode(file_get_contents('php://input'), true);
-    $createBuqueController->handleRequest($request);
+
+    $createRecaladaController->handleRequest($request);
 } else {
     header('Content-Type: application/json', true, 405);
     echo json_encode([

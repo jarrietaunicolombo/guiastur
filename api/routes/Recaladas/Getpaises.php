@@ -1,10 +1,8 @@
 <?php
 
-namespace Api\Routes\Endopoint\Users;
+use Api\Controllers\Recaladas\GetPaisesMobileController;
 
-use Api\Controllers\Users\LogoutController;
-
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Users/LogoutMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/GetPaisesMobileController.php";
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
@@ -18,5 +16,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-$controller = new LogoutController();
+$controller = new GetPaisesMobileController();
 $controller->handleRequest();

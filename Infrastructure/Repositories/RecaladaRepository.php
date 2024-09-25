@@ -86,10 +86,10 @@ class RecaladaRepository implements IRecaladaRepository
                 array(
                     "conditions"
                     => array(
-                            "buque_id = ? AND fecha_zarpe > ?",
-                            $buqueId,
-                            $fecha
-                        )
+                        "buque_id = ? AND fecha_zarpe > ?",
+                        $buqueId,
+                        $fecha
+                    )
                 )
             );
             if (count($recaladas) > 0) {
@@ -110,10 +110,10 @@ class RecaladaRepository implements IRecaladaRepository
                 array(
                     "conditions"
                     => array(
-                            "fecha_arribo <= ? AND fecha_zarpe >= ?",
-                            $nowDate,
-                            $nowDate
-                        )
+                        "fecha_arribo <= ? AND fecha_zarpe >= ?",
+                        $nowDate,
+                        $nowDate
+                    )
                 )
             );
             return $recaladas;
@@ -130,9 +130,9 @@ class RecaladaRepository implements IRecaladaRepository
                 array(
                     "conditions"
                     => array(
-                            "buque_id = ?",
-                            $buqueId
-                        )
+                        "buque_id = ?",
+                        $buqueId
+                    )
                 )
             );
             return $recaladas;

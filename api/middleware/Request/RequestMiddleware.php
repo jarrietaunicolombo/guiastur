@@ -41,4 +41,48 @@ class RequestMiddleware
             throw new \InvalidArgumentException('El Nombre solo puede contener letras y espacios.');
         }
     }
+
+    public static function validateCreateRecaladaRequest($request)
+    {
+        $errorMessages = [];
+
+        if (!isset($request['buque_id']) || $request['buque_id'] < 1) {
+            $errorMessages['buque_id'] = 'El Buque es requerido y debe ser mayor que 0.';
+        }
+
+        if (!isset($request['pais_id']) || $request['pais_id'] < 1) {
+            $errorMessages['pais_id'] = 'El País es requerido y debe ser mayor que 0.';
+        }
+
+        if (!isset($request['fecha_arribo'])) {
+            $errorMessages['fecha_arribo'] = 'La Fecha de Arribo es requerida.';
+        } else {
+            $fecha_arribo = \DateTime::createFromFormat('Y-m-d\TH:i', $request['fecha_arribo']);
+            if ($fecha_arribo === false) {
+                $errorMessages['fecha_arribo'] = 'La Fecha de Arribo debe tener el formato AAAA-MM-DDTHH:MM.';
+            }
+        }
+
+        if (!isset($request['fecha_zarpe'])) {
+            $errorMessages['fecha_zarpe'] = 'La Fecha de Zarpe es requerida.';
+        } else {
+            $fecha_zarpe = \DateTime::createFromFormat('Y-m-d\TH:i', $request['fecha_zarpe']);
+            if ($fecha_zarpe === false) {
+                $errorMessages['fecha_zarpe'] = 'La Fecha de Zarpe debe tener el formato AAAA-MM-DDTHH:MM.';
+            }
+        }
+
+        if (isset($fecha_arribo) && isset($fecha_zarpe) && $fecha_arribo > $fecha_zarpe) {
+            $errorMessages['fechas'] = 'La Fecha de Arribo no puede ser mayor que la Fecha de Zarpe.';
+        }
+
+        if (!isset($request['total_turistas']) || $request['total_turistas'] < 1) {
+            $errorMessages['total_turistas'] = 'El número total de turistas es requerido y debe ser mayor que 0.';
+        }
+
+        if (count($errorMessages) > 0) {
+            error_log("Errores de validación: " . json_encode($errorMessages)); // Log de errores
+            throw new \InvalidArgumentException(json_encode($errorMessages));
+        }
+    }
 }

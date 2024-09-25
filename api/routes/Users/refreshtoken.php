@@ -6,7 +6,7 @@ use Api\Controllers\Users\RefreshTokenController;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Users/RefreshTokenController.php";
 
-header("Access-Control-Allow-Origin: https://guiastur-mobile-app.test:4200");
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");

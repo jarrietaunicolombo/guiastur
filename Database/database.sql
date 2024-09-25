@@ -61,8 +61,6 @@ CREATE TABLE Supervisors (
     usuario_registro INT 
 ) engine = innodb;
 
-
-
 CREATE TABLE Buques (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     codigo VARCHAR(30) UNIQUE,
@@ -71,7 +69,6 @@ CREATE TABLE Buques (
     fecha_registro DATETIME NOT NULL,
     usuario_registro INT 
 ) engine = innodb;
-
 
 CREATE TABLE Recaladas (
 	id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
@@ -124,13 +121,12 @@ CREATE TABLE turnos (
     usuario_registro int DEFAULT NULL
 ) ENGINE=InnoDB;
 
-CREATE TABLE user_tokens (
-    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
+CREATE TABLE IF NOT EXISTS User_tokens (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
     usuario_id INT NOT NULL,
     token VARCHAR(255) NOT NULL,
     creado_el TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expira_el TIMESTAMP DEFAULT NULL,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    expira_el TIMESTAMP DEFAULT NULL
 ) ENGINE=InnoDB;
 
 ALTER TABLE Usuarios
@@ -177,6 +173,11 @@ ALTER TABLE Turnos
 ADD CONSTRAINT Fk_Guias_Turnos
 FOREIGN KEY (guia_id)
 REFERENCES Guias(cedula);
+
+ALTER TABLE User_tokens 
+ADD CONSTRAINT Fk_UserTokens_Usuarios 
+FOREIGN KEY (usuario_id) 
+REFERENCES Usuarios(id);
 
 INSERT INTO `rols` (`id`, `nombre`, `descripcion`, `icono`, `fecha_registro`, `usuario_registro`) VALUES
 	(1, 'Super Usuario', 'Persona puede crear, actualizar, eliminar, autorizar usuarios, crear roles, crear y otras funciones', NULL, '2024-06-19 19:57:06', 1),
