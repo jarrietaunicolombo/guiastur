@@ -4,7 +4,7 @@ use Api\Controllers\Buques\GetBuquesMobileControllerApi;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Buques/GetBuquesMobileControllerApi.php";
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://localhost:8100");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");

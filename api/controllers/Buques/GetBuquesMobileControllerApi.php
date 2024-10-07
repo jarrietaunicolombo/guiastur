@@ -55,10 +55,7 @@ class GetBuquesMobileControllerApi
                 ];
             }
 
-            ResponseMiddleware::success([
-                "status" => "success",
-                "data" => $result
-            ]);
+            ResponseMiddleware::success([$result]);
         } catch (\Exception $e) {
             // Loguea y maneja los errores
             $this->logError($e);

@@ -36,23 +36,35 @@ class GetPaisesMobileController
 
     private function convertPaisesToArray($paisesResponse)
     {
-        if (method_exists($paisesResponse, 'getPaises')) {
-            $paises = $paisesResponse->getPaises();
-        } else {
-            $paises = [];
-        }
-
-        $paisesArray = [];
-        if (is_array($paises)) {
-            foreach ($paises as $pais) {
-                $paisesArray[] = [
-                    'id' => $pais->getId(),
-                    'nombre' => $pais->getNombre(),
-                    'bandera' => $pais->getBandera()
-                ];
+        try {
+            if (method_exists($paisesResponse, 'getPaises')) {
+                $paises = $paisesResponse->getPaises();
+            } else {
+                error_log("El método 'getPaises' no existe en la respuesta.");
+                $paises = [];
             }
-        }
 
-        return $paisesArray;
+            error_log("Contenido de getPaises: " . print_r($paises, true));
+
+            $paisesArray = [];
+            if (is_array($paises)) {
+                foreach ($paises as $pais) {
+                    $paisesArray[] = [
+                        'id' => utf8_encode($pais->getId()),
+                        'nombre' => utf8_encode($pais->getNombre()),
+                        'bandera' => utf8_encode($pais->getBandera())
+                    ];
+                }
+            }
+
+            error_log("Array de países para enviar: " . print_r($paisesArray, true));
+
+            return $paisesArray;
+        } catch (Exception $e) {
+            error_log("Error al convertir países a array: " . $e->getMessage());
+            return [];
+        }
     }
+
+
 }

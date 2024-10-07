@@ -21,7 +21,7 @@ class CookiesSetup
             [
                 'expires' => time() + $expirationTime,
                 'path' => '/',
-                'domain' => 'guiastur-mobile-app.test',
+                'domain' => 'https://localhost:8100',
                 'secure' => $this->secure,
                 'httponly' => $this->httpOnly,
                 'samesite' => $this->sameSite,
@@ -40,7 +40,7 @@ class CookiesSetup
             [
                 'expires' => time() + $expirationTime,
                 'path' => '/',
-                'domain' => 'guiastur-mobile-app.test',
+                'domain' => 'https://localhost:8100',
                 'secure' => $this->secure,
                 'httponly' => $this->httpOnly,
                 'samesite' => $this->sameSite,
@@ -69,7 +69,7 @@ class CookiesSetup
             [
                 'expires' => time() - 3600,
                 'path' => $this->path,
-                'domain' => 'guiastur-mobile-app.test',
+                'domain' => 'https://localhost:8100',
                 'secure' => $this->secure,
                 'httponly' => $this->httpOnly,
                 'samesite' => $this->sameSite,
@@ -87,7 +87,7 @@ class CookiesSetup
             [
                 'expires' => time() - 3600,
                 'path' => $this->path,
-                'domain' => 'guiastur-mobile-app.test',
+                'domain' => 'https://localhost:8100',
                 'secure' => $this->secure,
                 'httponly' => $this->httpOnly,
                 'samesite' => $this->sameSite,
