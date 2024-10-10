@@ -29,10 +29,15 @@ class RefreshTokenController
 
     public function handleRequest()
     {
+        error_log("[INFO] handleRequest llamado");
+
         $data = json_decode(file_get_contents("php://input"), true);
         $refreshToken = $data['refresh_token'] ?? $_COOKIE['refresh_token'] ?? null;
 
+        error_log("[INFO] Token de refresco recibido: " . ($refreshToken ? $refreshToken : 'No token'));
+
         if (!$refreshToken) {
+            error_log("[ERROR] No se proporcionó token de refresco");
             $this->responseService->sendErrorResponse('Falta el token de refresco', 400);
             return;
         }
@@ -43,26 +48,28 @@ class RefreshTokenController
     private function refreshToken($refreshToken)
     {
         try {
-            ob_start();
+            error_log("[INFO] Intentando refrescar el token: " . $refreshToken);
 
             $userToken = $this->tokenService->refreshToken($refreshToken);
             if (!$userToken) {
+                error_log("[ERROR] Token de refresco no válido o expirado");
                 throw new UnauthorizedException("Refresh token no válido o expirado.");
             }
 
+            error_log("[INFO] Token refrescado exitosamente para el usuario: " . $userToken->usuario_id);
             $usuario = $this->userService->getUsuario($userToken->usuario_id);
             $rol = $this->userService->getUsuarioRol($usuario->rol_id);
 
             if (!$usuario || !$rol) {
+                error_log("[ERROR] Usuario o rol no encontrado");
                 throw new UnauthorizedException("Usuario o rol no encontrado.");
             }
 
             $newAuthToken = $this->tokenService->createAuthToken($usuario, $rol);
+            error_log("[INFO] Nuevo token generado: " . $newAuthToken);
 
             $cookies = new CookiesSetup();
             $cookies->setAuthTokenCookie($newAuthToken);
-
-            ob_end_clean();
 
             $this->responseService->sendSuccessResponse([
                 "message" => "Token refrescado exitosamente.",
@@ -70,9 +77,11 @@ class RefreshTokenController
             ]);
         } catch (UnauthorizedException $e) {
             ob_end_clean();
+            error_log("[ERROR] " . $e->getMessage());
             $this->responseService->sendErrorResponse($e->getMessage(), 401);
         } catch (\Exception $e) {
             ob_end_clean();
+            error_log("[ERROR] Error general al refrescar el token: " . $e->getMessage());
             $this->responseService->sendErrorResponse("Error al refrescar el token: " . $e->getMessage(), 400);
         }
     }
