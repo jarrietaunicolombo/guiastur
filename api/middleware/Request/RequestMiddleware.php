@@ -85,4 +85,26 @@ class RequestMiddleware
             throw new \InvalidArgumentException(json_encode($errorMessages));
         }
     }
+
+        public static function validateCreateAtencionRequest($request)
+        {
+            $errorMessages = [];
+
+            if (!isset($request['observaciones']) || strlen($request['observaciones']) < 3) {
+                $errorMessages['observaciones'] = 'Las observaciones son requeridas y deben tener al menos 3 caracteres.';
+            }
+
+            if (!isset($request['supervisor_id']) || $request['supervisor_id'] < 1) {
+                $errorMessages['supervisor_id'] = 'El ID del supervisor es requerido y debe ser mayor que 0.';
+            }
+
+            if (!isset($request['recalada_id']) || $request['recalada_id'] < 1) {
+                $errorMessages['recalada_id'] = 'El ID de la recalada es requerido y debe ser mayor que 0.';
+            }
+
+            if (count($errorMessages) > 0) {
+                error_log("Errores de validación: " . json_encode($errorMessages)); // Registro de los errores
+                throw new \InvalidArgumentException(json_encode($errorMessages));
+            }
+        }
 }

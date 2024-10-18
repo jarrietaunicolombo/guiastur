@@ -44,7 +44,6 @@ class GetPaisesMobileController
                 $paises = [];
             }
 
-            error_log("Contenido de getPaises: " . print_r($paises, true));
 
             $paisesArray = [];
             if (is_array($paises)) {
@@ -57,7 +56,6 @@ class GetPaisesMobileController
                 }
             }
 
-            error_log("Array de países para enviar: " . print_r($paisesArray, true));
 
             return $paisesArray;
         } catch (Exception $e) {
