@@ -22,24 +22,18 @@ class GetRecaladasMobileController
     public function handleRequest(array $request)
     {
         try {
-            error_log("Request recibido: " . json_encode($request));
 
             $authHeader = $this->getAuthorizationHeader();
-            error_log("Authorization Header: " . $authHeader);
 
             $decodedToken = $this->authService->validateToken($authHeader);
-            error_log("Token decodificado: " . json_encode($decodedToken));
 
             $this->authService->checkRolePermission($decodedToken->data->role, ['Super Usuario', 'ADMIN']);
-            error_log("Permiso verificado para el rol: " . $decodedToken->data->role);
 
             $this->getRecaladas();
 
         } catch (\InvalidPermissionException $e) {
-            error_log("Error de permisos: " . $e->getMessage());
             ResponseMiddleware::error($e->getMessage(), 403);
         } catch (\Exception $e) {
-            error_log("Error inesperado: " . $e->getMessage());
             ResponseMiddleware::error("Error interno del servidor", 500);
         }
     }
@@ -50,7 +44,6 @@ class GetRecaladasMobileController
         $authHeader = $headers['Authorization'] ?? null;
 
         if (!$authHeader) {
-            error_log("Falta el header de autorización.");
             throw new \InvalidPermissionException("Token de autorización no proporcionado.");
         }
 
@@ -76,7 +69,6 @@ class GetRecaladasMobileController
             }
 
         } catch (\Exception $e) {
-            error_log("Error al obtener recaladas: " . $e->getMessage());
             ResponseMiddleware::error($e->getMessage(), 500);
         }
     }

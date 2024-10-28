@@ -2,58 +2,63 @@
 
 namespace Api\Controllers\Recaladas;
 
+use Api\Middleware\Authorization\AuthorizationMiddleware;
 use Api\Middleware\Response\ResponseMiddleware;
-use Api\Helpers\JWTHandler;
-use Api\Exceptions\UnauthorizedException;
+use Api\Services\Auth\AuthService;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Helpers/JWTHandler.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Exceptions/UnauthorizedException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Auth/AuthService.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetRecaladasByBuque/Dto/GetRecaladasByBuqueRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/UseCases/IGetRecaladasByBuqueService.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Response/ResponseMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Authorization/AuthorizationMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/DependencyInjection.php";
 
-class GetRecaladasByBuqueMobileController
+class GetRecaladasByBuqueController
 {
     private $getRecaladasByBuqueService;
+    private $authService;
 
-    public function __construct(\IGetRecaladasByBuqueService $getRecaladasByBuqueService)
+    public function __construct()
     {
-        $this->getRecaladasByBuqueService = $getRecaladasByBuqueService;
+        $this->getRecaladasByBuqueService = \DependencyInjection::getRecaladasByBuqueService();
+        if (!$this->getRecaladasByBuqueService) {
+            throw new \Exception("No se pudo cargar el servicio de recaladas por buque.");
+        }
+
+        $this->authService = new AuthService();
     }
 
-    public function handleRequest($request)
+    public function handleRequest(array $request)
     {
         try {
-            if ($_SERVER["REQUEST_METHOD"] !== "GET") {
-                throw new \InvalidArgumentException("Método no permitido.");
+            $authHeader = $this->getAuthorizationHeader();
+            $decodedToken = $this->authService->validateToken($authHeader);
+
+            AuthorizationMiddleware::checkRolePermission($decodedToken->data->role, ['ADMIN', 'Super Usuario']);
+
+            if (!isset($request['buque_id']) || !is_numeric($request['buque_id'])) {
+                ResponseMiddleware::error("ID de buque no proporcionado o no válido", 400);
             }
 
-            $headers = apache_request_headers();
-            $authHeader = $headers['Authorization'] ?? '';
-            if (!$authHeader) {
-                throw new UnauthorizedException("Token de autorización faltante.");
-            }
+            $buqueId = (int)$request['buque_id'];
 
-            $jwtHandler = new JWTHandler();
-            $userData = $jwtHandler->validateToken($authHeader);
+            $recaladasRequest = new \GetRecaladasByBuqueRequest($buqueId);
 
-            $buqueId = $request["buque"] ?? null;
-            if (!$buqueId) {
-                throw new \InvalidArgumentException("ID del buque faltante.");
-            }
+            $recaladas = $this->getRecaladasByBuqueService->getRecaladasByBuque($recaladasRequest);
 
-            $getRecaladasRequest = new \GetRecaladasByBuqueRequest($buqueId);
+            ResponseMiddleware::success($recaladas);
 
-            $response = $this->getRecaladasByBuqueService->getRecaladasByBuque($getRecaladasRequest);
-
-            ResponseMiddleware::success([
-                "message" => "Recaladas obtenidas correctamente.",
-                "data" => $response
-            ]);
-        } catch (UnauthorizedException $e) {
-            ResponseMiddleware::error($e->getMessage(), 401);
+        } catch (\InvalidArgumentException $e) {
+            ResponseMiddleware::error("Solicitud no válida: " . $e->getMessage(), 400);
         } catch (\Exception $e) {
-            ResponseMiddleware::error($e->getMessage(), 400);
+            ResponseMiddleware::error("Error al obtener recaladas: " . $e->getMessage(), 500);
         }
+    }
+
+    private function getAuthorizationHeader()
+    {
+        if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            throw new \Exception('Encabezado de autorización no proporcionado');
+        }
+        return $_SERVER['HTTP_AUTHORIZATION'];
     }
 }

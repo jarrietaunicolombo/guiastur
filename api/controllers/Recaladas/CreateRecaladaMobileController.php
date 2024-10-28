@@ -32,21 +32,17 @@ class CreateRecaladaMobileController
     public function handleRequest(array $request)
     {
         try {
-            // Logging de la solicitud recibida
 
             if ($request["action"] !== "create") {
                 ResponseMiddleware::error("Acción no permitida", 403);
             }
 
-            // Validar token JWT
             $authHeader = $this->getAuthorizationHeader();
 
             $decodedToken = $this->authService->validateToken($authHeader);
 
-            // Verificación de permisos de usuario
             AuthorizationMiddleware::checkRolePermission($decodedToken->data->role, ['ADMIN', 'Super Usuario']);
 
-            // Llamar a la función para crear la recalada
             $this->createRecalada($request, $decodedToken->data->userId);
         } catch (\Exception $e) {
             $error = ["error" => $e->getMessage()];
@@ -57,17 +53,14 @@ class CreateRecaladaMobileController
 
     private function createRecalada(array $request, $userId)
     {
-        // Loggeamos los datos recibidos
 
         try {
             RequestMiddleware::validateCreateRecaladaRequest($request);
         } catch (\Exception $e) {
-            // Log detallado del error con trace y origen
             throw $e;
         }
 
         try {
-            // Conversión y validación de fechas
             $fecha_arribo = \DateTime::createFromFormat('Y-m-d\TH:i', $request['fecha_arribo']);
             $fecha_zarpe = isset($request['fecha_zarpe']) ? \DateTime::createFromFormat('Y-m-d\TH:i', $request['fecha_zarpe']) : null;
 
@@ -79,9 +72,7 @@ class CreateRecaladaMobileController
                 throw new \Exception("Formato de fecha de zarpe inválido.");
             }
 
-            // Loggeamos las fechas
 
-            // Crear recalada
             $createRecaladaRequest = new \CreateRecaladaRequest(
                 $fecha_arribo,
                 $fecha_zarpe,
@@ -92,9 +83,7 @@ class CreateRecaladaMobileController
                 $userId
             );
 
-            // Log para los datos preparados
 
-            // Llamar al servicio
             $response = $this->createRecaladaService->CreateRecalada($createRecaladaRequest);
 
             if (!$response) {

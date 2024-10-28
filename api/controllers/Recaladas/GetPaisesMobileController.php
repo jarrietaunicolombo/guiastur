@@ -44,7 +44,6 @@ class GetPaisesMobileController
                 $paises = [];
             }
 
-
             $paisesArray = [];
             if (is_array($paises)) {
                 foreach ($paises as $pais) {
@@ -55,7 +54,6 @@ class GetPaisesMobileController
                     ];
                 }
             }
-
 
             return $paisesArray;
         } catch (Exception $e) {
