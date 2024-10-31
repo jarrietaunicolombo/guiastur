@@ -8,8 +8,6 @@ use Api\Services\Auth\AuthService;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Auth/AuthService.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetRecaladasByBuque/Dto/GetRecaladasByBuqueRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Response/ResponseMiddleware.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Authorization/AuthorizationMiddleware.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/DependencyInjection.php";
 
 class GetRecaladasByBuqueController
@@ -40,7 +38,6 @@ class GetRecaladasByBuqueController
             }
 
             $buqueId = (int)$request['buque_id'];
-
             $recaladasRequest = new \GetRecaladasByBuqueRequest($buqueId);
 
             $recaladas = $this->getRecaladasByBuqueService->getRecaladasByBuque($recaladasRequest);
