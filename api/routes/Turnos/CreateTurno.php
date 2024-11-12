@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Routes\Endpoint\Recaladas;
+namespace Api\Routes\Endpoint\Turnos;
 
 header("Access-Control-Allow-Origin: https://localhost:8100");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
@@ -15,9 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/vendor/autoload.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/GetRecaladasInThePortMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Turnos/CreateTurnoMobileController.php";
 
-use Api\Controllers\Recaladas\GetRecaladasInThePortMobileController;
+use Api\Controllers\Turnos\CreateTurnoMobileController;
 
-$controller = new GetRecaladasInThePortMobileController();
-$controller->handleRequest($_REQUEST);
+$controller = new CreateTurnoMobileController();
+$controller->handleRequest($_POST);
