@@ -9,8 +9,8 @@ class LoginController
 {
     public function handleRequest(array $request)
     {
-        if($request["action"] === "login")$this->login($request);
-        if($request["action"] === "logout")$this->logout();
+        if ($request["action"] === "login") $this->login($request);
+        if ($request["action"] === "logout") $this->logout();
     }
 
     private function login(array $request)
@@ -26,23 +26,23 @@ class LoginController
             $loginResponse = $loginUseCase->login($request);
             $InformationMessage = "Hola " . $loginResponse->getRol() . " " . $loginResponse->getNombre();
             SessionUtility::startSession();
-            $_SESSION[ItemsInSessionEnum::USER_LOGIN]=$loginResponse;
+            $_SESSION[ItemsInSessionEnum::USER_LOGIN] = $loginResponse;
             $_SESSION[ItemsInSessionEnum::WELCOME_MESSAGE] = $InformationMessage;
             header("Location: ../../Views/index.php");
-        } catch (Exception $e) { 
+        } catch (Exception $e) {
             SessionUtility::clearAllSession();
             SessionUtility::startSession();
             $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = $e->getMessage();
-            header("Location: ../../Views/Users/login.php"); 
+            header("Location: ../../Views/Users/login.php");
         }
     }
 
-    private function logout (){
+    private function logout()
+    {
         SessionUtility::clearAllSession();
         SessionUtility::startSession();
         unset($_SESSION[ItemsInSessionEnum::USER_LOGIN]);
         $_SESSION[ItemsInSessionEnum::ERROR_MESSAGE] = "Sesion cerrada";
-        header("Location: ../../Views/Users/login.php"); 
+        header("Location: ../../Views/Users/login.php");
     }
 }
-

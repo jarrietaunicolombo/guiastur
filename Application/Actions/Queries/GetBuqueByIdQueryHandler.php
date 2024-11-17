@@ -14,6 +14,7 @@ class GetBuqueByIdQueryHandler implements IGetBuqueByIdQuery
     }
 
     public function handler(GetBuqueByIdRequest $request): GetBuqueByIdResponse
+
     {
         $buque = $this->buqueRepository->findById($request->getId());
         $recaladaList =   $buque->recaladas;
@@ -22,7 +23,7 @@ class GetBuqueByIdQueryHandler implements IGetBuqueByIdQuery
             $atencionList = $recalada->atencions;
             $atenciones += @count($atencionList);
         }
-        
+
         $getBuqueByIdResponse = new GetBuqueByIdResponse(
             $buque->id,
             $buque->codigo,

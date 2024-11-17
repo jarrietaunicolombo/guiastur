@@ -36,11 +36,11 @@ class CreateAtencionRequest
 
         if(!isset($fecha_cierre) && $fecha_cierre < $fecha_inicio){
             throw new InvalidArgumentException("La Fecha de Inicio no puede ser mayor que la Fecha de Cierre en la nueva Atencion");
-        }   
+        }
 
         if(!isset($supervisor_id) && empty(trim($supervisor_id))){
             throw new InvalidArgumentException("El SupervisorId está incorrecto en la nueva Atencion");
-        }   
+        }
 
         if(!isset($observaciones) && empty(trim($observaciones))){
             $observaciones = null;
@@ -69,7 +69,7 @@ class CreateAtencionRequest
     }
 
 
-    public function getTotalTurnos() : int 
+    public function getTotalTurnos() : int
     {
         return $this->total_turnos;
     }
@@ -105,4 +105,3 @@ class CreateAtencionRequest
     }
 
 }
-

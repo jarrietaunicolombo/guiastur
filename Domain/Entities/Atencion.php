@@ -3,6 +3,6 @@ require_once $_SERVER["DOCUMENT_ROOT"]."/guiastur/Infrastructure/Libs/Orm/Config
 
 class Atencion extends ActiveRecord\Model {
     public static $belongs_to = array(array("recalada"), array("supervisor"));
-    public static $has_many = array(array("turnos")); 
+    public static $has_many = array(array("turnos"));
 }
 

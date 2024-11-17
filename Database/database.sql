@@ -3,11 +3,11 @@ CREATE DATABASE Gestion_turnos_guias_bd;
 ALTER DATABASE Gestion_turnos_guias_bd
  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE Gestion_turnos_guias_bd;
-SELECT CONCAT('ALTER TABLE ', TABLE_NAME, ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;') 
-FROM INFORMATION_SCHEMA.TABLES 
+SELECT CONCAT('ALTER TABLE ', TABLE_NAME, ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;')
+FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_SCHEMA = 'Gestion_turnos_guias_bd';
 
-use Gestion_turnos_guias_bd; 
+use Gestion_turnos_guias_bd;
 
 CREATE TABLE Usuarios (
 	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE Usuarios (
     guia_o_supervisor_id VARCHAR(20),
     validation_token VARCHAR(250) UNIQUE,
     fecha_registro DATETIME NOT NULL,
-    usuario_registro INT 
+    usuario_registro INT
 ) engine = innodb;
 
 CREATE TABLE Rols (
@@ -28,7 +28,7 @@ CREATE TABLE Rols (
     descripcion TEXT,
     icono VARCHAR(25),
     fecha_registro DATETIME NOT NULL,
-    usuario_registro INT   
+    usuario_registro INT
 ) engine = innodb;
 
 CREATE TABLE Guias (
@@ -43,7 +43,7 @@ CREATE TABLE Guias (
     observaciones TEXT,
     usuario_id INT NOT NULL,
     fecha_registro DATETIME NOT NULL,
-    usuario_registro INT 
+    usuario_registro INT
 ) engine = innodb;
 
 CREATE TABLE Supervisors (
@@ -58,10 +58,8 @@ CREATE TABLE Supervisors (
     observaciones TEXT,
     usuario_id INT NOT NULL,
     fecha_registro DATETIME NOT NULL,
-    usuario_registro INT 
+    usuario_registro INT
 ) engine = innodb;
-
-
 
 CREATE TABLE Buques (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
@@ -69,9 +67,8 @@ CREATE TABLE Buques (
 	nombre VARCHAR(100) NOT NULL,
     foto VARCHAR(15) UNIQUE,
     fecha_registro DATETIME NOT NULL,
-    usuario_registro INT 
+    usuario_registro INT
 ) engine = innodb;
-
 
 CREATE TABLE Recaladas (
 	id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
@@ -90,7 +87,7 @@ CREATE TABLE Pais (
 	nombre VARCHAR(100) UNIQUE NOT NULL,
     bandera VARCHAR(15) UNIQUE,
     fecha_registro DATETIME NOT NULL,
-    usuario_registro INT 
+    usuario_registro INT
 ) engine = innodb;
 
 
@@ -103,10 +100,8 @@ CREATE TABLE Atencions (
     supervisor_id VARCHAR(20),
     recalada_id INT NOT NULL,
     fecha_registro DATETIME NOT NULL,
-    usuario_registro INT 
+    usuario_registro INT
 ) engine = innodb;
-
-
 
 
 CREATE TABLE turnos (
@@ -126,7 +121,13 @@ CREATE TABLE turnos (
     usuario_registro int DEFAULT NULL
 ) ENGINE=InnoDB;
 
-
+CREATE TABLE IF NOT EXISTS User_tokens (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    usuario_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    creado_el TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expira_el TIMESTAMP DEFAULT NULL
+) ENGINE=InnoDB;
 
 ALTER TABLE Usuarios
 ADD CONSTRAINT Fk_Rols_usuarios
@@ -172,6 +173,11 @@ ALTER TABLE Turnos
 ADD CONSTRAINT Fk_Guias_Turnos
 FOREIGN KEY (guia_id)
 REFERENCES Guias(cedula);
+
+ALTER TABLE User_tokens
+ADD CONSTRAINT Fk_UserTokens_Usuarios
+FOREIGN KEY (usuario_id)
+REFERENCES Usuarios(id);
 
 INSERT INTO `rols` (`id`, `nombre`, `descripcion`, `icono`, `fecha_registro`, `usuario_registro`) VALUES
 	(1, 'Super Usuario', 'Persona puede crear, actualizar, eliminar, autorizar usuarios, crear roles, crear y otras funciones', NULL, '2024-06-19 19:57:06', 1),
@@ -383,5 +389,5 @@ INSERT INTO pais (nombre, bandera, fecha_registro, usuario_registro) VALUES
 -- HeidiSQL Versión:             10.2.0.5599
 -- --------------------------------------------------------
 
-INSERT INTO `usuarios` (`id`, `email`, `password`, `nombre`, `estado`, `rol_id`, `guia_o_supervisor_id`, `validation_token`, `fecha_registro`, `usuario_registro`) 
+INSERT INTO `usuarios` (`id`, `email`, `password`, `nombre`, `estado`, `rol_id`, `guia_o_supervisor_id`, `validation_token`, `fecha_registro`, `usuario_registro`)
  VALUES (1, 'guiasturadmin@yopmail.com', 'Abc123$$', 'John Arrieta', 'Activado', 1, NULL, NULL, '2024-07-17 17:07:27', 1);
