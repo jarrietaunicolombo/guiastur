@@ -5,6 +5,8 @@ namespace Api\Routes\Endopoint\Users;
 use Api\Controllers\Users\CreateUserMobileController;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Users/CreateUserMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/UsuarioRepository.php";
+
 
 $allowedOrigins = [
     "http://localhost:8100",
@@ -34,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-$controller = new CreateUserMobileController();
+$usuarioRepository = new \UsuarioRepository();
+$controller = new CreateUserMobileController($usuarioRepository);
 $request = json_decode(file_get_contents('php://input'), true);
 $controller->handleRequest($request);
