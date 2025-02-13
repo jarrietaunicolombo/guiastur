@@ -6,10 +6,11 @@ class CookiesSetup
 {
     private $authCookieName = "auth_token";
     private $refreshCookieName = "refresh_token";
-    private $secure = true;
+    private $secure = false;
+    private $domain = 'http://localhost:8100';
     private $httpOnly = true;
     private $path = "/";
-    private $sameSite = "None";
+    private $sameSite = "Strict";
 
     public function setAuthTokenCookie($token, $expirationTime = 3600)
     {
@@ -21,7 +22,7 @@ class CookiesSetup
             [
                 'expires' => time() + $expirationTime,
                 'path' => '/',
-                'domain' => 'https://localhost:8100',
+                'domain' => $this->domain,
                 'secure' => $this->secure,
                 'httponly' => $this->httpOnly,
                 'samesite' => $this->sameSite,
@@ -40,7 +41,7 @@ class CookiesSetup
             [
                 'expires' => time() + $expirationTime,
                 'path' => '/',
-                'domain' => 'https://localhost:8100',
+                'domain' => $this->domain,
                 'secure' => $this->secure,
                 'httponly' => $this->httpOnly,
                 'samesite' => $this->sameSite,
@@ -69,7 +70,7 @@ class CookiesSetup
             [
                 'expires' => time() - 3600,
                 'path' => $this->path,
-                'domain' => 'https://localhost:8100',
+                'domain' => $this->domain,
                 'secure' => $this->secure,
                 'httponly' => $this->httpOnly,
                 'samesite' => $this->sameSite,
@@ -87,7 +88,7 @@ class CookiesSetup
             [
                 'expires' => time() - 3600,
                 'path' => $this->path,
-                'domain' => 'https://localhost:8100',
+                'domain' => $this->domain,
                 'secure' => $this->secure,
                 'httponly' => $this->httpOnly,
                 'samesite' => $this->sameSite,
