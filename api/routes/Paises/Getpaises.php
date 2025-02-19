@@ -1,8 +1,8 @@
 <?php
 
-use Api\Controllers\Recaladas\GetPaisesMobileController;
+use Api\Controllers\Paises\GetPaisesMobileController;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/GetPaisesMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Paises/GetPaisesMobileController.php";
 
 $allowedOrigins = [
     "http://localhost:8100",

@@ -4,55 +4,45 @@ namespace Api\Controllers\Recaladas;
 
 use Api\Middleware\Authorization\AuthorizationMiddleware;
 use Api\Middleware\Response\ResponseMiddleware;
+use Api\Middleware\Request\RequestMiddleware;
 use Api\Services\Auth\AuthService;
+use Api\Services\Recaladas\RecaladaService;
 
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Recaladas/RecaladaService.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Auth/AuthService.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetRecaladasByBuque/Dto/GetRecaladasByBuqueRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/DependencyInjection.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Request/RequestMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Authorization/AuthorizationMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Response/ResponseMiddleware.php";
 
-class GetRecaladasByBuqueController
-{
-    private $getRecaladasByBuqueService;
+class GetRecaladasByBuqueMobileController {
+    private $recaladaService;
     private $authService;
 
-    public function __construct()
-    {
-        $this->getRecaladasByBuqueService = \DependencyInjection::getRecaladasByBuqueService();
-        if (!$this->getRecaladasByBuqueService) {
-            throw new \Exception("No se pudo cargar el servicio de recaladas por buque.");
-        }
-
+    public function __construct() {
+        $this->recaladaService = new RecaladaService();
         $this->authService = new AuthService();
     }
 
-    public function handleRequest(array $request)
-    {
+    public function handleRequest(array $request) {
         try {
             $authHeader = $this->getAuthorizationHeader();
             $decodedToken = $this->authService->validateToken($authHeader);
-
             AuthorizationMiddleware::checkRolePermission($decodedToken->data->role, ['ADMIN', 'Super Usuario']);
-
+            
             if (!isset($request['buque_id']) || !is_numeric($request['buque_id'])) {
                 ResponseMiddleware::error("ID de buque no proporcionado o no válido", 400);
             }
-
+            
             $buqueId = (int)$request['buque_id'];
-            $recaladasRequest = new \GetRecaladasByBuqueRequest($buqueId);
-
-            $recaladas = $this->getRecaladasByBuqueService->getRecaladasByBuque($recaladasRequest);
-
-            ResponseMiddleware::success($recaladas);
-
-        } catch (\InvalidArgumentException $e) {
-            ResponseMiddleware::error("Solicitud no válida: " . $e->getMessage(), 400);
+            $recaladas = $this->recaladaService->getRecaladasByBuque($buqueId);
+            
+            ResponseMiddleware::success(json_encode($recaladas));
         } catch (\Exception $e) {
-            ResponseMiddleware::error("Error al obtener recaladas: " . $e->getMessage(), 500);
+            ResponseMiddleware::error($e->getMessage(), 500);
         }
     }
 
-    private function getAuthorizationHeader()
-    {
+    private function getAuthorizationHeader() {
         if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
             throw new \Exception('Encabezado de autorización no proporcionado');
         }

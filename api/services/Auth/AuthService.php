@@ -12,7 +12,6 @@ class AuthService
 {
     public function validateToken($authHeader)
     {
-        error_log("Cabecera Authorization recibida: " . $authHeader);
     
         if (strpos($authHeader, 'Bearer ') === 0) {
             $token = str_replace('Bearer ', '', $authHeader);
@@ -29,7 +28,6 @@ class AuthService
     
         return JWTHandler::decodeJWT($token);
     }
-    
 
     public function checkRolePermission($userRole, $requiredRoles)
     {

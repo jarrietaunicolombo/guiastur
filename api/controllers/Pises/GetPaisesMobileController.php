@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Controllers\Recaladas;
+namespace Api\Controllers\Paises;
 
 use Api\Middleware\Response\ResponseMiddleware;
 use Exception;
@@ -61,6 +61,4 @@ class GetPaisesMobileController
             return [];
         }
     }
-
-
 }
