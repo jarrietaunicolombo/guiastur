@@ -24,29 +24,17 @@ class CreateRecaladaMobileController {
     }
 
     public function handleRequest(array $request) {
-        try {
-            error_log("[CreateRecaladaMobileController] Iniciando handleRequest");
-    
-            // 🔹 Log para ver qué datos están llegando
-            error_log("[CreateRecaladaMobileController] Request recibido: " . json_encode($request));
-    
+        try {    
             if (!isset($request["action"]) || $request["action"] !== "create") {
-                error_log("[CreateRecaladaMobileController] Acción no permitida");
                 ResponseMiddleware::error("Acción no permitida", 403);
                 exit();
             }
             
-            error_log("[CreateRecaladaMobileController] Acción válida: " . $request["action"]);
-            
-            // Obtener el token de autorización
             $authHeader = $this->getAuthorizationHeader();
-            error_log("[CreateRecaladaMobileController] Token recibido: " . substr($authHeader, 0, 20) . "...");
     
             $decodedToken = $this->authService->validateToken($authHeader);
-            error_log("[CreateRecaladaMobileController] Token validado correctamente");
     
             AuthorizationMiddleware::checkRolePermission($decodedToken->data->role, ['ADMIN', 'Super Usuario']);
-            error_log("[CreateRecaladaMobileController] Permisos validados correctamente");
     
             $this->createRecalada($request, $decodedToken->data->userId);
         } catch (\Exception $e) {
@@ -64,16 +52,12 @@ class CreateRecaladaMobileController {
             $fecha_zarpe = isset($request['fecha_zarpe']) ? new \DateTime($request['fecha_zarpe']) : null;
             $totalTuristas = isset($request['total_turistas']) ? (int) $request['total_turistas'] : 0;
             $observaciones = isset($request['observaciones']) ? $request['observaciones'] : "";
-    
-            error_log("[CreateRecaladaMobileController] Datos a enviar:");
-            error_log("Fecha Arribo: " . $fecha_arribo->format('Y-m-d H:i:s'));
-            error_log("Fecha Zarpe: " . ($fecha_zarpe ? $fecha_zarpe->format('Y-m-d H:i:s') : "NULL"));
-    
+        
             $response = $this->recaladaService->createRecalada(
                 $request['buque_id'],
                 $request['pais_id'],
                 $fecha_arribo,
-                $fecha_zarpe, // ✅ Pasamos la fecha de zarpe correctamente
+                $fecha_zarpe,
                 $totalTuristas,
                 $observaciones,
                 $userId
@@ -88,7 +72,6 @@ class CreateRecaladaMobileController {
 
     private function getAuthorizationHeader() {
         $headers = apache_request_headers();
-        error_log("[CreateRecaladaMobileController] Headers recibidos: " . json_encode($headers));
 
         $authHeader = $headers['Authorization'] ?? '';
         if (!$authHeader) {

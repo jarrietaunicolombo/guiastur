@@ -2,16 +2,11 @@
 
 namespace Api\Routes;
 
-use Api\Controllers\Recaladas\CreateRecaladaMobileController;
-use Api\Controllers\Recaladas\GetRecaladasMobileController;
-use Api\Controllers\Recaladas\GetRecaladasByBuqueMobileController;
-use Api\Controllers\Recaladas\GetRecaladasInThePortMobileController;
+use Api\Controllers\Buques\CreateBuqueMobileController;
+use Api\Controllers\Buques\GetBuquesMobileController;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/CreateRecaladaMobileController.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/GetRecaladasMobileController.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/GetRecaladasByBuqueMobileController.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/GetRecaladasInThePortMobileController.php";
-
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Buques/CreateBuqueMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Buques/GetBuquesMobileController.php";
 
 $allowedOrigins = [
     "http://localhost:8100",
@@ -41,22 +36,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // Definir rutas válidas y sus controladores
 $routes = [
-    'POST recaladas' => new CreateRecaladaMobileController(),
-    'GET recaladas' => new GetRecaladasMobileController(),
-    'GET recaladas/buque' => new GetRecaladasByBuqueMobileController(),
-    'GET recaladas/puerto' => new GetRecaladasInThePortMobileController()
+    'POST buques' => new CreateBuqueMobileController(),
+    'GET buques' => new GetBuquesMobileController()
 ];
 
 // Obtener la ruta limpia desde el parámetro 'ruta' en la query string
-$ruta = $_GET['ruta'] ?? '';
+$ruta = explode('?', $_GET['ruta'] ?? '')[0]; // Elimina los parámetros extra
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$perPage = isset($_GET['perPage']) ? (int) $_GET['perPage'] : 20;
 
 // Buscar coincidencia en las rutas definidas
 foreach ($routes as $route => $controller) {
     [$routeMethod, $routePath] = explode(' ', $route);
     
+
     if ($_SERVER['REQUEST_METHOD'] === $routeMethod && $ruta === $routePath) {
-        $request = json_decode(file_get_contents('php://input'), true) ?? $_REQUEST;
-        $controller->handleRequest($request);
+
+        // Pasar los datos del request correctamente
+        $requestData = json_decode(file_get_contents("php://input"), true) ?? [];
+        $controller->handleRequest($requestData);
+        
         exit();
     }
 }
@@ -67,4 +66,3 @@ echo json_encode([
     "status" => "error",
     "message" => "Método no permitido o ruta incorrecta"
 ]);
-

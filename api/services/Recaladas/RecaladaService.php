@@ -3,9 +3,6 @@
 namespace Api\Services\Recaladas;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/repositories/RecaladaMobileRepository.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/DuplicateEntryException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/NotFoundEntryException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/Utility.php";
 
 use Exception;
 use Api\Repositories\RecaladaMobileRepository;

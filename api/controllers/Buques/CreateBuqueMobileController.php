@@ -2,79 +2,82 @@
 
 namespace Api\Controllers\Buques;
 
-use Api\Services\Auth\AuthService;
-use Api\Middleware\Request\RequestMiddleware;
-use Api\Middleware\Response\ResponseMiddleware;
 use Api\Middleware\Authorization\AuthorizationMiddleware;
+use Api\Middleware\Response\ResponseMiddleware;
+use Api\Middleware\Request\RequestMiddleware;
+use Api\Services\Auth\AuthService;
+use Api\Services\Buques\BuqueService;
 
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Buques/BuqueService.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Auth/AuthService.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Authorization/AuthorizationMiddleware.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Request/RequestMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Authorization/AuthorizationMiddleware.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Response/ResponseMiddleware.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateBuque/Dto/CreateBuqueRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateBuque/CreateBuqueUseCase.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/DependencyInjection.php";
 
-class CreateBuqueMobileController
-{
-    private $createBuqueService;
+class CreateBuqueMobileController {
+    private $buqueService;
     private $authService;
 
-    public function __construct()
-    {
-        try {
-            $this->createBuqueService = \DependencyInjection::getCreateBuqueServce();
-            $this->authService = new AuthService();
-        } catch (\Exception $e) {
-            $this->logError($e);
-            ResponseMiddleware::error("Error en el constructor", 500);
-        }
+    public function __construct() {
+        $this->buqueService = new BuqueService();
+        $this->authService = new AuthService();
     }
 
-    public function handleRequest(array $request)
-    {
+    public function handleRequest(array $request) {
         try {
+            error_log("[CreateBuqueMobileController] Iniciando handleRequest");
+            error_log("[CreateBuqueMobileController] Request recibido: " . json_encode($request));
 
-            if ($request["action"] !== "create") {
+            if (!isset($request["action"]) || $request["action"] !== "create") {
+                error_log("[CreateBuqueMobileController] Acción no permitida");
                 ResponseMiddleware::error("Acción no permitida", 403);
+                exit();
             }
 
-            $decodedToken = $this->authService->validateToken($this->getAuthorizationHeader());
+            error_log("[CreateBuqueMobileController] Acción válida: " . $request["action"]);
+
+            $authHeader = $this->getAuthorizationHeader();
+            error_log("[CreateBuqueMobileController] Token recibido: " . substr($authHeader, 0, 20) . "...");
+
+            $decodedToken = $this->authService->validateToken($authHeader);
+            error_log("[CreateBuqueMobileController] Token validado correctamente");
 
             AuthorizationMiddleware::checkRolePermission($decodedToken->data->role, ['ADMIN', 'Super Usuario']);
+            error_log("[CreateBuqueMobileController] Permisos validados correctamente");
 
+            $this->createBuque($request, $decodedToken->data->userId);
+        } catch (\Exception $e) {
+            error_log("[CreateBuqueMobileController] Error en handleRequest: " . $e->getMessage());
+            ResponseMiddleware::error($e->getMessage(), 500);
+        }
+    }
+
+    private function createBuque(array $request, $userId) {
+        try {
             RequestMiddleware::validateCreateBuqueRequest($request);
 
-            $createRequest = new \CreateBuqueRequest($request['codigo'], $request['nombre'], null, $decodedToken->data->userId);
-            $response = $this->createBuqueService->CreateBuque($createRequest);
+            $response = $this->buqueService->createBuque(
+                $request['nombre'],
+                $request['codigo'],
+                $userId
+            );
+            
 
-            ResponseMiddleware::success($response->toJSON());
-        } catch (\InvalidArgumentException $e) {
-            ResponseMiddleware::error($e->getMessage(), 400);
+            ResponseMiddleware::success(json_encode($response));
         } catch (\Exception $e) {
-            $this->logError($e);
-            ResponseMiddleware::error("Error interno del servidor", 500);
+            ResponseMiddleware::error($e->getMessage(), 500);
         }
     }
 
-    private function getAuthorizationHeader()
-    {
-        try {
-            $headers = apache_request_headers();
-            $authHeader = $headers['Authorization'] ?? '';
+    private function getAuthorizationHeader() {
+        $headers = apache_request_headers();
+        error_log("[CreateBuqueMobileController] Headers recibidos: " . json_encode($headers));
 
-            if (!$authHeader) {
-                throw new \Exception("Token de autorización no proporcionado.");
-            }
-            return $authHeader;
-        } catch (\Exception $e) {
-            $this->logError($e);
-            throw $e;
+        $authHeader = $headers['Authorization'] ?? '';
+        if (!$authHeader) {
+            error_log("[CreateBuqueMobileController] Error: Token de autorización no proporcionado");
+            throw new \Exception("Token de autorización no proporcionado.");
         }
-    }
-
-    private function logError(\Exception $e)
-    {
-        error_log("[ERROR] " . $e->getMessage() . " en " . $e->getFile() . " línea " . $e->getLine());
+        return $authHeader;
     }
 }
