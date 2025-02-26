@@ -2,16 +2,11 @@
 
 namespace Api\Routes;
 
-use Api\Controllers\Recaladas\CreateRecaladaMobileController;
-use Api\Controllers\Recaladas\GetRecaladasMobileController;
-use Api\Controllers\Recaladas\GetRecaladasByBuqueMobileController;
-use Api\Controllers\Recaladas\GetRecaladasInThePortMobileController;
+use Api\Controllers\Supervisores\GetAllSupervisoresMobileController;
+use Api\Controllers\Supervisores\GetSupervisorByCedulaMobileController;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/CreateRecaladaMobileController.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/GetRecaladasMobileController.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/GetRecaladasByBuqueMobileController.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Recaladas/GetRecaladasInThePortMobileController.php";
-
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Supervisores/GetAllSupervisoresMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/controllers/Supervisores/GetSupervisorByCedulaMobileController.php";
 
 $allowedOrigins = [
     "http://localhost:8100",
@@ -40,10 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $routes = [
-    'POST recaladas' => new CreateRecaladaMobileController(),
-    'GET recaladas' => new GetRecaladasMobileController(),
-    'GET recaladas/buque' => new GetRecaladasByBuqueMobileController(),
-    'GET recaladas/puerto' => new GetRecaladasInThePortMobileController()
+    'GET supervisores' => new GetAllSupervisoresMobileController(),
+    'GET supervisores/cedula' => new GetSupervisorByCedulaMobileController()
 ];
 
 $ruta = $_GET['ruta'] ?? '';
@@ -53,7 +46,12 @@ foreach ($routes as $route => $controller) {
     
     if ($_SERVER['REQUEST_METHOD'] === $routeMethod && $ruta === $routePath) {
         $request = json_decode(file_get_contents('php://input'), true) ?? $_REQUEST;
-        $controller->handleRequest($request);
+        
+        if ($routePath === 'supervisores/cedula' && isset($_GET['cedula'])) {
+            $controller->handleRequest($_GET['cedula']);
+        } else {
+            $controller->handleRequest();
+        }
         exit();
     }
 }
@@ -63,4 +61,3 @@ echo json_encode([
     "status" => "error",
     "message" => "Método no permitido o ruta incorrecta"
 ]);
-

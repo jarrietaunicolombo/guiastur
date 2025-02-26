@@ -34,25 +34,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Definir rutas válidas y sus controladores
 $routes = [
     'POST buques' => new CreateBuqueMobileController(),
     'GET buques' => new GetBuquesMobileController()
 ];
 
-// Obtener la ruta limpia desde el parámetro 'ruta' en la query string
-$ruta = explode('?', $_GET['ruta'] ?? '')[0]; // Elimina los parámetros extra
+$ruta = explode('?', $_GET['ruta'] ?? '')[0];
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $perPage = isset($_GET['perPage']) ? (int) $_GET['perPage'] : 20;
 
-// Buscar coincidencia en las rutas definidas
 foreach ($routes as $route => $controller) {
     [$routeMethod, $routePath] = explode(' ', $route);
     
 
     if ($_SERVER['REQUEST_METHOD'] === $routeMethod && $ruta === $routePath) {
 
-        // Pasar los datos del request correctamente
         $requestData = json_decode(file_get_contents("php://input"), true) ?? [];
         $controller->handleRequest($requestData);
         
@@ -60,7 +56,6 @@ foreach ($routes as $route => $controller) {
     }
 }
 
-// Si ninguna ruta coincide, devolver error
 http_response_code(405);
 echo json_encode([
     "status" => "error",
