@@ -2,6 +2,8 @@
 
 namespace Api\Middleware\Authentication;
 
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Helpers/JWTHandler.php";
+
 use Api\Helpers\JWTHandler;
 
 class AuthMiddleware
@@ -20,6 +22,27 @@ class AuthMiddleware
         }
 
         return $next();
+    }
+
+    public static function authenticate()
+    {
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        $token = str_replace('Bearer ', '', $authHeader);
+
+        if (empty($token)) {
+            http_response_code(401);
+            echo json_encode(["error" => "Token no proporcionado."]);
+            exit();
+        }
+
+        $user = JWTHandler::validateToken($token);
+        if (!$user) {
+            http_response_code(401);
+            echo json_encode(["error" => "Token no válido o expirado."]);
+            exit();
+        }
+
+        return $user; // Retorna el usuario autenticado
     }
 
     private function sendErrorResponse($message, $code = 400)

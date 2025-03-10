@@ -22,5 +22,4 @@ class UtilityService
         }
     }
 
-    // Puedes agregar más métodos de utilidad que se usen en varios lugares del proyecto
 }

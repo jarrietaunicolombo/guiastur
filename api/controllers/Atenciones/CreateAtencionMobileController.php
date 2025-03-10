@@ -1,65 +1,56 @@
 <?php
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Authorization/AuthorizationMiddleware.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateAtencion/Dto/CreateAtencionRequest.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Request/RequestMiddleware.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Response/ResponseMiddleware.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/Helpers/JWTHandler.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/DependencyInjection.php";
+namespace Api\Controllers\Atenciones;
 
-use Api\Middleware\Authorization\AuthorizationMiddleware;
-use Api\Middleware\Request\RequestMiddleware;
-use Api\Middleware\Response\ResponseMiddleware;
-use Api\Services\Auth\AuthService;
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Atenciones/AtencionService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Authentication/AuthMiddleware.php";
 
+use Api\Middleware\Authentication\AuthMiddleware;
 
 class CreateAtencionMobileController
 {
-    private $createAtencionService;
-    private $authService;
-
+    private $atencionService;
 
     public function __construct()
     {
-        $this->createAtencionService = DependencyInjection::getCreateAtencionService();
-        $this->authService = new AuthService();
+        $this->atencionService = new \AtencionService();
     }
 
-    public function handleRequest(array $request)
+    public function handleRequest()
     {
-        if ($request['action'] !== 'create') {
-            ResponseMiddleware::error('Invalid action', 403);
+        header("Content-Type: application/json");
+
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            http_response_code(405);
+            echo json_encode(["error" => "Método no permitido"]);
+            exit;
         }
 
-        $authToken = $_COOKIE['auth_token'] ?? '';
-        $decodedToken = $this->authService->validateToken($authToken);
-        AuthorizationMiddleware::checkRolePermission($decodedToken->role, ['ADMIN', 'USER']);
+        $user = AuthMiddleware::authenticate();
+        if (!$user) {
+            http_response_code(401);
+            echo json_encode(["error" => "No autorizado"]);
+            exit;
+        }
 
-        RequestMiddleware::validateCreateAtencionRequest($request);
+        $input = json_decode(file_get_contents("php://input"), true);
+        if (!$input) {
+            http_response_code(400);
+            echo json_encode(["error" => "Datos inválidos o faltantes"]);
+            exit;
+        }
 
         try {
-            $fechaInicio = new DateTime($request['fecha_inicio']);
-            $fechaCierre = isset($request['fecha_cierre']) ? new DateTime($request['fecha_cierre']) : null;
+            $atencion = $this->atencionService->createAtencion($input);
 
-            if (!isset($request['total_turnos'])) {
-                throw new InvalidArgumentException("El campo 'total_turnos' es obligatorio.");
-            }
-
-            $createAtencionRequest = new CreateAtencionRequest(
-                $fechaInicio,
-                $fechaCierre,
-                $request['total_turnos'],
-                $request['observaciones'] ?? null,
-                $request['supervisor_id'] ?? null,
-                $request['recalada_id'],
-                $decodedToken->userId
-            );
-
-            $response = $this->createAtencionService->createAtencion($createAtencionRequest);
-            ResponseMiddleware::success($response->toJSON());
-
-        } catch (Exception $e) {
-            ResponseMiddleware::error($e->getMessage(), 500);
+            http_response_code(201);
+            echo json_encode([
+                "message" => "Atención creada exitosamente",
+                "atencion" => $atencion
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(400);
+            echo json_encode(["error" => $e->getMessage()]);
         }
     }
 }
