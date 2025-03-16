@@ -57,4 +57,29 @@ class AtencionRepository
             throw new NotFoundEntryException("No se puede eliminar, atención no encontrada con ID: $id");
         }
     }
+
+    public function validateNoCollision(int $recaladaId, DateTime $fechaInicio, DateTime $fechaCierre)
+    {
+        $atencion = Atencion::find("first", [
+            "conditions" => [
+                "recalada_id = ? AND ? BETWEEN fecha_inicio AND fecha_cierre",
+                $recaladaId, $fechaInicio
+            ]
+        ]);
+
+        if ($atencion) {
+            throw new InvalidAtencionException("La fecha de inicio se cruza con otra atención existente.");
+        }
+
+        $atencion = Atencion::find("first", [
+            "conditions" => [
+                "recalada_id = ? AND ? BETWEEN fecha_inicio AND fecha_cierre",
+                $recaladaId, $fechaCierre
+            ]
+        ]);
+
+        if ($atencion) {
+            throw new InvalidAtencionException("La fecha de cierre se cruza con otra atención existente.");
+        }
+    }
 }
