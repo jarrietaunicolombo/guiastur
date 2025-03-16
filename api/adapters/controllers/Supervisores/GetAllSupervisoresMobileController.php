@@ -3,7 +3,7 @@
 namespace Api\Controllers\Supervisores;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/services/Supervisores/SupervisorService.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/middleware/Response/ResponseMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/middleware/Response/ResponseMiddleware.php";
 
 use Api\Services\Supervisores\SupervisorService;
 use Api\Middleware\Response\ResponseMiddleware;

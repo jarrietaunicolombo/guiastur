@@ -8,11 +8,11 @@ use Api\Middleware\Request\RequestMiddleware;
 use Api\Services\Auth\AuthService;
 use Api\Services\Buques\BuqueService;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Buques/BuqueService.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/services/Auth/AuthService.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Request/RequestMiddleware.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Authorization/AuthorizationMiddleware.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/middleware/Response/ResponseMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/services/Buques/BuqueService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/services/Auth/AuthService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/middleware/Request/RequestMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/middleware/Authorization/AuthorizationMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/middleware/Response/ResponseMiddleware.php";
 
 class GetBuquesMobileController {
     private $buqueService;
