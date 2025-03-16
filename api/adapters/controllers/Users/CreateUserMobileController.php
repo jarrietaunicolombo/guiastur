@@ -1,0 +1,83 @@
+<?php
+
+namespace Api\Controllers\Users;
+
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/services/Auth/AuthService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/services/Users/CreateUserService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/services/Emails/EmailService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/services/Utilities/UtilityService.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/middleware/Request/RequestMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/middleware/Authorization/AuthorizationMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/middleware/Response/ResponseMiddleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Contracts/Repositories/IUsuarioRepository.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/UsuarioRepository.php";
+
+use Api\Services\Auth\AuthService;
+use Api\Services\Users\CreateUserService;
+use Api\Services\Emails\EmailService;
+use Api\Services\Utilities\UtilityService;
+use Api\Middleware\Request\RequestMiddleware;
+use Api\Middleware\Authorization\AuthorizationMiddleware;
+use Api\Middleware\Response\ResponseMiddleware;
+
+class CreateUserMobileController
+{
+    private $authService;
+    private $createUserService;
+    private $emailService;
+    private $utilityService;
+
+    public function __construct()
+    {
+        $this->authService = new AuthService();
+        $usuarioRepository = new \UsuarioRepository();
+        $this->createUserService = new CreateUserService($usuarioRepository);
+        $this->emailService = new EmailService();
+        $this->utilityService = new UtilityService();
+    }
+
+    public function handleRequest($request)
+    {
+        try {
+            if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+                throw new \InvalidArgumentException("Método no permitido.");
+            }
+
+            RequestMiddleware::validateCreateUserRequest($request);
+
+            $headers = apache_request_headers();
+            $authHeader = $headers['Authorization'] ?? '';
+            if (!$authHeader) {
+                throw new \InvalidArgumentException("Authorization header no proporcionado.");
+            }
+
+            $decodedToken = $this->authService->validateToken($authHeader);
+            if (!$decodedToken) {
+                throw new \InvalidArgumentException("Token inválido.");
+            }
+
+            $userRole = $decodedToken->data->role;
+            AuthorizationMiddleware::checkRolePermission($userRole, [\RolTypeEnum::SUPERVISOR, \RolTypeEnum::SUPER_USUARIO]);
+
+            $email = trim($request['email']);
+            $nombre = trim($request['nombre']);
+            $rol_id = $request['rol_id'];
+
+            $password = $this->utilityService->generatePassword();
+            $createUserResponse = $this->createUserService->createUser($email, $password, $nombre, $rol_id, $decodedToken->data->userId);
+
+            $this->emailService->sendUserCreatedEmail($createUserResponse);
+
+            ResponseMiddleware::success([
+                "id" => $createUserResponse->getId(),
+                "message" => "Usuario creado exitosamente.",
+                "email" => $createUserResponse->getEmail(),
+                "rol" => $createUserResponse->getRolNombre()
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            ResponseMiddleware::error($e->getMessage(), 400);
+        } catch (\Exception $e) {
+            ResponseMiddleware::error("Error interno en el servidor.", 500);
+        }
+    }
+}
