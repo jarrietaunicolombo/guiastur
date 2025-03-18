@@ -45,9 +45,23 @@ class RecaladaService {
      */
     public function getRecaladaById($id) {
         $this->validateId($id);
-        return $this->recaladaRepository->findById($id);
+        
+        error_log("[RecaladaService] Buscando recalada con ID: " . $id);
+    
+        $recalada = $this->recaladaRepository->findById($id);
+    
+        if (!$recalada) {
+            error_log("[RecaladaService] No se encontró la recalada.");
+            return ["errors" => "No se encontró la recalada"];
+        }
+    
+        $recaladaArray = is_object($recalada) ? $recalada->to_array() : $recalada;
+    
+        error_log("[RecaladaService] Recalada encontrada y convertida a array: " . json_encode($recaladaArray));
+    
+        return $recaladaArray;
     }
-
+    
     /**
      * Obtener recaladas por buque
      */

@@ -15,8 +15,19 @@ class RecaladaMobileRepository {
      */
     public function findById($id) {
         try {
-            return \Recalada::find($id);
+            error_log("[RecaladaMobileRepository] Ejecutando findById con ID: " . $id);
+            
+            $recalada = \Recalada::find($id);
+            
+            if (!$recalada) {
+                error_log("[RecaladaMobileRepository] No se encontró la recalada con ID: " . $id);
+            } else {
+                error_log("[RecaladaMobileRepository] Recalada encontrada: " . json_encode($recalada->to_array()));
+            }
+    
+            return $recalada;
         } catch (Exception $e) {
+            error_log("[RecaladaMobileRepository] Error en findById: " . $e->getMessage());
             throw \Utility::errorHandler($e);
         }
     }

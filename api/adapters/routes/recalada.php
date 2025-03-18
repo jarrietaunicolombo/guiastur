@@ -6,11 +6,13 @@ use Api\Controllers\Recaladas\CreateRecaladaMobileController;
 use Api\Controllers\Recaladas\GetRecaladasMobileController;
 use Api\Controllers\Recaladas\GetRecaladasByBuqueMobileController;
 use Api\Controllers\Recaladas\GetRecaladasInThePortMobileController;
+use Api\Controllers\Recaladas\GetRecaladaByIdMobileController;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Recaladas/CreateRecaladaMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Recaladas/GetRecaladasMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Recaladas/GetRecaladasByBuqueMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Recaladas/GetRecaladasInThePortMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Recaladas/GetRecaladaByIdMobileController.php";
 
 
 $allowedOrigins = [
@@ -43,7 +45,8 @@ $routes = [
     'POST recaladas' => new CreateRecaladaMobileController(),
     'GET recaladas' => new GetRecaladasMobileController(),
     'GET recaladas/buque' => new GetRecaladasByBuqueMobileController(),
-    'GET recaladas/puerto' => new GetRecaladasInThePortMobileController()
+    'GET recaladas/puerto' => new GetRecaladasInThePortMobileController(),
+    'GET recaladas/id' => new GetRecaladaByIdMobileController()
 ];
 
 $ruta = $_GET['ruta'] ?? '';
