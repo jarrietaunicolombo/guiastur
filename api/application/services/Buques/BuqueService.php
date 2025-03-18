@@ -21,7 +21,7 @@ class BuqueService {
         $this->validateBuqueData($nombre, $codigo);
         return $this->buqueRepository->create($nombre, $codigo, $usuarioRegistro);
     }
-    
+
     /**
      * Obtener todos los buques
      */
@@ -49,7 +49,6 @@ class BuqueService {
         if (empty($tipo)) {
             throw new Exception("El tipo de buque es requerido.");
         }
-
     }
 
     /**

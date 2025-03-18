@@ -3,62 +3,31 @@
 namespace Api\Controllers\Paises;
 
 use Api\Middleware\Response\ResponseMiddleware;
+use Api\Services\Paises\PaisService;
 use Exception;
 
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/services/Paises/PaisService.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/middleware/Response/ResponseMiddleware.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/GetPaises/GetPaisesService.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Actions/Queries/GetPaisesQueryHandler.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/PaisRepository.php";
 
-class GetPaisesMobileController
-{
-    private $getPaisesService;
+class GetPaisesMobileController {
+    private $paisService;
 
-    public function __construct()
-    {
-        $getPaisesQueryHandler = new \GetPaisesQueryHandler(new \PaisRepository());
-
-        $this->getPaisesService = new \GetPaisesService($getPaisesQueryHandler);
+    public function __construct() {
+        error_log("[GetPaisesMobileController] Constructor llamado");
+        $this->paisService = new PaisService();
     }
 
-    public function handleRequest()
-    {
+    public function handleRequest() {
         try {
-            $paisesResponse = $this->getPaisesService->getPaises();
-
-            $paisesArray = $this->convertPaisesToArray($paisesResponse);
-
-            ResponseMiddleware::success($paisesArray);
+            error_log("[GetPaisesMobileController] handleRequest() llamado");
+            $response = $this->paisService->getAllPaises();
+            error_log("[GetPaisesMobileController] Respuesta enviada al cliente: " . json_encode($response));
+    
+            ResponseMiddleware::success($response);
         } catch (Exception $e) {
+            error_log("[GetPaisesMobileController] Error: " . $e->getMessage());
             ResponseMiddleware::error($e->getMessage(), 500);
         }
     }
-
-    private function convertPaisesToArray($paisesResponse)
-    {
-        try {
-            if (method_exists($paisesResponse, 'getPaises')) {
-                $paises = $paisesResponse->getPaises();
-            } else {
-                error_log("El método 'getPaises' no existe en la respuesta.");
-                $paises = [];
-            }
-
-            $paisesArray = [];
-            if (is_array($paises)) {
-                foreach ($paises as $pais) {
-                    $paisesArray[] = [
-                        'id' => utf8_encode($pais->getId()),
-                        'nombre' => utf8_encode($pais->getNombre()),
-                        'bandera' => utf8_encode($pais->getBandera())
-                    ];
-                }
-            }
-
-            return $paisesArray;
-        } catch (Exception $e) {
-            error_log("Error al convertir países a array: " . $e->getMessage());
-            return [];
-        }
-    }
+    
 }

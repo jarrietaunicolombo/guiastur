@@ -61,7 +61,6 @@ class CreateBuqueMobileController {
                 $request['codigo'],
                 $userId
             );
-            
 
             ResponseMiddleware::success(json_encode($response));
         } catch (\Exception $e) {

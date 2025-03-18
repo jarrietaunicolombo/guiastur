@@ -28,13 +28,10 @@ class BuqueMobileRepository {
         try {
             $offset = ($page - 1) * $perPage;
     
-            // Obtener todos los buques (sin paginación a nivel de base de datos)
             $allBuques = \Buque::all();
     
-            // Total de registros
             $total = count($allBuques);
     
-            // Aplicar paginación en PHP
             $buques = array_slice($allBuques, $offset, $perPage);
     
             $data = [];
