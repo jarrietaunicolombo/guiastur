@@ -13,20 +13,12 @@ class PaisMobileRepository {
      */
     public function findAll() {
         try {
-            error_log("[PaisMobileRepository] findAll() llamado");
-    
-            // Obtener los países desde ActiveRecord
             $paises = \Pais::all();
     
-            error_log("[PaisMobileRepository] Países obtenidos (crudos): " . print_r($paises, true));
-    
-            // Verificar si hay datos
             if (empty($paises)) {
-                error_log("[PaisMobileRepository] No se encontraron países");
                 return ["status" => "success", "data" => []];
             }
     
-            // Convertir los objetos ActiveRecord a arrays asociativos con UTF-8
             $data = [];
             foreach ($paises as $pais) {
                 try {
@@ -44,15 +36,10 @@ class PaisMobileRepository {
                 }
             }
     
-            // Verificar si json_encode está fallando
             $jsonData = json_encode($data);
             if ($jsonData === false) {
-                error_log("[PaisMobileRepository] ERROR al convertir datos a JSON: " . json_last_error_msg());
                 return ["status" => "error", "message" => "Error al procesar los datos"];
             }
-    
-            // Log para verificar si los datos se formatearon correctamente
-            error_log("[PaisMobileRepository] Países formateados correctamente: " . $jsonData);
     
             return [
                 "status" => "success",
@@ -64,5 +51,30 @@ class PaisMobileRepository {
             return ["status" => "error", "message" => $e->getMessage()];
         }
     }
-    
+
+    /**
+     * Obtener un país por su ID
+     */
+    public function findById($id) {
+        try {
+            $pais = \Pais::find($id);
+
+            if (!$pais) {
+                throw new Exception("País no encontrado.");
+            }
+
+            return [
+                'id' => utf8_encode($pais->id ?? null),
+                'nombre' => utf8_encode($pais->nombre ?? ''),
+                'bandera' => utf8_encode($pais->bandera ?? ''),
+                'fecha_registro' => isset($pais->fecha_registro) && $pais->fecha_registro instanceof \ActiveRecord\DateTime
+                    ? $pais->fecha_registro->format('Y-m-d H:i:s')
+                    : null,
+                'usuario_registro' => utf8_encode($pais->usuario_registro ?? null)
+            ];
+        } catch (Exception $e) {
+            error_log("[PaisMobileRepository] ERROR en findById(): " . $e->getMessage());
+            throw new Exception("Error al obtener el país.");
+        }
+    }
 }

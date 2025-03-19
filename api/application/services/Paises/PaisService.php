@@ -23,13 +23,9 @@ class PaisService {
     
         $resultado = $this->paisRepository->findAll();
     
-        // Verificar si la consulta se ejecutó correctamente
         if (!isset($resultado["data"]) || !is_array($resultado["data"])) {
-            error_log("[PaisService] Error: Resultado inválido de la base de datos");
             return ["status" => "error", "message" => "Error al obtener los países"];
         }
-    
-        error_log("[PaisService] Países recibidos desde el repositorio: " . json_encode($resultado["data"]));
     
         return [
             "status" => "success",
@@ -37,5 +33,17 @@ class PaisService {
             "data" => $resultado["data"]
         ];
     }
-    
+
+    /**
+     * Obtener un país por su ID
+     */
+    public function getPaisById($id) {
+        error_log("[PaisService] getPaisById() llamado con ID: " . $id);
+
+        if (!is_numeric($id) || $id <= 0) {
+            throw new Exception("ID de país inválido.");
+        }
+
+        return $this->paisRepository->findById($id);
+    }
 }

@@ -4,14 +4,17 @@ namespace Api\Routes;
 
 use Api\Controllers\Buques\CreateBuqueMobileController;
 use Api\Controllers\Buques\GetBuquesMobileController;
+use Api\Controllers\Buques\GetBuqueByIdMobileController;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Buques/CreateBuqueMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Buques/GetBuquesMobileController.php";
-
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Buques/GetBuqueByIdMobileController.php";
+/*
 $allowedOrigins = [
     "http://localhost:8100",
     "https://localhost:8100",
     "http://192.168.137.57:8100",
+    "**",
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -23,8 +26,9 @@ if (in_array($origin, $allowedOrigins)) {
     http_response_code(403);
     echo json_encode(["error" => "Origen no permitido"]);
     exit();
-}
+}*/
 
+header("Access-Control-Allow-Origin: $**");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header('Content-Type: application/json; charset=utf-8');
@@ -36,23 +40,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 $routes = [
     'POST buques' => new CreateBuqueMobileController(),
-    'GET buques' => new GetBuquesMobileController()
+    'GET buques' => new GetBuquesMobileController(),
+    'GET buques/id' => new GetBuqueByIdMobileController(),
 ];
 
-$ruta = explode('?', $_GET['ruta'] ?? '')[0];
+$ruta = $_GET['ruta'] ?? '';
+$id = $_GET['id'] ?? null;
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $perPage = isset($_GET['perPage']) ? (int) $_GET['perPage'] : 20;
 
 foreach ($routes as $route => $controller) {
     [$routeMethod, $routePath] = explode(' ', $route);
-    
 
-    if ($_SERVER['REQUEST_METHOD'] === $routeMethod && $ruta === $routePath) {
-
-        $requestData = json_decode(file_get_contents("php://input"), true) ?? [];
-        $controller->handleRequest($requestData);
-        
-        exit();
+    if ($_SERVER['REQUEST_METHOD'] === $routeMethod) {
+        if ($routePath === 'buques/id' && $id !== null) {
+            // Si la ruta es 'buques/id', se pasa el ID al controlador
+            $controller->handleRequest($id);
+            exit();
+        } elseif ($ruta === 'buques' && $routePath === 'buques') {
+            // Si es 'buques', pasamos la paginación
+            $controller->handleRequest(['page' => $page, 'perPage' => $perPage]);
+            exit();
+        } elseif ($ruta === $routePath) {
+            // Para otras rutas, manejar normalmente
+            $requestData = json_decode(file_get_contents("php://input"), true) ?? [];
+            $controller->handleRequest($requestData);
+            exit();
+        }
     }
 }
 

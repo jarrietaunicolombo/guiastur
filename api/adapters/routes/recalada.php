@@ -14,7 +14,6 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Rec
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Recaladas/GetRecaladasInThePortMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Recaladas/GetRecaladaByIdMobileController.php";
 
-
 $allowedOrigins = [
     "http://localhost:8100",
     "https://localhost:8100",
@@ -53,9 +52,10 @@ $ruta = $_GET['ruta'] ?? '';
 
 foreach ($routes as $route => $controller) {
     [$routeMethod, $routePath] = explode(' ', $route);
-    
+
     if ($_SERVER['REQUEST_METHOD'] === $routeMethod && $ruta === $routePath) {
         $request = json_decode(file_get_contents('php://input'), true) ?? $_REQUEST;
+
         $controller->handleRequest($request);
         exit();
     }
@@ -66,4 +66,3 @@ echo json_encode([
     "status" => "error",
     "message" => "Método no permitido o ruta incorrecta"
 ]);
-

@@ -3,8 +3,10 @@
 namespace Api\Routes;
 
 use Api\Controllers\Paises\GetPaisesMobileController;
+use Api\Controllers\Paises\GetPaisByIdMobileController;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Paises/GetPaisesMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Paises/GetPaisByIdMobileController.php";
 
 $allowedOrigins = [
     "http://localhost:8100",
@@ -33,17 +35,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $routes = [
-    'GET paises' => new GetPaisesMobileController()
+    'GET paises' => new GetPaisesMobileController(),
+    'GET paises/id' => new GetPaisByIdMobileController(),
 ];
 
-$ruta = explode('?', $_GET['ruta'] ?? '')[0];
+$ruta = $_GET['ruta'] ?? '';
 
 foreach ($routes as $route => $controller) {
     [$routeMethod, $routePath] = explode(' ', $route);
-    
-    if ($_SERVER['REQUEST_METHOD'] === $routeMethod && $ruta === $routePath) {
-        $controller->handleRequest();
-        exit();
+
+    if ($_SERVER['REQUEST_METHOD'] === $routeMethod) {
+        if ($routePath === 'paises/id' && isset($_GET['id'])) {
+            $controller->handleRequest($_GET['id']);
+            exit();
+        } elseif ($ruta === $routePath) {
+            $controller->handleRequest();
+            exit();
+        }
     }
 }
 
