@@ -64,7 +64,6 @@ class JWTHandler
             }
 
         } catch (\Exception $e) {
-            error_log("Error en la validación del token: " . $e->getMessage());
             return false;
         }
 

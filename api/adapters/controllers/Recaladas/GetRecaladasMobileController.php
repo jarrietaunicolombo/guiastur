@@ -48,7 +48,6 @@ Class GetRecaladasMobileController {
     private function getRecaladas() {
         try {
             $response = $this->recaladaService->getAllRecaladas();
-            error_log("[GetRecaladasMobileController] Respuesta final antes de enviar: " . json_encode($response));
             ResponseMiddleware::success(['recaladas' => $response]);
         } catch (\Exception $e) {
             ResponseMiddleware::error($e->getMessage(), 500);

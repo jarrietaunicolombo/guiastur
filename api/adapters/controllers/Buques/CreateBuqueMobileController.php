@@ -25,29 +25,21 @@ class CreateBuqueMobileController {
 
     public function handleRequest(array $request) {
         try {
-            error_log("[CreateBuqueMobileController] Iniciando handleRequest");
-            error_log("[CreateBuqueMobileController] Request recibido: " . json_encode($request));
 
             if (!isset($request["action"]) || $request["action"] !== "create") {
-                error_log("[CreateBuqueMobileController] Acción no permitida");
                 ResponseMiddleware::error("Acción no permitida", 403);
                 exit();
             }
 
-            error_log("[CreateBuqueMobileController] Acción válida: " . $request["action"]);
 
             $authHeader = $this->getAuthorizationHeader();
-            error_log("[CreateBuqueMobileController] Token recibido: " . substr($authHeader, 0, 20) . "...");
 
             $decodedToken = $this->authService->validateToken($authHeader);
-            error_log("[CreateBuqueMobileController] Token validado correctamente");
 
             AuthorizationMiddleware::checkRolePermission($decodedToken->data->role, ['ADMIN', 'Super Usuario']);
-            error_log("[CreateBuqueMobileController] Permisos validados correctamente");
 
             $this->createBuque($request, $decodedToken->data->userId);
         } catch (\Exception $e) {
-            error_log("[CreateBuqueMobileController] Error en handleRequest: " . $e->getMessage());
             ResponseMiddleware::error($e->getMessage(), 500);
         }
     }
@@ -70,11 +62,9 @@ class CreateBuqueMobileController {
 
     private function getAuthorizationHeader() {
         $headers = apache_request_headers();
-        error_log("[CreateBuqueMobileController] Headers recibidos: " . json_encode($headers));
 
         $authHeader = $headers['Authorization'] ?? '';
         if (!$authHeader) {
-            error_log("[CreateBuqueMobileController] Error: Token de autorización no proporcionado");
             throw new \Exception("Token de autorización no proporcionado.");
         }
         return $authHeader;

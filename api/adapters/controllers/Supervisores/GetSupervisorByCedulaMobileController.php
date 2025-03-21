@@ -33,7 +33,6 @@ class GetSupervisorByCedulaMobileController {
     
             ResponseMiddleware::success(["supervisor" => $supervisor]);
         } catch (Exception $e) {
-            error_log("[ERROR] " . $e->getMessage());
             ResponseMiddleware::error($e->getMessage());
         }
     }

@@ -13,7 +13,6 @@ class GetPaisByIdMobileController {
     private $paisService;
 
     public function __construct() {
-        error_log("[GetPaisByIdMobileController] Constructor llamado");
         $this->paisService = new PaisService();
     }
 
@@ -30,7 +29,6 @@ class GetPaisByIdMobileController {
 
             ResponseMiddleware::success(["data" => $pais]);
         } catch (Exception $e) {
-            error_log("[GetPaisByIdMobileController] Error: " . $e->getMessage());
             ResponseMiddleware::error($e->getMessage(), 404);
         }
     }

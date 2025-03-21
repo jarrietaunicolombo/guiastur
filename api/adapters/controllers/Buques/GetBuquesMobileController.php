@@ -35,7 +35,6 @@ class GetBuquesMobileController {
             $response = $this->buqueService->getAllBuques();
             ResponseMiddleware::success($response);
         } catch (\Exception $e) {
-            error_log("[GetBuquesMobileController] Error en handleRequest: " . $e->getMessage());
             ResponseMiddleware::error($e->getMessage(), 500);
         }
     }

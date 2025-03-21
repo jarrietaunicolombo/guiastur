@@ -18,7 +18,6 @@ class SupervisorMobileRepository {
             $supervisor = \Supervisor::find($cedula);
     
             if (!$supervisor) {
-                error_log("[DEBUG] Supervisor no encontrado en BD.");
                 return null;
             }
     

@@ -11,7 +11,6 @@ class PaisService {
     private $paisRepository;
 
     public function __construct() {
-        error_log("[PaisService] Constructor llamado");
         $this->paisRepository = new PaisMobileRepository();
     }
 
@@ -19,7 +18,6 @@ class PaisService {
      * Obtener todos los países
      */
     public function getAllPaises() {
-        error_log("[PaisService] getAllPaises() llamado");
     
         $resultado = $this->paisRepository->findAll();
     
@@ -38,7 +36,6 @@ class PaisService {
      * Obtener un país por su ID
      */
     public function getPaisById($id) {
-        error_log("[PaisService] getPaisById() llamado con ID: " . $id);
 
         if (!is_numeric($id) || $id <= 0) {
             throw new Exception("ID de país inválido.");

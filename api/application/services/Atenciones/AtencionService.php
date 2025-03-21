@@ -17,7 +17,6 @@ class AtencionService
 
     public function createAtencion($data)
     {
-        error_log("📌 Datos recibidos en createAtencion: " . json_encode($data));
 
         if (!isset($data["recalada_id"]) || $data["recalada_id"] < 1) {
             throw new InvalidAtencionException("El ID de la Recalada es requerido.");
@@ -32,7 +31,6 @@ class AtencionService
         $fechaInicio = DateTime::createFromFormat("Y-m-d H:i:s", $data["fecha_inicio"]);
         $fechaCierre = DateTime::createFromFormat("Y-m-d H:i:s", $data["fecha_cierre"]);
 
-        error_log("📌 Validando fechas: Inicio - {$data["fecha_inicio"]}, Cierre - {$data["fecha_cierre"]}");
 
         if (!$fechaInicio || !$fechaCierre) {
             throw new InvalidAtencionException("Las fechas deben estar en formato YYYY-MM-DD HH:MM:SS.");
@@ -41,7 +39,6 @@ class AtencionService
             throw new InvalidAtencionException("La fecha de inicio no puede ser mayor a la fecha de cierre.");
         }
 
-        error_log("📌 Buscando recalada con ID: " . $data["recalada_id"]);
 
         $recalada = Recalada::find($data["recalada_id"]);
         if (!$recalada) {
@@ -60,17 +57,14 @@ class AtencionService
             throw new InvalidAtencionException("La fecha de cierre no puede ser mayor a la fecha de zarpe de la recalada.");
         }
 
-        error_log("📌 Validando colisión de horarios...");
         $this->atencionRepository->validateNoCollision($data["recalada_id"], $fechaInicio, $fechaCierre);
 
-        error_log("📌 Creando la atención...");
         $atencion = Atencion::create($data);
 
         if (!$atencion || !$atencion->id) {
             throw new Exception("No se pudo crear la atención.");
         }
 
-        error_log("✅ Atención creada con éxito - ID: " . $atencion->id);
 
         return [
             "id" => $atencion->id,

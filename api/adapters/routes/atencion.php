@@ -38,21 +38,17 @@ $routes = [
 
 $ruta = $_GET['ruta'] ?? '';
 
-error_log("📌 Petición recibida en atencion.php - Método: {$_SERVER['REQUEST_METHOD']} - Ruta: $ruta");
 
 foreach ($routes as $route => $controller) {
     [$routeMethod, $routePath] = explode(' ', $route);
 
-    error_log("🔍 Comparando ruta - Método: $routeMethod, Ruta: $routePath");
 
     if ($_SERVER['REQUEST_METHOD'] === $routeMethod && $ruta === $routePath) {
-        error_log("✅ Ruta encontrada: $ruta, ejecutando controlador...");
         $request = json_decode(file_get_contents('php://input'), true) ?? $_REQUEST;
         $controller->handleRequest($request);
         exit();
     }
 }
 
-error_log("❌ Ruta no encontrada o método incorrecto.");
 http_response_code(405);
 echo json_encode(["status" => "error", "message" => "Método no permitido o ruta incorrecta"]);

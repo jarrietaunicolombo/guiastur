@@ -81,7 +81,6 @@ class RequestMiddleware
         }
 
         if (count($errorMessages) > 0) {
-            error_log("Errores de validación: " . json_encode($errorMessages)); // Log de errores
             throw new \InvalidArgumentException(json_encode($errorMessages));
         }
     }
@@ -103,7 +102,6 @@ class RequestMiddleware
             }
 
             if (count($errorMessages) > 0) {
-                error_log("Errores de validación: " . json_encode($errorMessages)); // Registro de los errores
                 throw new \InvalidArgumentException(json_encode($errorMessages));
             }
         }

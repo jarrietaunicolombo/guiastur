@@ -15,14 +15,11 @@ class AuthService
     
         if (strpos($authHeader, 'Bearer ') === 0) {
             $token = str_replace('Bearer ', '', $authHeader);
-            error_log("Token extraído: " . $token);
         } else {
-            error_log("Error: No se proporcionó un token válido.");
             throw new \InvalidPermissionException("Token no proporcionado.");
         }
     
         if (!JWTHandler::validateToken($token)) {
-            error_log("Error: Token inválido o expirado.");
             throw new \InvalidPermissionException("Token no válido o expirado.");
         }
     

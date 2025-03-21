@@ -28,7 +28,7 @@ class GetRecaladasInThePortMobileController {
             AuthorizationMiddleware::checkRolePermission($decodedToken->data->role, ['ADMIN', 'Super Usuario']);
             
             $response = $this->recaladaService->findRecaladasInThePort();
-            ResponseMiddleware::success(json_encode($response));
+            ResponseMiddleware::success(['recaladas' => $response]);
         } catch (\Exception $e) {
             ResponseMiddleware::error($e->getMessage(), 400);
         }

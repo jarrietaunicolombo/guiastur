@@ -9,12 +9,11 @@ use Api\Controllers\Buques\GetBuqueByIdMobileController;
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Buques/CreateBuqueMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Buques/GetBuquesMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Buques/GetBuqueByIdMobileController.php";
-/*
+
 $allowedOrigins = [
     "http://localhost:8100",
     "https://localhost:8100",
     "http://192.168.137.57:8100",
-    "**",
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -26,10 +25,9 @@ if (in_array($origin, $allowedOrigins)) {
     http_response_code(403);
     echo json_encode(["error" => "Origen no permitido"]);
     exit();
-}*/
+}
 
-header("Access-Control-Allow-Origin: $**");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header('Content-Type: application/json; charset=utf-8');
 
@@ -54,17 +52,15 @@ foreach ($routes as $route => $controller) {
 
     if ($_SERVER['REQUEST_METHOD'] === $routeMethod) {
         if ($routePath === 'buques/id' && $id !== null) {
-            // Si la ruta es 'buques/id', se pasa el ID al controlador
             $controller->handleRequest($id);
             exit();
-        } elseif ($ruta === 'buques' && $routePath === 'buques') {
-            // Si es 'buques', pasamos la paginación
-            $controller->handleRequest(['page' => $page, 'perPage' => $perPage]);
-            exit();
         } elseif ($ruta === $routePath) {
-            // Para otras rutas, manejar normalmente
-            $requestData = json_decode(file_get_contents("php://input"), true) ?? [];
-            $controller->handleRequest($requestData);
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                $controller->handleRequest(['page' => $page, 'perPage' => $perPage]);
+            } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $requestData = json_decode(file_get_contents("php://input"), true) ?? [];
+                $controller->handleRequest($requestData);
+            }
             exit();
         }
     }

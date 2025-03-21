@@ -29,7 +29,6 @@ class GetBuqueByIdMobileController {
 
             ResponseMiddleware::success(["data" => $buque]);
         } catch (Exception $e) {
-            error_log("[GetBuqueByIdMobileController] Error: " . $e->getMessage());
             ResponseMiddleware::error($e->getMessage(), 404);
         }
     }

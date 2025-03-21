@@ -32,7 +32,6 @@ class PaisMobileRepository {
                         'usuario_registro' => utf8_encode($pais->usuario_registro ?? null)
                     ];
                 } catch (Exception $ex) {
-                    error_log("[PaisMobileRepository] Error formateando país con ID " . ($pais->id ?? "Desconocido") . ": " . $ex->getMessage());
                 }
             }
     
@@ -47,7 +46,6 @@ class PaisMobileRepository {
                 "data" => $data
             ];
         } catch (Exception $e) {
-            error_log("[PaisMobileRepository] ERROR en findAll(): " . $e->getMessage());
             return ["status" => "error", "message" => $e->getMessage()];
         }
     }
@@ -73,7 +71,6 @@ class PaisMobileRepository {
                 'usuario_registro' => utf8_encode($pais->usuario_registro ?? null)
             ];
         } catch (Exception $e) {
-            error_log("[PaisMobileRepository] ERROR en findById(): " . $e->getMessage());
             throw new Exception("Error al obtener el país.");
         }
     }

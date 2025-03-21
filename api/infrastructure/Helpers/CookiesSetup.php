@@ -14,7 +14,6 @@ class CookiesSetup
 
     public function setAuthTokenCookie($token, $expirationTime = 3600)
     {
-        error_log("Seteando cookie auth_token con token: " . $token);
 
         $cookieSet = setcookie(
             $this->authCookieName,
@@ -29,12 +28,10 @@ class CookiesSetup
             ]
         );
 
-        error_log("Cookie auth_token seteada correctamente: " . ($cookieSet ? 'Sí' : 'No'));
     }
 
     public function setRefreshTokenCookie($token, $expirationTime = 604800)
     {
-        error_log("Seteando cookie refresh_token con token: " . $token);
         setcookie(
             $this->refreshCookieName,
             $token,
@@ -51,9 +48,7 @@ class CookiesSetup
 
     public function getAuthTokenFromCookie()
     {
-        error_log("Obteniendo cookie auth_token: " . print_r($_COOKIE, true));
         $token = $_COOKIE[$this->authCookieName] ?? null;
-        error_log("Token auth_token obtenido: " . ($token ?? 'Nulo'));
         return $token;
     }
 
@@ -77,7 +72,6 @@ class CookiesSetup
             ]
         );
 
-        error_log("Cookie auth_token eliminada.");
     }
 
     public function clearRefreshTokenCookie()
@@ -95,6 +89,5 @@ class CookiesSetup
             ]
         );
 
-        error_log("Cookie refresh_token eliminada.");
     }
 }

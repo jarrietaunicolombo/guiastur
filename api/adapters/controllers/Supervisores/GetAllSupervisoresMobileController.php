@@ -22,7 +22,6 @@ class GetAllSupervisoresMobileController {
             
             ResponseMiddleware::success($supervisores);
         } catch (Exception $e) {
-            error_log("[ERROR] " . $e->getMessage());
             ResponseMiddleware::error($e->getMessage());
         }
     }

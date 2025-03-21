@@ -27,7 +27,6 @@ class BuqueService {
      */
     public function getAllBuques() {
         $buques = $this->buqueRepository->findAll();
-        error_log("Buques: " . json_encode($buques));
         return $buques;
     }
 

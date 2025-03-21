@@ -53,11 +53,9 @@ class BuqueMobileRepository {
                 "data" => $data
             ];
         } catch (Exception $e) {
-            error_log("[BuqueMobileRepository] Error en findAll(): " . $e->getMessage());
             return ["status" => "error", "message" => $e->getMessage()];
         }
     }
-    
     
     /**
      * Crear un buque
@@ -74,11 +72,8 @@ class BuqueMobileRepository {
                 throw new \Exception("No se pudo crear el buque.");
             }
     
-            error_log("[BuqueMobileRepository] Buque creado exitosamente: " . json_encode($buque));
-    
             return $buque->to_array();
         } catch (Exception $e) {
-            error_log("[BuqueMobileRepository] Error al crear buque: " . $e->getMessage());
             throw \Utility::errorHandler($e);
         }
     }
