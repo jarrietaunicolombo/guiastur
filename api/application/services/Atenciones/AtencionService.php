@@ -65,7 +65,6 @@ class AtencionService
             throw new Exception("No se pudo crear la atención.");
         }
 
-
         return [
             "id" => $atencion->id,
             "recalada_id" => $atencion->recalada_id,

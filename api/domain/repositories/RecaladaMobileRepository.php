@@ -15,24 +15,21 @@ class RecaladaMobileRepository {
      */
     public function findById($id) {
         try {
-    
+
             $recalada = \Recalada::find($id);
-    
+
             if (!$recalada) {
                 return null;
             }
-    
-            // Obtener el nombre del buque
+
             $buque_nombre = $recalada->buque_id 
                 ? (\Buque::find_by_id($recalada->buque_id)->nombre ?? "Sin buque") 
                 : "Sin buque";
-    
-            // Obtener el nombre del país
+
             $pais_nombre = $recalada->pais_id 
                 ? (\Pais::find_by_id($recalada->pais_id)->nombre ?? "No especificado") 
                 : "No especificado";
-    
-            // Convertir a array incluyendo los nombres del buque y país
+
             $data = [
                 'id' => $recalada->id ?? null,
                 'buque_id' => $recalada->buque_id ?? null,
@@ -46,8 +43,7 @@ class RecaladaMobileRepository {
                 'fecha_registro' => isset($recalada->fecha_registro) ? $recalada->fecha_registro->format('Y-m-d H:i:s') : null,
                 'usuario_registro' => $recalada->usuario_registro ?? null,
             ];
-    
-    
+
             return $data;
         } catch (Exception $e) {
             throw \Utility::errorHandler($e);
@@ -102,14 +98,13 @@ class RecaladaMobileRepository {
             if (!$recalada) {
                 throw new \Exception("No se pudo crear la recalada.");
             }
-    
-    
+
             return $recalada->to_array();
         } catch (Exception $e) {
             throw \Utility::errorHandler($e);
         }
     }
-    
+
     /**
      * Obtener recaladas por buque
      */
@@ -123,47 +118,45 @@ class RecaladaMobileRepository {
 
     public function findRecaladaInThePort() {
         try {
-            $fecha_actual = new \DateTime(); // Fecha actual para la consulta
+            date_default_timezone_set('America/Bogota');
+
+            $fecha_actual = new \DateTime();
+            $ahora = $fecha_actual->format('Y-m-d H:i:s');
     
-            // Buscar recaladas activas en el puerto
+    
             $recaladas = \Recalada::find("all", [
                 "conditions" => [
                     "fecha_arribo <= ? AND fecha_zarpe >= ?",
-                    $fecha_actual->format('Y-m-d H:i:s'),
-                    $fecha_actual->format('Y-m-d H:i:s')
+                    $ahora,
+                    $ahora
                 ]
             ]);
-    
+
             $data = [];
-    
+
             foreach ($recaladas as $recalada) {
-                // Obtener nombre del buque
                 $buque_nombre = "Sin buque";
                 if ($recalada->buque_id) {
                     $buque = \Buque::find_by_id($recalada->buque_id);
                     $buque_nombre = $buque ? $buque->nombre : "Sin buque";
                 }
-    
-                // Obtener nombre del país
+
                 $pais_nombre = "No especificado";
                 if ($recalada->pais_id) {
                     $pais = \Pais::find_by_id($recalada->pais_id);
                     $pais_nombre = $pais ? $pais->nombre : "No especificado";
                 }
-    
-                // Formatear fechas y manejar valores nulos
+
                 $fecha_arribo = isset($recalada->fecha_arribo) && $recalada->fecha_arribo != null
                     ? $recalada->fecha_arribo->format('Y-m-d H:i:s')
                     : null;
-    
+
                 $fecha_zarpe = isset($recalada->fecha_zarpe) && $recalada->fecha_zarpe != null
                     ? $recalada->fecha_zarpe->format('Y-m-d H:i:s')
                     : null;
-    
-                // Manejo de valores nulos en total_turistas
+
                 $total_turistas = $recalada->total_turistas ?? 0;
-    
-                // Construcción del array con los datos corregidos
+
                 $data[] = [
                     'id' => $recalada->id ?? null,
                     'buque_id' => $recalada->buque_id ?? null,
@@ -178,8 +171,8 @@ class RecaladaMobileRepository {
                     'usuario_registro' => $recalada->usuario_registro ?? null,
                 ];
             }
-    
-            return $data; // Retornar recaladas activas con datos corregidos
+
+            return $data;
         } catch (\Exception $e) {
             throw new \Exception("Error al obtener recaladas en el puerto: " . $e->getMessage());
         }

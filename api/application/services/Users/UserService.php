@@ -5,6 +5,7 @@ namespace Api\Services;
 use Usuario;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Usuario.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/domain/repositories/UserMobileRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateUser/Dto/CreateUserRequest.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/UseCases/CreateUser/Dto/CreateUserResponse.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Constants/RolTypeEnum.php";
@@ -12,6 +13,14 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/Inval
 
 class UserService
 {
+
+    private $userRepository;
+
+    public function __construct()
+    {
+        $this->userRepository = new \UserMobileRepository();
+    }
+
     public function getUsuario($usuario_id)
     {
         $sql = "SELECT * FROM usuarios WHERE id = ?";
@@ -38,5 +47,10 @@ class UserService
 
         $createUserUseCase = \DependencyInjection::getCreateUserServce();
         return $createUserUseCase->createUser($createUserRequest);
+    }
+
+    public function getUserById(int $userId)
+    {
+        return $this->userRepository->findById($userId);
     }
 }

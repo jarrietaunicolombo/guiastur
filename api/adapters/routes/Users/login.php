@@ -36,21 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Obtener los datos enviados en el cuerpo de la solicitud (formato JSON)
     $input = json_decode(file_get_contents('php://input'), true);
 
 
-    // Verificar si los campos email y password están presentes
     if (isset($input['email']) && isset($input['password'])) {
 
-        // Verificar si los campos no están vacíos
         if (empty($input['email']) || empty($input['password'])) {
             http_response_code(400);
             echo json_encode(["error" => "El email y la contraseña no pueden estar vacíos."]);
             exit();
         }
 
-        // Preparar la solicitud para el controlador
         $request = [
             "action" => "login",
             "email" => $input['email'],
@@ -58,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
 
 
-        // Instanciar el controlador y manejar la solicitud
         try {
             $controller = new LoginController();
             $controller->handleRequest($request);

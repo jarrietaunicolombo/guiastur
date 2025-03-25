@@ -32,4 +32,31 @@ class AuthService
             throw new \InvalidPermissionException("No tiene permisos suficientes.");
         }
     }
+
+    public function getUserIdFromToken(): ?int
+    {
+        if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            throw new \InvalidPermissionException("Encabezado de autorización no encontrado.");
+        }
+
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+
+        if (strpos($authHeader, 'Bearer ') === 0) {
+            $token = str_replace('Bearer ', '', $authHeader);
+        } else {
+            throw new \InvalidPermissionException("Token no proporcionado.");
+        }
+
+        if (!JWTHandler::validateToken($token)) {
+            throw new \InvalidPermissionException("Token no válido o expirado.");
+        }
+
+        $payload = JWTHandler::decodeJWT($token);
+
+        if (isset($payload["user_id"])) {
+            return (int) $payload["user_id"];
+        }
+        
+        throw new \InvalidPermissionException("Token sin ID de usuario.");
+    }
 }

@@ -2,11 +2,13 @@
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Atencion.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Recalada.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/Exceptions/InvalidAtencionException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/Exceptions/NotFoundEntryException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/Exceptions/DuplicateEntryException.php";
 
 use Api\Exceptions\NotFoundEntryException;
 use Api\Exceptions\DuplicateEntryException;
+use Api\Exceptions\InvalidAtencionException;
 
 class AtencionRepository
 {

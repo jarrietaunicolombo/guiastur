@@ -23,10 +23,9 @@ class LoginController
 
     public function handleRequest(array $request)
     {
-        if ($request["action"] === "login") {
-            $this->login($request);
-        }
+        $this->login($request);
     }
+    
 
     private function login(array $request)
     {
