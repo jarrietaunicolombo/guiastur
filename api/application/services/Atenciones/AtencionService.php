@@ -1,10 +1,13 @@
 <?php
 
+namespace Api\Services\Atenciones;
+
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/domain/repositories/AtencionMobileRepository.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/exceptions/InvalidAtencionException.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/exceptions/NotFoundEntryException.php";
 
 use Api\Exceptions\InvalidAtencionException;
+use Api\Domain\Repositories\Atenciones\AtencionRepository;
 
 class AtencionService
 {
@@ -15,6 +18,16 @@ class AtencionService
         $this->atencionRepository = new AtencionRepository();
     }
 
+    public function getAllAtenciones()
+    {
+        return $this->atencionRepository->findAll();
+    }
+
+    public function getAtencionesActivas()
+    {
+        return $this->atencionRepository->findActivas();
+    }
+    
     public function createAtencion($data)
     {
 
@@ -28,8 +41,8 @@ class AtencionService
             throw new InvalidAtencionException("El supervisor es obligatorio.");
         }
 
-        $fechaInicio = DateTime::createFromFormat("Y-m-d H:i:s", $data["fecha_inicio"]);
-        $fechaCierre = DateTime::createFromFormat("Y-m-d H:i:s", $data["fecha_cierre"]);
+        $fechaInicio = \DateTime::createFromFormat("Y-m-d H:i:s", $data["fecha_inicio"]);
+        $fechaCierre = \DateTime::createFromFormat("Y-m-d H:i:s", $data["fecha_cierre"]);
 
 
         if (!$fechaInicio || !$fechaCierre) {
@@ -40,29 +53,29 @@ class AtencionService
         }
 
 
-        $recalada = Recalada::find($data["recalada_id"]);
+        $recalada = \Recalada::find($data["recalada_id"]);
         if (!$recalada) {
-            throw new NotFoundEntryException("Recalada no encontrada con ID: " . $data["recalada_id"]);
+            throw new \NotFoundEntryException("Recalada no encontrada con ID: " . $data["recalada_id"]);
         }
 
-        $fechaActual = new DateTime();
-        if ($fechaActual > new DateTime($recalada->fecha_zarpe)) {
+        $fechaActual = new \DateTime();
+        if ($fechaActual > new \DateTime($recalada->fecha_zarpe)) {
             throw new InvalidAtencionException("No se puede crear la atención porque la recalada ya zarpó.");
         }
 
-        if ($fechaInicio < new DateTime($recalada->fecha_arribo)) {
+        if ($fechaInicio < new \DateTime($recalada->fecha_arribo)) {
             throw new InvalidAtencionException("La fecha de inicio no puede ser menor a la fecha de arribo de la recalada.");
         }
-        if ($fechaCierre > new DateTime($recalada->fecha_zarpe)) {
+        if ($fechaCierre > new \DateTime($recalada->fecha_zarpe)) {
             throw new InvalidAtencionException("La fecha de cierre no puede ser mayor a la fecha de zarpe de la recalada.");
         }
 
         $this->atencionRepository->validateNoCollision($data["recalada_id"], $fechaInicio, $fechaCierre);
 
-        $atencion = Atencion::create($data);
+        $atencion = \Atencion::create($data);
 
         if (!$atencion || !$atencion->id) {
-            throw new Exception("No se pudo crear la atención.");
+            throw new \Exception("No se pudo crear la atención.");
         }
 
         return [

@@ -6,6 +6,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/application/services/Ate
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/middleware/Authentication/AuthMiddleware.php";
 
 use Api\Middleware\Authentication\AuthMiddleware;
+use Api\Services\Atenciones\AtencionService;
 
 class CreateAtencionMobileController
 {
@@ -13,7 +14,7 @@ class CreateAtencionMobileController
 
     public function __construct()
     {
-        $this->atencionService = new \AtencionService();
+        $this->atencionService = new AtencionService();
     }
 
     public function handleRequest()
@@ -38,16 +39,17 @@ class CreateAtencionMobileController
 
         $input = json_decode(file_get_contents("php://input"), true);
 
+        $input = json_decode(file_get_contents("php://input"), true);
+
         if (!$input) {
             http_response_code(400);
             echo json_encode(["error" => "Datos inválidos o faltantes"]);
             exit;
         }
-
-
+        
         try {
             $atencion = $this->atencionService->createAtencion($input);
-
+        
             http_response_code(201);
             echo json_encode(["message" => "Atención creada exitosamente", "atencion" => $atencion]);
         } catch (\Exception $e) {

@@ -3,8 +3,12 @@
 namespace Api\Routes;
 
 use Api\Controllers\Atenciones\CreateAtencionMobileController;
+use Api\Controllers\Atenciones\GetAtencionesActivasMobileController;
+use Api\Controllers\Atenciones\GetAllAtencionesMobileController;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Atenciones/CreateAtencionMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Atenciones/GetAllAtencionesMobileController.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Atenciones/GetAtencionesActivasMobileController.php";
 
 $allowedOrigins = [
     "http://localhost:8100",
@@ -33,11 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $routes = [
-    'POST atencion' => new CreateAtencionMobileController()
+    'POST atencion' => new CreateAtencionMobileController(),
+    'GET atenciones' => new GetAllAtencionesMobileController(),
+    'GET atenciones/activas' => new GetAtencionesActivasMobileController()
 ];
 
 $ruta = $_GET['ruta'] ?? '';
-
 
 foreach ($routes as $route => $controller) {
     [$routeMethod, $routePath] = explode(' ', $route);
