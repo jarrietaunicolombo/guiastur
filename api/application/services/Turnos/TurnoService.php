@@ -2,138 +2,85 @@
 
 namespace Api\Services\Turnos;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Domain/Entities/Turno.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/NumberTurnosExceededException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/DuplicateEntryException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/InvalidFinishTurnoException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/InvalidUseTurnoException.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Application/Exceptions/InvalidReleaseTurnoException.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/domain/repositories/TurnoMobileRepository.php";
 
-class TurnoService
-{
-    public function createTurno(array $data)
-    {
-        $this->validateTurnoAvailability($data['atencion_id'], $data['total_turnos']);
-        $this->ensureGuiaDoesNotHaveTurno($data['atencion_id'], $data['guia_id']);
+use Exception;
+use Api\Domain\Repositories\Turnos\TurnoMobileRepository;
 
-        $numero = $this->getNextTurnoNumero($data['atencion_id']);
-        return $this->saveNewTurno($data, $numero);
+class TurnoService {
+    private $turnoRepository;
+
+    public function __construct() {
+        $this->turnoRepository = new TurnoMobileRepository();
     }
 
-    public function getAllTurnos()
-    {
-        return \Turno::all();
-    }
+    public function createTurno($data, $usuarioRegistro) {
+        $this->validateCreateData($data);
 
-    public function finishTurno(int $turnoId, int $usuarioId)
-    {
-        $turno = $this->getTurnoIfReleased($turnoId);
-        $this->checkPermission($usuarioId, $turno->guia_id);
-
-        return $this->updateTurnoEstado($turno, 'FINISHED');
-    }
-
-    public function useTurno(int $turnoId, int $atencionId, int $usuarioId)
-    {
-        $turno = $this->getTurnoIfNext($turnoId, $atencionId);
-        $this->checkPermission($usuarioId, $turno->guia_id);
-
-        return $this->updateTurnoEstado($turno, 'IN_USE');
-    }
-
-    public function releaseTurno(int $turnoId, int $usuarioId)
-    {
-        $turno = $this->getTurnoIfInUse($turnoId);
-        $this->checkPermission($usuarioId, $turno->guia_id);
-
-        return $this->updateTurnoEstado($turno, 'AVAILABLE');
-    }
-
-    public function getTurnosByAtenciones(int $atencionId)
-    {
-        return \Turno::find('all', ['conditions' => ['atencion_id' => $atencionId]]);
-    }
-
-    public function getTurnosByStatus(string $estado)
-    {
-        return \Turno::find('all', ['conditions' => ['estado' => $estado]]);
-    }
-
-    // Métodos auxiliares
-
-    private function validateTurnoAvailability(int $atencionId, int $totalTurnos)
-    {
-        $turnos = \Turno::find('all', ['conditions' => ['atencion_id' => $atencionId]]);
-        if (count($turnos) >= $totalTurnos) {
-            throw new \NumberTurnosExceededException("No existen turnos disponibles para la Atencion $atencionId");
-        }
-    }
-
-    private function ensureGuiaDoesNotHaveTurno(int $atencionId, int $guiaId)
-    {
-        $turnos = \Turno::find('all', ['conditions' => ['atencion_id' => $atencionId]]);
-        foreach ($turnos as $turno) {
-            if ($turno->guia_id == $guiaId) {
-                throw new \DuplicateEntryException("El guia Id: $guiaId tiene un turno previamente programado para la Atencion $atencionId");
-            }
-        }
-    }
-
-    private function getNextTurnoNumero(int $atencionId): int
-    {
-        $turnos = \Turno::find('all', ['conditions' => ['atencion_id' => $atencionId]]);
-        return (count($turnos) > 0) ? end($turnos)->numero + 1 : 1;
-    }
-
-    private function saveNewTurno(array $data, int $numero)
-    {
-        return \Turno::create([
-            'numero' => $numero,
-            'estado' => 'CREATED',
-            'observaciones' => $data['observaciones'],
-            'guia_id' => $data['guia_id'],
-            'atencion_id' => $data['atencion_id'],
-            'usuario_registro' => $data['usuario_registro']
+        $turnoData = array_merge($data, [
+            'fecha_registro' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'usuario_registro' => $usuarioRegistro
         ]);
+
+        return $this->turnoRepository->create($turnoData);
     }
 
-    private function getTurnoIfReleased(int $turnoId)
-    {
-        $turno = \Turno::find($turnoId);
-        if ($turno->estado !== 'RELEASE') {
-            throw new \InvalidFinishTurnoException("El Turno #: {$turno->numero} no fue liberado");
+    public function useTurno($turnoId, $usuarioId, $observaciones = null) {
+        $turno = $this->turnoRepository->findById($turnoId);
+        $turno->estado = 'INUSE';
+        $turno->fecha_uso = new \DateTime();
+        $turno->usuario_uso = $usuarioId;
+
+        if ($observaciones && !empty(trim($observaciones))) {
+            $turno->observaciones = "Liberado: " . $observaciones;
         }
-        return $turno;
+
+        return $this->turnoRepository->update($turno);
     }
 
-    private function getTurnoIfNext(int $turnoId, int $atencionId)
-    {
-        $nextTurno = \Turno::find('first', ['conditions' => ['atencion_id' => $atencionId, 'estado' => 'CREATED']]);
-        if ($turnoId != $nextTurno->id) {
-            throw new \InvalidUseTurnoException("Uso de turno rechazado, Proximo Turno Numero: {$nextTurno->numero}");
+    public function releaseTurno($turnoId, $usuarioId, $observaciones = null) {
+        $turno = $this->turnoRepository->findById($turnoId);
+        $turno->estado = 'RELEASE';
+        $turno->fecha_salida = new \DateTime();
+        $turno->usuario_salida = $usuarioId;
+
+        if ($observaciones && !empty(trim($observaciones))) {
+            $turno->observaciones = $turno->observaciones
+                ? $turno->observaciones . ". Liberado: " . $observaciones
+                : "Liberado: " . $observaciones;
         }
-        return \Turno::find($turnoId);
+
+        return $this->turnoRepository->update($turno);
     }
 
-    private function getTurnoIfInUse(int $turnoId)
-    {
-        $turno = \Turno::find($turnoId);
-        if ($turno->estado !== 'IN_USE') {
-            throw new \InvalidReleaseTurnoException("No se puede liberar el Turno #: {$turno->numero}, el turno no está en uso");
+    public function finishTurno($turnoId, $usuarioId, $observaciones = null) {
+        $turno = $this->turnoRepository->findById($turnoId);
+        $turno->estado = 'FINALIZED';
+        $turno->fecha_regreso = new \DateTime();
+        $turno->usuario_regreso = $usuarioId;
+
+        if ($observaciones && !empty(trim($observaciones))) {
+            $turno->observaciones = $turno->observaciones
+                ? $turno->observaciones . ". Finalizado: " . $observaciones
+                : "Finalizado: " . $observaciones;
         }
-        return $turno;
+
+        return $this->turnoRepository->update($turno);
     }
 
-    private function updateTurnoEstado($turno, string $estado)
-    {
-        $turno->update_attributes(['estado' => $estado]);
-        return $turno;
+    public function getTurnosByAtencion($atencionId) {
+        return $this->turnoRepository->findByAtencion($atencionId);
     }
 
-    private function checkPermission(int $usuarioId, int $guiaId): void
-    {
-        if ($usuarioId !== $guiaId) {
-            throw new \InvalidReleaseTurnoException("No tiene permisos para esta acción en el turno del Guia {$guiaId}");
+    private function validateCreateData($data) {
+        if (!isset($data['numero']) || empty($data['numero'])) {
+            throw new Exception("El número de turno es obligatorio.");
+        }
+        if (!isset($data['estado']) || empty($data['estado'])) {
+            throw new Exception("El estado del turno es obligatorio.");
+        }
+        if (!isset($data['atencion_id']) || empty($data['atencion_id'])) {
+            throw new Exception("El ID de atención es obligatorio.");
         }
     }
 }

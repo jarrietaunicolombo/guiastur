@@ -105,4 +105,31 @@ class RequestMiddleware
                 throw new \InvalidArgumentException(json_encode($errorMessages));
             }
         }
+
+        public static function validateCreateTurnoRequest(array $request) {
+            if (!isset($request['numero']) || empty(trim($request['numero']))) {
+                throw new \Exception("El número del turno es obligatorio.");
+            }
+        
+            if (!isset($request['estado']) || empty(trim($request['estado']))) {
+                throw new \Exception("El estado del turno es obligatorio.");
+            }
+        
+            $validStates = ['INUSE', 'RELEASE', 'FINALIZED', 'DISPONIBLE']; // ajusta según tus enums
+            if (!in_array(strtoupper($request['estado']), $validStates)) {
+                throw new \Exception("El estado del turno no es válido.");
+            }
+        
+            if (!isset($request['atencion_id']) || !is_numeric($request['atencion_id']) || $request['atencion_id'] <= 0) {
+                throw new \Exception("El ID de atención es obligatorio y debe ser válido.");
+            }
+
+            if (isset($request['guia_id']) && (!is_numeric($request['guia_id']) || $request['guia_id'] <= 0)) {
+                throw new \Exception("El ID de la guía debe ser un número válido.");
+            }
+            
+            $observaciones = isset($request['observaciones']) ? trim($request['observaciones']) : null;
+
+        }
+        
 }

@@ -26,7 +26,6 @@ if (in_array($origin, $allowedOrigins)) {
         exit();
     }
 
-
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/DependencyInjection.php";
 
 try {

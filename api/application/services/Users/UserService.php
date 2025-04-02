@@ -35,6 +35,11 @@ class UserService
         return $roles ? $roles[0] : null;
     }
 
+    public function getRoles()
+    {
+        return $this->userRepository->getAllRoles();
+    }
+
     public function createUser($email, $password, $nombre, $rol_id, $creatorId)
     {
         $createUserRequest = new \CreateUserRequest(

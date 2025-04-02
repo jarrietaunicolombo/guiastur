@@ -6,8 +6,10 @@ use Api\Controllers\Users\CreateUserMobileController;
 use Api\Controllers\Users\LoginController;
 use Api\Controllers\Users\LogoutController;
 use Api\Controllers\Users\RefreshTokenController;
+use GetAllRolesMobileController;
 use MeMobileController;
 
+require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Users/GetAllRolesMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Users/CreateUserMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Users/LoginMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Users/LogoutMobileController.php";
@@ -15,7 +17,6 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Use
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/api/adapters/controllers/Users/MeMobileController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/guiastur/Infrastructure/Repositories/UsuarioRepository.php";
 
-// CORS
 $allowedOrigins = [
     "http://localhost:8100",
     "https://localhost:8100",
@@ -42,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Definición de rutas
 $usuarioRepository = new \UsuarioRepository();
 
 $routes = [
@@ -50,7 +50,8 @@ $routes = [
     'POST login'          => new LoginController(),
     'POST logout'         => new LogoutController(),
     'POST refresh-token'  => new RefreshTokenController(),
-    'GET me'              => new MeMobileController()
+    'GET me'              => new MeMobileController(),
+    'GET roles'           => new GetAllRolesMobileController()
 ];
 
 $ruta = $_GET['ruta'] ?? '';
