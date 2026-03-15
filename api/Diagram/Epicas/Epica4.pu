@@ -1,0 +1,51 @@
+@startuml Flujo de Controladores Móviles para Gestión de Buques
+title Flujo de Controladores Móviles para Gestión de Buques
+
+actor Usuario as U
+participant "API" as API
+participant "CreateBuqueMobileController" as CreateC
+participant "GetBuquesMobileController" as GetC
+participant "BuquesService" as BS
+participant "AuthorizationMiddleware" as AuthM
+participant "RequestMiddleware" as ReqM
+participant "ResponseMiddleware" as ResM
+database "Base de Datos" as DB
+
+== Creación de Buques ==
+U -> API: Enviar solicitud POST para crear buque
+API -> ReqM: Validar datos de la solicitud
+ReqM -> API: Datos válidos
+API -> AuthM: Validar token JWT y permisos del usuario
+AuthM -> DB: Verificar rol del usuario
+DB -> AuthM: Permisos válidos
+API -> CreateC: Redirigir a CreateBuqueMobileController
+CreateC -> BS: Llamar al servicio para crear buque
+BS -> DB: Insertar nuevo buque
+DB -> BS: Confirmar creación
+CreateC -> ResM: Formatear respuesta JSON
+ResM -> API: Respuesta formateada
+API -> U: Retornar detalles del buque creado
+
+== Consulta de Buques ==
+U -> API: Enviar solicitud GET para consultar buques
+API -> AuthM: Validar token JWT y permisos del usuario
+AuthM -> DB: Verificar rol del usuario
+DB -> AuthM: Permisos válidos
+API -> GetC: Redirigir a GetBuquesMobileController
+GetC -> BS: Llamar al servicio para obtener lista de buques
+BS -> DB: Consultar datos de buques
+DB -> BS: Retornar lista de buques
+GetC -> ResM: Formatear respuesta JSON
+ResM -> API: Respuesta formateada
+API -> U: Retornar lista de buques
+
+== Gestión de Tokens ==
+note right of DB
+Tabla User_tokens:
+- usuario_id
+- token
+- fecha_creacion
+- fecha_expiracion
+end note
+
+@enduml

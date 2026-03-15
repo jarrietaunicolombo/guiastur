@@ -1,0 +1,50 @@
+@startuml Flujo Completo de Implementación de Middlewares en la API
+title Flujo Completo de Implementación de Middlewares en la API
+
+actor Cliente as C
+participant "API" as API
+participant "RequestMiddleware" as ReqM
+participant "AuthorizationMiddleware" as AuthM
+participant "Controladores" as Ctrl
+participant "ResponseMiddleware" as ResM
+database "Base de Datos" as DB
+
+C -> API: Enviar solicitud
+API -> ReqM: Validar datos de la solicitud
+ReqM -> ReqM: Verificar campos requeridos
+ReqM -> API: Datos válidos
+API -> AuthM: Verificar roles y permisos
+AuthM -> DB: Consultar rol del usuario
+DB -> AuthM: Retornar información del rol
+AuthM -> API: Permisos válidos
+API -> Ctrl: Procesar lógica de negocio
+Ctrl -> DB: Consultar/actualizar datos
+DB -> Ctrl: Retornar datos
+Ctrl -> ResM: Formatear respuesta JSON
+ResM -> ResM: Estructurar respuesta estándar
+ResM -> API: Respuesta formateada
+API -> C: Retornar respuesta JSON
+
+note right of ReqM
+Valida que los datos
+de la solicitud cumplan
+con los requisitos del
+sistema (campos, tipos).
+end note
+
+note right of AuthM
+Verifica que el usuario
+tenga los permisos
+necesarios según su rol
+para acceder al recurso
+solicitado.
+end note
+
+note right of ResM
+Estándar de respuestas:
+- Formato JSON.
+- Códigos HTTP claros.
+- Mensajes informativos.
+end note
+
+@enduml

@@ -1,0 +1,42 @@
+@startuml Implementación de Autorización con JWT
+title Implementación de Autorización con JWT
+
+actor Usuario as U
+participant "API (Controladores)" as API
+participant "JWTHandler" as JWT
+participant "TokenService" as TS
+participant "AuthService" as AS
+database "Base de Datos (UserToken)" as DB
+participant "CookiesSetup" as CS
+
+U -> API: Enviar solicitud con credenciales
+API -> JWT: Generar token de acceso y refresco
+JWT -> TS: Crear tokens (access_token y refresh_token)
+TS -> JWT: Retorna tokens generados
+JWT -> DB: Almacenar tokens en UserToken
+JWT -> API: Retorna tokens al cliente
+API -> CS: Configurar cookies para almacenar tokens
+CS -> U: Retorna cookies con auth_token y refresh_token
+
+U -> API: Enviar solicitud protegida
+API -> CS: Recuperar auth_token desde cookies
+CS -> API: Retorna token
+API -> JWT: Validar token recibido
+JWT -> DB: Verificar token en base de datos
+DB -> JWT: Retorna estado del token
+JWT -> API: Token válido
+API -> AS: Verificar permisos de usuario
+AS -> API: Permisos válidos
+API -> U: Respuesta exitosa
+
+U -> API: Solicitar renovación del token
+API -> CS: Recuperar refresh_token desde cookies
+CS -> API: Retorna refresh_token
+API -> JWT: Validar y renovar tokens
+JWT -> DB: Actualizar tokens en UserToken
+DB -> JWT: Tokens renovados
+JWT -> API: Retorna nuevos tokens
+API -> CS: Actualizar cookies con nuevos tokens
+CS -> U: Respuesta con cookies actualizadas
+
+@enduml

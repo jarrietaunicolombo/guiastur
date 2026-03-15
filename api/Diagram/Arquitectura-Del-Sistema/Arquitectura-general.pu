@@ -1,0 +1,67 @@
+@startuml Arquitectura-general
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+package "Arquitectura General del Sistema" {
+    rectangle "Frontend\n(Ionic Angular)" as Frontend {
+        component "Aplicación Móvil" as MobileApp
+    }
+
+    package "Backend\n(PHP API RESTful)" as Backend {
+        component "Controladores" as Controllers
+        component "Middlewares\n(Auth, Request, Response)" as Middlewares
+        component "Servicios\n(Lógica de Negocio)" as Services
+    }
+
+    database "Base de Datos\n(MySQL)" as Database {
+        entity "Usuarios"
+        entity "Turnos"
+        entity "Recaladas"
+        entity "Buques"
+    }
+}
+
+cloud "Usuario" as User
+
+User --> MobileApp : Interacción\n(UI/UX)
+MobileApp --> Controllers : Solicitudes HTTP\n(JSON)
+Controllers --> Middlewares : Validación\n(Auth, Request)
+Middlewares --> Services : Lógica de Negocio
+Services --> Database : Consultas SQL
+Database --> Services : Respuesta (Datos)
+
+Services --> Controllers : Respuesta (JSON)
+Controllers --> MobileApp : Respuesta HTTP
+
+MobileApp --> Controllers : JWT en Header\n(Authorization Bearer)
+Controllers --> Middlewares : Validar JWT\n(Seguridad)
+Middlewares --> Controllers : Autorización Exitosa\no Error (403)
+
+note right of MobileApp
+- Procesa entradas del usuario
+- Muestra respuestas del backend
+- Maneja errores locales
+end note
+
+note right of Controllers
+- Maneja endpoints RESTful
+- Redirige a Middlewares
+end note
+
+note right of Database
+- Almacena datos clave:
+  * Usuarios
+  * Turnos
+  * Recaladas
+  * Buques
+end note
+
+note bottom of User
+Puede realizar:
+- Inicio de sesión
+- Gestión de turnos y recaladas
+- entre otras...
+end note
+
+@enduml

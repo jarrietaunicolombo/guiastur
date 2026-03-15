@@ -1,0 +1,51 @@
+@startuml Flujo de Controladores de Usuarios en la API Móvil
+title Flujo de Controladores de Usuarios en la API Móvil
+
+actor Usuario as U
+participant "API" as API
+participant "LoginMobileController" as LoginC
+participant "LogoutMobileController" as LogoutC
+participant "RefreshTokenController" as RefreshC
+participant "CreateUserMobileController" as CreateC
+participant "LoginService" as LoginS
+participant "UserService" as UserS
+participant "EmailService" as EmailS
+participant "UtilityService" as UtilityS
+database "Base de Datos" as DB
+
+== Proceso de Login ==
+U -> API: Enviar credenciales de usuario
+API -> LoginC: Redirigir a LoginMobileController
+LoginC -> LoginS: Autenticar usuario
+LoginS -> DB: Verificar credenciales
+DB -> LoginS: Usuario válido
+LoginS -> LoginC: Generar tokens JWT
+LoginC -> API: Configurar cookies y responder con tokens
+
+== Proceso de Logout ==
+U -> API: Solicitar logout
+API -> LogoutC: Redirigir a LogoutMobileController
+LogoutC -> API: Borrar cookies JWT
+LogoutC -> U: Confirmar logout exitoso
+
+== Renovación de Tokens ==
+U -> API: Solicitar nuevos tokens
+API -> RefreshC: Redirigir a RefreshTokenController
+RefreshC -> DB: Validar refresh_token
+DB -> RefreshC: Token válido
+RefreshC -> RefreshC: Generar nuevo access_token
+RefreshC -> API: Configurar cookies con nuevos tokens
+API -> U: Retornar respuesta con nuevos tokens
+
+== Registro de Usuarios ==
+U -> API: Enviar datos para registro
+API -> CreateC: Redirigir a CreateUserMobileController
+CreateC -> UserS: Validar y crear usuario
+UserS -> DB: Registrar usuario
+UserS -> UtilityS: Generar contraseña segura
+UserS -> EmailS: Enviar correo de confirmación
+EmailS -> U: Notificación enviada
+CreateC -> API: Confirmar creación de usuario
+API -> U: Respuesta con detalles del usuario
+
+@enduml

@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS User_tokens (
     usuario_id INT NOT NULL,
     token VARCHAR(255) NOT NULL,
     creado_el TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expira_el TIMESTAMP DEFAULT NULL
+    expira_el TIMESTAMP NULL
 ) ENGINE=InnoDB;
 
 ALTER TABLE Usuarios

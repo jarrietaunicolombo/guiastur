@@ -1,0 +1,62 @@
+@startuml Flujo de Servicios y Vistas en Ionic Angular para la Gestión de Buques y Usuarios
+title Flujo de Servicios y Vistas en Ionic Angular para la Gestión de Buques y Usuarios
+
+actor Usuario as U
+participant "Login Page (Componente)" as LoginPage
+participant "AuthGuard" as AuthG
+participant "Interceptor" as Interceptor
+participant "TokenService" as TokenS
+participant "LoginService" as LoginS
+participant "BuquesService" as BuquesS
+participant "UsersService" as UsersS
+participant "RolesService" as RolesS
+participant "PaisService" as PaisS
+participant "Backend API" as API
+
+== Autenticación ==
+U -> LoginPage: Ingresar credenciales
+LoginPage -> LoginS: Enviar credenciales
+LoginS -> API: Autenticar usuario
+API -> LoginS: Retornar tokens JWT
+LoginS -> TokenS: Almacenar tokens JWT
+LoginS -> LoginPage: Confirmar autenticación
+LoginPage -> U: Redirigir al dashboard
+
+== Protección de Rutas ==
+U -> AuthG: Acceso a ruta protegida
+AuthG -> TokenS: Validar token JWT
+TokenS -> Interceptor: Refrescar token si es necesario
+Interceptor -> API: Renovar tokens
+API -> Interceptor: Retornar nuevos tokens
+AuthG -> U: Acceso permitido
+
+== Gestión de Buques ==
+U -> BuquesS: Solicitar lista de buques
+BuquesS -> API: Realizar solicitud GET
+API -> BuquesS: Retornar lista de buques
+BuquesS -> U: Mostrar lista en tabla
+
+U -> BuquesS: Crear un nuevo buque
+BuquesS -> API: Realizar solicitud POST
+API -> BuquesS: Confirmar creación del buque
+BuquesS -> U: Actualizar lista de buques
+
+== Gestión de Usuarios ==
+U -> UsersService: Crear un nuevo usuario
+UsersService -> API: Realizar solicitud POST
+API -> UsersService: Confirmar creación
+UsersService -> U: Mostrar mensaje de éxito
+
+== Gestión de Roles ==
+UsersService -> RolesService: Obtener lista de roles
+RolesService -> API: Realizar solicitud GET
+API -> RolesService: Retornar lista de roles
+RolesService -> UsersService: Roles cargados
+
+== Gestión de Países ==
+U -> PaisService: Solicitar lista de países
+PaisService -> API: Realizar solicitud GET
+API -> PaisService: Retornar lista de países
+PaisService -> U: Mostrar países en formulario
+
+@enduml

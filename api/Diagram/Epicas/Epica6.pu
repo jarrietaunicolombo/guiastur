@@ -1,0 +1,56 @@
+@startuml Flujo Completo para la Creación de Recaladas desde la API Móvil
+title Flujo Completo para la Creación de Recaladas desde la API Móvil
+
+actor Usuario as U
+participant "API" as API
+participant "AuthorizationMiddleware" as AuthM
+participant "RequestMiddleware" as ReqM
+participant "CreateRecaladaController" as CreateC
+participant "RecaladaService" as RecaladaS
+participant "ResponseMiddleware" as ResM
+database "Base de Datos" as DB
+
+== Validación de Autenticación ==
+U -> API: Solicitud POST para crear recalada
+API -> AuthM: Validar token JWT
+AuthM -> DB: Verificar token y rol del usuario
+DB -> AuthM: Permisos válidos
+AuthM -> API: Token válido, continuar
+
+== Validación de Datos ==
+API -> ReqM: Validar datos de la solicitud
+ReqM -> ReqM: Validar campos obligatorios y formato de fechas
+ReqM -> API: Datos válidos
+
+== Creación de la Recalada ==
+API -> CreateC: Redirigir a CreateRecaladaController
+CreateC -> RecaladaS: Procesar creación de recalada
+RecaladaS -> DB: Insertar datos de la recalada
+DB -> RecaladaS: Confirmar creación
+RecaladaS -> CreateC: Confirmar éxito
+
+== Manejo de Respuestas ==
+CreateC -> ResM: Formatear respuesta estándar
+ResM -> API: Generar respuesta JSON
+API -> U: Retornar éxito o mensaje de error
+
+note right of ReqM
+Valida que:
+- Fechas sean correctas
+- Campos obligatorios estén presentes
+- Datos tengan el formato esperado
+end note
+
+note right of AuthM
+Asegura que:
+- Token JWT sea válido
+- Usuario tenga permisos (Administrador/Superusuario)
+end note
+
+note right of ResM
+Estandariza las respuestas:
+- JSON claro
+- Código HTTP relevante
+end note
+
+@enduml
